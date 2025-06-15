@@ -1,0 +1,400 @@
+{
+  "companySizes": [
+    {
+      "id": "1-20",
+      "label": "1 - 20 employees",
+      "description": "Small startup or local business",
+      "multiplier": 0.1,
+      "icon": "👥"
+    },
+    {
+      "id": "21-50",
+      "label": "21 - 50 employees",
+      "description": "Growing small business",
+      "multiplier": 0.2,
+      "icon": "🏢"
+    },
+    {
+      "id": "51-100",
+      "label": "51 - 100 employees",
+      "description": "Medium-sized company",
+      "multiplier": 0.3,
+      "icon": "🏬"
+    },
+    {
+      "id": "101-200",
+      "label": "101 - 200 employees",
+      "description": "Established mid-market",
+      "multiplier": 0.4,
+      "icon": "🏭"
+    },
+    {
+      "id": "201-500",
+      "label": "201 - 500 employees",
+      "description": "Large mid-market",
+      "multiplier": 0.5,
+      "icon": "🏗️"
+    },
+    {
+      "id": "501-1000",
+      "label": "501 - 1,000 employees",
+      "description": "Large company",
+      "multiplier": 0.6,
+      "icon": "🌆"
+    },
+    {
+      "id": "1001-2500",
+      "label": "1,001 - 2,500 employees",
+      "description": "Very large company",
+      "multiplier": 0.7,
+      "icon": "🏙️"
+    },
+    {
+      "id": "2501-5000",
+      "label": "2,501 - 5,000 employees",
+      "description": "Enterprise",
+      "multiplier": 0.8,
+      "icon": "🌃"
+    },
+    {
+      "id": "5001-10000",
+      "label": "5,001 - 10,000 employees",
+      "description": "Large enterprise",
+      "multiplier": 0.9,
+      "icon": "🌉"
+    },
+    {
+      "id": "10000+",
+      "label": "10,000+ employees",
+      "description": "Government/Fortune 500",
+      "multiplier": 1.0,
+      "icon": "🏛️"
+    }
+  ],
+  "questions": [
+    {
+      "id": "company-size",
+      "botMessage": "Before we dive into your AI agent requirements, I'd love to understand the scale we're working with. What's the size of your organization?",
+      "stage": "Company Profile",
+      "isCompanySizeQuestion": true
+    },
+    {
+      "id": "information-landscape",
+      "botMessage": "Perfect! Now let's talk about your information landscape. Where does your team currently go to find the information they need to do their job?",
+      "followUpMessage": "Interesting! What's the typical format of this information?",
+      "stage": "Information Architecture",
+      "options": [
+        {
+          "id": "centralized-sources",
+          "label": "Mainly from 1-2 central systems",
+          "basePrice": 7500,
+          "hours": 150,
+          "conversationalText": "We mostly use 1-2 main systems for our information! 🏛️",
+          "description": "Information is well-centralized"
+        },
+        {
+          "id": "distributed-sources",
+          "label": "From several different platforms and tools",
+          "basePrice": 15000,
+          "hours": 300,
+          "conversationalText": "We pull information from several different platforms! 🌐",
+          "description": "Information spans multiple systems"
+        },
+        {
+          "id": "everywhere-sources",
+          "label": "From many places - databases, files, emails, etc.",
+          "basePrice": 25000,
+          "hours": 500,
+          "conversationalText": "Information is everywhere - databases, files, emails, you name it! 📁",
+          "description": "Information is highly distributed"
+        }
+      ],
+      "multipliers": [
+        {
+          "id": "structured-reports",
+          "label": "Mostly reports, dashboards, and database queries",
+          "multiplier": 0.8,
+          "description": "Information comes in structured, predictable formats",
+          "conversationalText": "Mostly structured reports, dashboards, and database queries! 📋"
+        },
+        {
+          "id": "mixed-formats",
+          "label": "Mix of reports, documents, and communication threads",
+          "multiplier": 1.0,
+          "description": "Combination of structured and unstructured information",
+          "conversationalText": "A mix of reports, documents, emails, and team communications! 📄"
+        },
+        {
+          "id": "unstructured-heavy",
+          "label": "Lots of documents, images, recordings, and tribal knowledge",
+          "multiplier": 1.3,
+          "description": "Heavy reliance on unstructured content and institutional knowledge",
+          "conversationalText": "Lots of documents, images, recordings, and knowledge that's in people's heads! 🧠"
+        }
+      ],
+      "requiresMultiplier": true
+    },
+    {
+      "id": "user-interaction",
+      "botMessage": "Now, how do you envision your team and customers interacting with this AI agent? What type of interaction feels most natural for your environment?",
+      "stage": "User Experience Design",
+      "options": [
+        {
+          "id": "simple-interactions",
+          "label": "Simple, direct interactions",
+          "basePrice": 0,
+          "hours": 0,
+          "conversationalText": "We prefer simple, direct interactions! 💬",
+          "description": "Quick answers and straightforward communication",
+          "subOptions": [
+            {
+              "id": "quick-answers",
+              "label": "Quick answers to common questions",
+              "basePrice": 15000,
+              "hours": 300,
+              "conversationalText": "We need quick answers to frequently asked questions! ⚡",
+              "description": "Efficient FAQ and knowledge retrieval"
+            },
+            {
+              "id": "guided-conversations",
+              "label": "Guided conversations that understand context",
+              "basePrice": 35000,
+              "hours": 700,
+              "conversationalText": "We want guided conversations that really understand what we're asking! 💬",
+              "description": "Contextual dialogue and problem-solving"
+            }
+          ]
+        },
+        {
+          "id": "advanced-interactions",
+          "label": "Advanced, hands-free interactions",
+          "basePrice": 0,
+          "hours": 0,
+          "conversationalText": "We want advanced, hands-free interactions! 🎤",
+          "description": "Voice and automated interactions",
+          "subOptions": [
+            {
+              "id": "voice-interactions",
+              "label": "Voice conversations while working hands-free",
+              "basePrice": 50000,
+              "hours": 1000,
+              "conversationalText": "Voice conversations would be perfect for our hands-free work environment! 🎤",
+              "description": "Speech-enabled interactions"
+            },
+            {
+              "id": "background-automation",
+              "label": "Working behind the scenes to handle routine tasks",
+              "basePrice": 60000,
+              "hours": 1200,
+              "conversationalText": "We want it working behind the scenes, handling routine tasks automatically! 🔄",
+              "description": "Automated workflow processing"
+            }
+          ]
+        },
+        {
+          "id": "intelligent-coordination",
+          "label": "Intelligent coordination and learning",
+          "basePrice": 0,
+          "hours": 0,
+          "conversationalText": "We need intelligent coordination and learning capabilities! 🧠",
+          "description": "Smart assistants and team coordination",
+          "subOptions": [
+            {
+              "id": "intelligent-assistant",
+              "label": "Proactive assistant that learns and improves over time",
+              "basePrice": 100000,
+              "hours": 2000,
+              "conversationalText": "A proactive assistant that learns our patterns and gets smarter! 🎓",
+              "description": "Adaptive AI with continuous learning"
+            },
+            {
+              "id": "team-coordination",
+              "label": "Coordinating multiple team members and external partners",
+              "basePrice": 150000,
+              "hours": 3000,
+              "conversationalText": "Coordinating our whole team and external partners seamlessly! 👥",
+              "description": "Multi-stakeholder orchestration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "external-connections",
+      "botMessage": "Now, thinking about your daily workflow - which external tools and services does your team regularly use that would need to stay in sync?",
+      "followUpMessage": "Got it! What's your experience been like with these systems?",
+      "stage": "Integration Requirements",
+      "options": [
+        {
+          "id": "essential-tools",
+          "label": "Just our core business tools (CRM, email, calendar)",
+          "basePrice": 10000,
+          "hours": 200,
+          "conversationalText": "Just our essential business tools - CRM, email, calendar! 📅",
+          "description": "Core productivity integrations"
+        },
+        {
+          "id": "business-suite",
+          "label": "Full business suite (accounting, project management, communication)",
+          "basePrice": 20000,
+          "hours": 400,
+          "conversationalText": "Our full business suite - accounting, project management, communication tools! 💼",
+          "description": "Comprehensive business tool integration"
+        },
+        {
+          "id": "specialized-ecosystem",
+          "label": "Industry-specific tools plus standard business applications",
+          "basePrice": 25000,
+          "hours": 500,
+          "conversationalText": "Industry-specific tools plus all our standard business applications! 🏭",
+          "description": "Specialized industry integration"
+        }
+      ],
+      "multipliers": [
+        {
+          "id": "cloud-native",
+          "label": "Modern cloud-based tools with great APIs",
+          "multiplier": 1.0,
+          "description": "Contemporary SaaS platforms with robust integration capabilities",
+          "conversationalText": "Modern cloud-based tools that play well with others! ☁️"
+        },
+        {
+          "id": "mixed-environment",
+          "label": "Mix of cloud and on-premise systems we've built over time",
+          "multiplier": 1.3,
+          "description": "Hybrid environment with various integration challenges",
+          "conversationalText": "A mix of cloud and on-premise systems we've built up over the years! 🏗️"
+        }
+      ],
+      "requiresMultiplier": true
+    },
+    {
+      "id": "quality-expectations",
+      "botMessage": "Almost there! 🧪 What are your expectations around reliability and performance? How critical is this system to your daily operations?",
+      "stage": "Quality Standards",
+      "options": [
+        {
+          "id": "standard-reliability",
+          "label": "Standard business reliability - occasional hiccups are okay",
+          "basePrice": 5000,
+          "hours": 100,
+          "conversationalText": "Standard business reliability works for us - occasional hiccups are manageable! ✅",
+          "description": "Normal business-grade reliability"
+        },
+        {
+          "id": "high-availability",
+          "label": "High reliability - this will be mission-critical for our team",
+          "basePrice": 10000,
+          "hours": 200,
+          "conversationalText": "High reliability is important - this will be mission-critical for our operations! 🎯",
+          "description": "Mission-critical system reliability"
+        },
+        {
+          "id": "enterprise-grade",
+          "label": "Enterprise-grade - downtime directly impacts revenue",
+          "basePrice": 15000,
+          "hours": 300,
+          "conversationalText": "Enterprise-grade reliability is essential - any downtime directly impacts our revenue! 💰",
+          "description": "Revenue-critical system reliability"
+        }
+      ]
+    },
+    {
+      "id": "ongoing-partnership",
+      "botMessage": "Last question! 🎉 How do you prefer to handle ongoing support and system evolution? What approach fits best with how your organization typically manages technology?",
+      "followUpMessage": "Perfect! What level of insight do you typically need for business systems?",
+      "stage": "Partnership Model",
+      "options": [
+        {
+          "id": "launch-support",
+          "label": "Get us launched, then we'll handle it internally",
+          "basePrice": 12000,
+          "hours": 240,
+          "conversationalText": "Get us launched successfully, then we'll take it from there internally! 🚀",
+          "description": "Initial launch support with internal handoff"
+        },
+        {
+          "id": "ongoing-partnership",
+          "label": "Ongoing partnership for optimization and growth",
+          "basePrice": 24000,
+          "hours": 480,
+          "conversationalText": "We'd like an ongoing partnership for continuous optimization and growth! 🤝",
+          "description": "Long-term collaborative relationship"
+        },
+        {
+          "id": "strategic-evolution",
+          "label": "Strategic partnership - evolve with our business needs",
+          "basePrice": 48000,
+          "hours": 960,
+          "conversationalText": "A strategic partnership that evolves with our changing business needs! 📈",
+          "description": "Strategic long-term business alignment"
+        }
+      ],
+      "multipliers": [
+        {
+          "id": "operational-metrics",
+          "label": "Basic operational metrics (uptime, usage, errors)",
+          "multiplier": 0.8,
+          "description": "Standard system monitoring and reporting",
+          "conversationalText": "Basic operational metrics like uptime, usage, and error tracking work for us! 📊"
+        },
+        {
+          "id": "business-intelligence",
+          "label": "Business intelligence (ROI, efficiency gains, user satisfaction)",
+          "multiplier": 1.2,
+          "description": "Strategic business impact measurement and reporting",
+          "conversationalText": "We need business intelligence - ROI, efficiency gains, user satisfaction insights! 📈"
+        }
+      ],
+      "requiresMultiplier": true
+    }
+  ],
+  "ui": {
+    "sliderLabels": {
+      "startup": "Startup",
+      "enterprise": "Enterprise"
+    },
+    "buttons": {
+      "confirmCompanySize": "Confirm Company Size",
+      "back": "Back"
+    },
+    "messages": {
+      "subQuestionPrompt": "Perfect! Now let me get more specific - which of these best describes what you need?",
+      "complexityPrompt": "Great! Now let me ask about the complexity level:",
+      "priceUpdate": "Perfect! 💰 Your current estimate is US${{price}}.",
+      "finalMessage": "🎉 Fantastic! I have everything I need. Let me prepare your personalized quote...",
+      "explanationIntro": "Let me explain \"{{option}}\" in more detail:"
+    },
+    "headers": {
+      "currentEstimate": "Current Estimate",
+      "estimatedHours": "Estimated Hours"
+    }
+  },
+  "explanations": {
+    "centralized-sources": "This means your team mainly goes to one or two main places to find what they need - like a company database, your main software system, or a central file server. If most of your information lives in just a few key systems that everyone knows about, this is you.",
+    "distributed-sources": "This describes teams that use several different tools and platforms regularly - maybe you have a CRM system, a project management tool, some cloud storage, and a few other specialized applications. If your team has to check 3-6 different places to get their work done, this fits your situation.",
+    "everywhere-sources": "This is when information is scattered everywhere - in email threads, various databases, different file systems, people's personal folders, chat messages, and sometimes just in people's heads. If finding information feels like a treasure hunt across many different places, this describes your current reality.",
+    "quick-answers": "Think of this like having a smart search engine that can instantly answer common questions your team asks repeatedly. If your team often needs quick facts, status updates, or simple answers to routine questions, this would be perfect for you.",
+    "guided-conversations": "This is like having a knowledgeable assistant that can have back-and-forth conversations, understand what you're really asking for, and help you work through problems step by step. If your team needs help thinking through complex situations or multi-step processes, this would serve you well.",
+    "voice-interactions": "This means talking to your AI assistant out loud, like you would with Siri or Alexa, but for your business needs. This is ideal if your team works with their hands, drives vehicles, or is often away from keyboards where speaking would be more convenient than typing.",
+    "background-automation": "Think of this as having an invisible assistant that handles routine tasks automatically without you having to ask. If your team spends time on repetitive tasks like data entry, status updates, or routine notifications, this would work behind the scenes to handle those things.",
+    "intelligent-assistant": "This is like having a smart team member that learns your patterns, anticipates your needs, and gets better over time. If you want an AI that adapts to how your team works and becomes more helpful as it learns your preferences, this is the right choice.",
+    "team-coordination": "This means having an AI that can manage communications and tasks across multiple people, departments, or even external partners. If your work involves coordinating between different groups or managing complex projects with many moving parts, this would be valuable.",
+    "essential-tools": "This covers the basic business tools most companies use - things like email, calendar, customer management (CRM), and maybe accounting software. If your team mainly uses these fundamental business applications, this level of integration would work for you.",
+    "business-suite": "This includes a full range of business applications - everything from the basics plus project management tools, communication platforms, accounting systems, and other operational software. If your business runs on a comprehensive set of tools and applications, this describes your needs.",
+    "specialized-ecosystem": "This means you use industry-specific software along with standard business tools - like medical practice software, legal case management, manufacturing systems, or other specialized tools unique to your field. If your industry requires specific software that general businesses don't use, this applies to you.",
+    "standard-reliability": "This is typical business-level dependability - the system works well most of the time, but occasional brief outages or minor issues are acceptable. If a few minutes of downtime here and there wouldn't significantly impact your operations, this level is sufficient.",
+    "high-availability": "This means the system is critical to your daily operations and needs to be available almost all the time. If your team relies heavily on the system to get their work done and downtime would noticeably slow down productivity, you need this level of reliability.",
+    "enterprise-grade": "This is for systems where any downtime directly costs you money or significantly impacts your business. If customers can't be served, sales are lost, or critical operations stop when the system is down, you need this highest level of reliability.",
+    "launch-support": "This means we help you get everything set up and running smoothly, train your team, and then hand it over for you to manage internally. Choose this if you have technical staff who can handle ongoing maintenance and updates, or if you prefer to manage systems internally.",
+    "ongoing-partnership": "This means we continue working together after launch to optimize performance, add new features, and help the system grow with your business. This is ideal if you want continuous improvement and prefer to have expert support available as your needs evolve.",
+    "strategic-evolution": "This is a long-term partnership where we help your AI capabilities evolve as your business changes and grows. Choose this if you see AI as a key part of your future strategy and want a partner who will help you stay ahead of the curve as technology advances.",
+    "structured-reports": "This means your information comes in organized, predictable formats - like standard reports, dashboards with charts and graphs, or database queries that always look the same. If most of your information is already organized in tables, reports, or structured formats, this describes your situation.",
+    "mixed-formats": "This describes having some organized information (like reports and databases) mixed with less structured content (like emails, documents, and team discussions). If your information comes in various formats - some organized, some not - this fits your reality.",
+    "unstructured-heavy": "This means much of your important information exists in documents, images, recordings, presentations, or just in people's knowledge and experience. If finding information often requires reading through documents, asking colleagues, or searching through files, this describes your current situation.",
+    "cloud-native": "This means you use modern, web-based software that's designed to work well with other systems - like Google Workspace, Microsoft 365, Salesforce, or other contemporary cloud applications. If most of your tools are accessed through web browsers and are relatively new, this describes your setup.",
+    "mixed-environment": "This describes having a combination of newer cloud-based tools alongside older systems, custom-built software, or on-premise applications that your company has used for years. If you have some modern tools mixed with legacy systems or custom solutions, this fits your situation.",
+    "operational-metrics": "This means you want to track basic system performance - things like whether it's working properly, how often people use it, and if there are any technical problems. Choose this if you mainly need to know that the system is running well and being used effectively.",
+    "business-intelligence": "This means you want to understand the business impact - like how much time the system saves, whether it's improving productivity, if customers are happier, and what return you're getting on your investment. Choose this if you need to demonstrate business value and make data-driven decisions about the system."
+  }
+}

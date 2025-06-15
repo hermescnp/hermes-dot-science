@@ -1,0 +1,48 @@
+{
+  "badgeText": "Use Cases",
+  "title": "Transforming Industries",
+  "subtitle": "Our AI platform is designed to meet the unique challenges of various sectors.",
+  "items": [
+    {
+      "iconName": "BuildingIcon",
+      "title": "Enterprise Knowledge Management",
+      "description": "Centralize organizational knowledge and enable AI-powered search and retrieval across all your data sources.",
+      "accentColor": "rgba(59, 130, 246, 0.5)"
+    },
+    {
+      "iconName": "GovernmentIcon",
+      "title": "Government Operations",
+      "description": "Streamline processes, enhance citizen services, and improve decision-making with secure AI solutions.",
+      "accentColor": "rgba(139, 92, 246, 0.5)"
+    },
+    {
+      "iconName": "FinanceIcon",
+      "title": "Financial Services",
+      "description": "Enhance compliance, risk assessment, and customer service with AI that respects strict data security requirements.",
+      "accentColor": "rgba(245, 158, 11, 0.5)"
+    },
+    {
+      "iconName": "HealthcareIcon",
+      "title": "Healthcare",
+      "description": "Improve patient care and operational efficiency while maintaining HIPAA compliance and data privacy.",
+      "accentColor": "rgba(239, 68, 68, 0.5)"
+    },
+    {
+      "iconName": "LegalIcon",
+      "title": "Legal",
+      "description": "Accelerate legal research, contract analysis, and case preparation with secure, accurate AI assistance.",
+      "accentColor": "rgba(132, 204, 22, 0.5)"
+    },
+    {
+      "iconName": "EducationIcon",
+      "title": "Education",
+      "description": "Transform learning experiences and administrative processes with customizable AI solutions.",
+      "accentColor": "rgba(14, 165, 233, 0.5)"
+    }
+  ],
+  "cta": {
+    "text": "Ready to transform your industry with custom AI solutions?",
+    "buttonText": "Learn More",
+    "href": "/learn-more"
+  }
+}

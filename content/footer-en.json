@@ -1,0 +1,20 @@
+{
+  "companyName": "Hermes Dot Science",
+  "companyDescription": "Enterprise-grade AI solutions for organizations that demand security, customization, and control.",
+  "sections": [
+    {
+      "title": "Product",
+      "links": [{ "label": "Learn More", "href": "/learn-more" }, { "label": "Get Quote", "href": "/quote" }]
+    },
+    {
+      "title": "Legal",
+      "links": [{ "label": "Terms & Conditions", "href": "/terms-and-conditions" }]
+    }
+  ],
+  "copyrightText": "© {year} Hermes Dot Science. All rights reserved.",
+  "socialLinks": [
+    { "name": "LinkedIn", "href": "https://www.linkedin.com/company/hermes-dot-science/", "iconName": "LinkedInSVG" },
+    { "name": "Twitter", "href": "https://x.com/hermesscience", "iconName": "TwitterSVG" },
+    { "name": "Instagram", "href": "https://www.instagram.com/hermes.science/", "iconName": "InstagramSVG" }
+  ]
+}

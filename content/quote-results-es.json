@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "title": "Resultados de Cotización | Hermes Dot Science",
+    "description": "Tu cotización personalizada de solución de IA de Hermes Dot Science"
+  },
+  "header": {
+    "quoteCompleted": "Cotización Completada",
+    "customQuoteTitle": "Tu Cotización Personalizada de Solución IA",
+    "customQuoteTitleWithName": "Cotización para Solución IA de {name}",
+    "preparedFor": "Preparado para"
+  },
+  "serviceDescription": "Esta propuesta describe una estrategia integral de implementación de IA de nivel empresarial diseñada para transformar las operaciones de tu negocio a través de automatización inteligente, información basada en datos y experiencias mejoradas para el cliente. Nuestra solución abarca todo el ciclo de vida del desarrollo, desde la evaluación inicial hasta la implementación, integración y mantenimiento continuo, entregado por nuestro equipo especializado.",
+  "summary": {
+    "totalInvestment": "Inversión Total",
+    "completeSolutionCost": "Costo total de la solución",
+    "developmentTime": "Tiempo de Desarrollo",
+    "weeks": "semanas",
+    "hours": "horas",
+    "estimatedCompletion": "Finalización Estimada",
+    "projectedDeliveryDate": "Fecha de entrega proyectada"
+  },
+  "breakdown": {
+    "title": "Desglose Detallado del Proyecto",
+    "description": "Visión completa de todos los componentes incluidos en tu solución de IA",
+    "free": "GRATIS",
+    "noCharge": "Sin cargo",
+    "adjustedForComplexity": "Ajustado por complejidad",
+    "perHour": "/hora",
+    "totalProjectInvestment": "Inversión Total del Proyecto",
+    "completeSolution": "Implementación completa de solución IA",
+    "totalHours": "horas totales"
+  },
+  "stages": {
+    "organizational-assessment": {
+      "title": "Evaluación Organizacional",
+      "description": "Una revisión de alto nivel de la estructura de tu empresa o agencia, las interacciones del equipo y los procesos existentes para identificar puntos problemáticos, cuellos de botella y oportunidades para mejoras de eficiencia impulsadas por IA."
+    },
+    "demo-proposal": {
+      "title": "Propuesta de Demostración y Hoja de Ruta",
+      "description": "Un plan de prueba de concepto personalizado, completo con una matriz de priorización MoSCoW (Debe tener, Debería tener, Podría tener, No tendrá), una hoja de ruta de implementación por fases y una estimación aproximada del presupuesto para alinear el alcance y las expectativas."
+    },
+    "workflow-analysis": {
+      "title": "Análisis Detallado de Flujo de Trabajo y Arquitectura de Sistemas",
+      "description": "Inmersión profunda en los procesos seleccionados: mapeo de flujos de trabajo de extremo a extremo, flujos de datos y dependencias del sistema; definición de requisitos de seguridad, cumplimiento y escalabilidad; y producción de un plano de arquitectura técnica."
+    },
+    "knowledge-base": {
+      "title": "Curación de Base de Conocimientos y Preparación de Entrada",
+      "description": "Inventario, ingesta y preprocesamiento de todas las fuentes de datos relevantes—estructuradas, semi-estructuradas y no estructuradas—limpiando y organizando el contenido para que pueda ser ingerido de manera confiable en tus modelos de IA."
+    },
+    "implementation": {
+      "title": "Implementación / Desarrollo",
+      "description": "Construir y entrenar tu(s) agente(s) de IA personalizado(s), ya sea un chatbot basado en reglas, un asistente conversacional impulsado por PNL, una interfaz de voz o un flujo de trabajo automatizado de backend, siguiendo las mejores prácticas para seguridad y mantenibilidad."
+    },
+    "integrations": {
+      "title": "Integraciones",
+      "description": "Conectar el agente de IA a tus sistemas principales (CRM, ERP, tickets, APIs personalizadas, bases de datos locales, etc.), desarrollando los adaptadores o middleware necesarios para garantizar un intercambio de datos bidireccional y sin problemas."
+    },
+    "qa": {
+      "title": "Aseguramiento de Calidad (QA)",
+      "description": "Ejecutar planes de prueba que cubran pruebas unitarias, pruebas de integración, pruebas de rendimiento y estrés, auditorías de seguridad y, si es necesario, conjuntos de regresión automatizados para validar la funcionalidad, confiabilidad y cumplimiento."
+    },
+    "maintenance": {
+      "title": "Mantenimiento y Monitoreo (KPIs)",
+      "description": "Soporte continuo y monitoreo del sistema, con paneles e informes que rastrean el tiempo de actividad, la precisión de respuesta, la satisfacción del usuario, las métricas de ahorro de costos y otros KPIs acordados; incluye reentrenamiento del modelo, parches y ajuste de rendimiento."
+    }
+  },
+  "nextSteps": {
+    "title": "Próximos Pasos",
+    "description": "¿Listo para avanzar con tu solución de IA?",
+    "disclaimer": {
+      "title": "Aviso Importante",
+      "content": "Esta cotización se genera automáticamente según tus respuestas y sirve como una estimación inicial. La cotización oficial se proporcionará después de nuestra Evaluación Organizacional complementaria - una consulta gratuita sin compromiso requerido. Esta evaluación nos ayuda a comprender tus necesidades específicas y proporcionar precios precisos adaptados a tu organización."
+    },
+    "termsCheckbox": {
+      "before": "Reconozco que he leído y entendido el aviso anterior, y acepto los ",
+      "link": "términos y condiciones",
+      "after": " de este servicio."
+    },
+    "requestQuote": "Solicitar Esta Cotización",
+    "downloadPDF": "Descargar PDF",
+    "shareQuote": "Compartir Cotización"
+  },
+  "clientInfo": {
+    "title": "Información del Cliente",
+    "name": "Nombre",
+    "company": "Empresa",
+    "role": "Cargo",
+    "email": "Correo Electrónico"
+  },
+  "whatsIncluded": {
+    "title": "Qué Incluye",
+    "description": "Tu paquete completo de solución de IA incluye todo lo siguiente",
+    "items": [
+      "Desarrollo de modelo IA personalizado",
+      "Integración completa del sistema",
+      "Capacitación y documentación para usuarios",
+      "Pruebas de aseguramiento de calidad",
+      "Implementación y configuración",
+      "Soporte de 30 días post-lanzamiento",
+      "Herramientas de monitoreo de rendimiento",
+      "Planificación de escalabilidad"
+    ]
+  },
+  "contactForm": {
+    "title": "Confirma tus Datos",
+    "description": "Revisa y confirma tu información para proceder con esta cotización",
+    "fullName": "Nombre Completo *",
+    "emailAddress": "Dirección de Correo Electrónico *",
+    "company": "Empresa",
+    "phoneNumber": "Número de Teléfono",
+    "additionalRequirements": "Requisitos Adicionales",
+    "placeholder": "Cualquier requisito específico, restricciones de tiempo o preguntas...",
+    "submitButton": "Enviar Solicitud de Cotización"
+  },
+  "navigation": {
+    "backToHome": "Volver al Inicio",
+    "startNewQuote": "Iniciar Nueva Cotización"
+  },
+  "timeLabels": {
+    "hours": "horas",
+    "week": "semana",
+    "weeks": "semanas"
+  }
+}

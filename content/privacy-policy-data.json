@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "title": "Privacy Policy | Hermes Dot Science",
+    "description": "Our commitment to protecting your privacy and securing your data."
+  },
+  "pageContent": {
+    "backButtonText": "Back to Home",
+    "mainTitle": "Privacy Policy"
+  },
+  "templateProps": {
+    "companyName": "AI Enterprise",
+    "websiteUrl": "https://aienterprise.com",
+    "contactEmail": "privacy@aienterprise.com",
+    "contactAddress": "AI Enterprise, Inc.\n123 AI Boulevard\nTech City, CA 94000\nUnited States",
+    "includeGDPR": true,
+    "includeCCPA": true,
+    "includeCookies": true,
+    "includeAnalytics": true,
+    "includeThirdPartyServices": ["OpenAI", "Google Analytics", "AWS", "Microsoft Azure"]
+  }
+}

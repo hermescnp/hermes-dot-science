@@ -1,0 +1,18 @@
+{
+  "badgeText": "Hermes Dot Science",
+  "title": "Agentes de IA Seguros para Empresas y Gobierno",
+  "subtitle": "Desbloquea el poder de la IA con seguridad empresarial, agentes personalizables y gestión integral del conocimiento.",
+  "typingPrompts": [
+    "Analiza los comentarios de nuestros clientes e identifica tendencias clave...",
+    "Resume los últimos documentos y destaca cambios importantes...",
+    "Crea un artículo de base de conocimientos sobre nuestras nuevas características de seguridad...",
+    "Genera un informe sobre las métricas de rendimiento de nuestro departamento...",
+    "Redacta una respuesta basada en nuestras presentaciones anteriores..."
+  ],
+  "ctaButton1": { "text": "Solicitar Demo", "icon": "Zap" },
+  "ctaButton2": { "text": "Saber Más" },
+  "scrollDownButton": {
+    "targetSectionId": "platforms",
+    "text": "Explorar Plataformas"
+  }
+}

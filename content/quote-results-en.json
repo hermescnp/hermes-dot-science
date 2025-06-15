@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "title": "Quote Results | Hermes Dot Science",
+    "description": "Your custom AI solution quote from Hermes Dot Science"
+  },
+  "header": {
+    "quoteCompleted": "Quote Completed",
+    "customQuoteTitle": "Your Custom AI Solution Quote",
+    "customQuoteTitleWithName": "{name}'s Custom AI Solution Quote",
+    "preparedFor": "Prepared for"
+  },
+  "serviceDescription": "This proposal outlines a comprehensive enterprise-grade AI implementation strategy designed to transform your business operations through intelligent automation, data-driven insights, and enhanced customer experiences. Our solution encompasses the complete development lifecycle from initial assessment through deployment, integration, and ongoing maintenance, delivered by our specialized team.",
+  "summary": {
+    "totalInvestment": "Total Investment",
+    "completeSolutionCost": "Complete solution cost",
+    "developmentTime": "Development Time",
+    "weeks": "weeks",
+    "hours": "hours",
+    "estimatedCompletion": "Estimated Completion",
+    "projectedDeliveryDate": "Projected delivery date"
+  },
+  "breakdown": {
+    "title": "Detailed Project Breakdown",
+    "description": "Comprehensive overview of all components included in your AI solution",
+    "free": "FREE",
+    "noCharge": "No charge",
+    "adjustedForComplexity": "Adjusted for complexity",
+    "perHour": "/hour",
+    "totalProjectInvestment": "Total Project Investment",
+    "completeSolution": "Complete AI solution implementation",
+    "totalHours": "total hours"
+  },
+  "stages": {
+    "organizational-assessment": {
+      "title": "Organizational Assessment",
+      "description": "A high-level review of your enterprise or agency's structure, team interactions, and existing processes to pinpoint pain points, bottlenecks, and opportunities for AI-driven efficiency gains."
+    },
+    "demo-proposal": {
+      "title": "Demo Proposal & Roadmap",
+      "description": "A tailored proof-of-concept plan, complete with a MoSCoW prioritization matrix (Must-have, Should-have, Could-have, Won't-have), a phased rollout roadmap, and a ballpark budget estimate to align on scope and expectations."
+    },
+    "workflow-analysis": {
+      "title": "Detailed Workflow & Systems Architecture Analysis",
+      "description": "Deep dive into the selected process(es): map end-to-end workflows, data flows, and system dependencies; define security, compliance, and scalability requirements; and produce a technical architecture blueprint."
+    },
+    "knowledge-base": {
+      "title": "Knowledge-Base Curation & Input Preparation",
+      "description": "Inventory, ingest, and preprocess all relevant data sources—structured, semi-structured, and unstructured—cleaning and organizing content so it can be reliably ingested into your AI models."
+    },
+    "implementation": {
+      "title": "Implementation / Development",
+      "description": "Build and train your custom AI agent(s), whether a rule-based chatbot, an NLP-driven conversational assistant, a voice interface, or an automated backend workflow, following best practices for security and maintainability."
+    },
+    "integrations": {
+      "title": "Integrations",
+      "description": "Connect the AI agent to your core systems (CRM, ERP, ticketing, custom APIs, on-premise databases, etc.), developing any necessary adapters or middleware to ensure seamless, bi-directional data exchange."
+    },
+    "qa": {
+      "title": "Quality Assurance (QA)",
+      "description": "Execute test plans covering unit tests, integration tests, performance and stress tests, security audits, and—if required—automated regression suites to validate functionality, reliability, and compliance."
+    },
+    "maintenance": {
+      "title": "Maintenance & Monitoring (KPIs)",
+      "description": "Ongoing support and system monitoring, with dashboards and reports tracking uptime, response accuracy, user satisfaction, cost-savings metrics, and other agreed KPIs; includes model retraining, patching, and performance tuning."
+    }
+  },
+  "nextSteps": {
+    "title": "Next Steps",
+    "description": "Ready to move forward with your AI solution?",
+    "disclaimer": {
+      "title": "Important Disclaimer",
+      "content": "This quote is automatically generated based on your responses and serves as an initial estimate. The official quote will be provided after our complimentary Organizational Assessment - a free consultation with no commitment required. This assessment helps us understand your specific needs and provide accurate pricing tailored to your organization."
+    },
+    "termsCheckbox": {
+      "before": "I acknowledge that I have read and understood the disclaimer above, and I accept the ",
+      "link": "terms and conditions",
+      "after": " of this service."
+    },
+    "requestQuote": "Request This Quote",
+    "downloadPDF": "Download PDF",
+    "shareQuote": "Share Quote"
+  },
+  "clientInfo": {
+    "title": "Client Information",
+    "name": "Name",
+    "company": "Company",
+    "role": "Role",
+    "email": "Email"
+  },
+  "whatsIncluded": {
+    "title": "What's Included",
+    "description": "Your comprehensive AI solution package includes all of the following",
+    "items": [
+      "Custom AI model development",
+      "Complete system integration",
+      "User training and documentation",
+      "Quality assurance testing",
+      "Deployment and setup",
+      "30-day post-launch support",
+      "Performance monitoring tools",
+      "Scalability planning"
+    ]
+  },
+  "contactForm": {
+    "title": "Confirm Your Details",
+    "description": "Review and confirm your information to proceed with this quote",
+    "fullName": "Full Name *",
+    "emailAddress": "Email Address *",
+    "company": "Company",
+    "phoneNumber": "Phone Number",
+    "additionalRequirements": "Additional Requirements",
+    "placeholder": "Any specific requirements, timeline constraints, or questions...",
+    "submitButton": "Submit Quote Request"
+  },
+  "navigation": {
+    "backToHome": "Back to Home",
+    "startNewQuote": "Start New Quote"
+  },
+  "timeLabels": {
+    "hours": "hours",
+    "week": "week",
+    "weeks": "weeks"
+  }
+}

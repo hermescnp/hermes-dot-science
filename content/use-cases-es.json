@@ -1,0 +1,48 @@
+{
+  "badgeText": "Casos de Uso",
+  "title": "Transformando Industrias",
+  "subtitle": "Nuestra plataforma de IA está diseñada para enfrentar los desafíos únicos de varios sectores.",
+  "items": [
+    {
+      "iconName": "BuildingIcon",
+      "title": "Gestión del Conocimiento Empresarial",
+      "description": "Centraliza el conocimiento organizacional y habilita búsqueda y recuperación impulsada por IA en todas tus fuentes de datos.",
+      "accentColor": "rgba(59, 130, 246, 0.5)"
+    },
+    {
+      "iconName": "GovernmentIcon",
+      "title": "Operaciones Gubernamentales",
+      "description": "Optimiza procesos, mejora servicios ciudadanos y mejora la toma de decisiones con soluciones de IA seguras.",
+      "accentColor": "rgba(139, 92, 246, 0.5)"
+    },
+    {
+      "iconName": "FinanceIcon",
+      "title": "Servicios Financieros",
+      "description": "Mejora el cumplimiento, evaluación de riesgos y servicio al cliente con IA que respeta estrictos requisitos de seguridad de datos.",
+      "accentColor": "rgba(245, 158, 11, 0.5)"
+    },
+    {
+      "iconName": "HealthcareIcon",
+      "title": "Salud",
+      "description": "Mejora la atención al paciente y eficiencia operacional mientras mantienes el cumplimiento HIPAA y privacidad de datos.",
+      "accentColor": "rgba(239, 68, 68, 0.5)"
+    },
+    {
+      "iconName": "LegalIcon",
+      "title": "Legal",
+      "description": "Acelera la investigación legal, análisis de contratos y preparación de casos con asistencia de IA segura y precisa.",
+      "accentColor": "rgba(132, 204, 22, 0.5)"
+    },
+    {
+      "iconName": "EducationIcon",
+      "title": "Educación",
+      "description": "Transforma experiencias de aprendizaje y procesos administrativos con soluciones de IA personalizables.",
+      "accentColor": "rgba(14, 165, 233, 0.5)"
+    }
+  ],
+  "cta": {
+    "text": "¿Listo para transformar tu industria con soluciones de IA personalizadas?",
+    "buttonText": "Saber Más",
+    "href": "/learn-more"
+  }
+}

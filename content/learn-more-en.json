@@ -1,0 +1,109 @@
+{
+  "pageTitle": "Learn More About Hermes Dot Science",
+  "pageSubtitle": "Discover how our enterprise AI platform transforms businesses and government operations with secure, customizable solutions.",
+  "heroSection": {
+    "title": "Enterprise AI That Works For You",
+    "subtitle": "Built for security, designed for scale, optimized for results.",
+    "features": ["End-to-end encryption", "On-premises deployment", "Custom AI agents", "24/7 enterprise support"]
+  },
+  "sections": [
+    {
+      "id": "security",
+      "title": "Enterprise-Grade Security",
+      "subtitle": "Your data stays secure with military-grade encryption and compliance standards.",
+      "content": "Hermes Dot Science implements zero-trust architecture with end-to-end encryption, ensuring your sensitive data never leaves your control. Our platform meets SOC 2, GDPR, and government security requirements.",
+      "features": [
+        {
+          "icon": "Shield",
+          "title": "Zero-Trust Architecture",
+          "description": "Every request is verified and encrypted before processing."
+        },
+        {
+          "icon": "Lock",
+          "title": "End-to-End Encryption",
+          "description": "Data is encrypted in transit and at rest with AES-256 encryption."
+        },
+        {
+          "icon": "FileCheck",
+          "title": "Compliance Ready",
+          "description": "SOC 2, GDPR, HIPAA, and government compliance built-in."
+        }
+      ]
+    },
+    {
+      "id": "customization",
+      "title": "Fully Customizable AI Agents",
+      "subtitle": "Create AI agents tailored to your specific business needs and workflows.",
+      "content": "Our platform allows you to build custom AI agents that understand your business context, integrate with your existing systems, and follow your specific protocols and procedures.",
+      "features": [
+        {
+          "icon": "Bot",
+          "title": "Custom Training",
+          "description": "Train agents on your specific data and business processes."
+        },
+        {
+          "icon": "Workflow",
+          "title": "Workflow Integration",
+          "description": "Seamlessly integrate with your existing enterprise workflows."
+        },
+        {
+          "icon": "Settings",
+          "title": "Fine-Grained Control",
+          "description": "Adjust agent behavior and responses to match your requirements."
+        }
+      ]
+    },
+    {
+      "id": "deployment",
+      "title": "Flexible Deployment Options",
+      "subtitle": "Deploy on-premises, in the cloud, or hybrid configurations.",
+      "content": "Choose the deployment model that best fits your security and infrastructure requirements. From air-gapped on-premises installations to cloud-native deployments.",
+      "features": [
+        {
+          "icon": "Server",
+          "title": "On-Premises",
+          "description": "Complete control with air-gapped installations."
+        },
+        {
+          "icon": "Cloud",
+          "title": "Cloud-Native",
+          "description": "Scalable cloud deployments with enterprise security."
+        },
+        {
+          "icon": "Network",
+          "title": "Hybrid Solutions",
+          "description": "Combine on-premises and cloud for optimal flexibility."
+        }
+      ]
+    },
+    {
+      "id": "integration",
+      "title": "Seamless Integration",
+      "subtitle": "Connect with your existing tools and systems effortlessly.",
+      "content": "Our platform integrates with 100+ enterprise tools and systems, from CRM and ERP systems to industry-specific software.",
+      "features": [
+        {
+          "icon": "Plug",
+          "title": "API-First Design",
+          "description": "RESTful APIs and webhooks for easy integration."
+        },
+        {
+          "icon": "Database",
+          "title": "Data Connectors",
+          "description": "Pre-built connectors for popular enterprise systems."
+        },
+        {
+          "icon": "Zap",
+          "title": "Real-Time Sync",
+          "description": "Keep your data synchronized across all platforms."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Ready To Transform Your Business?",
+    "subtitle": "Join hundreds of companies already using Hermes Dot Science to revolutionize their operations.",
+    "primaryButton": "Request Demo",
+    "secondaryButton": "Get a Quote"
+  }
+}

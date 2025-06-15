@@ -1,0 +1,400 @@
+{
+  "companySizes": [
+    {
+      "id": "1-20",
+      "label": "1 - 20 empleados",
+      "description": "Startup pequeña o negocio local",
+      "multiplier": 0.1,
+      "icon": "👥"
+    },
+    {
+      "id": "21-50",
+      "label": "21 - 50 empleados",
+      "description": "Pequeña empresa en crecimiento",
+      "multiplier": 0.2,
+      "icon": "🏢"
+    },
+    {
+      "id": "51-100",
+      "label": "51 - 100 empleados",
+      "description": "Empresa mediana",
+      "multiplier": 0.3,
+      "icon": "🏬"
+    },
+    {
+      "id": "101-200",
+      "label": "101 - 200 empleados",
+      "description": "Mercado medio establecido",
+      "multiplier": 0.4,
+      "icon": "🏭"
+    },
+    {
+      "id": "201-500",
+      "label": "201 - 500 empleados",
+      "description": "Gran mercado medio",
+      "multiplier": 0.5,
+      "icon": "🏗️"
+    },
+    {
+      "id": "501-1000",
+      "label": "501 - 1,000 empleados",
+      "description": "Empresa grande",
+      "multiplier": 0.6,
+      "icon": "🌆"
+    },
+    {
+      "id": "1001-2500",
+      "label": "1,001 - 2,500 empleados",
+      "description": "Empresa muy grande",
+      "multiplier": 0.7,
+      "icon": "🏙️"
+    },
+    {
+      "id": "2501-5000",
+      "label": "2,501 - 5,000 empleados",
+      "description": "Empresa",
+      "multiplier": 0.8,
+      "icon": "🌃"
+    },
+    {
+      "id": "5001-10000",
+      "label": "5,001 - 10,000 empleados",
+      "description": "Gran empresa",
+      "multiplier": 0.9,
+      "icon": "🌉"
+    },
+    {
+      "id": "10000+",
+      "label": "10,000+ empleados",
+      "description": "Gobierno/Fortune 500",
+      "multiplier": 1.0,
+      "icon": "🏛️"
+    }
+  ],
+  "questions": [
+    {
+      "id": "company-size",
+      "botMessage": "Antes de profundizar en los requisitos de tu agente de IA, me gustaría entender la escala con la que trabajamos. ¿Cuál es el tamaño de tu organización?",
+      "stage": "Perfil de la Empresa",
+      "isCompanySizeQuestion": true
+    },
+    {
+      "id": "information-landscape",
+      "botMessage": "¡Perfecto! Ahora hablemos sobre tu panorama de información. ¿A dónde va actualmente tu equipo para encontrar la información que necesita para hacer su trabajo?",
+      "followUpMessage": "¡Interesante! ¿Cuál es el formato típico de esta información?",
+      "stage": "Arquitectura de Información",
+      "options": [
+        {
+          "id": "centralized-sources",
+          "label": "Principalmente de 1-2 sistemas centrales",
+          "basePrice": 7500,
+          "hours": 150,
+          "conversationalText": "¡Principalmente usamos 1-2 sistemas principales para nuestra información! 🏛️",
+          "description": "La información está bien centralizada"
+        },
+        {
+          "id": "distributed-sources",
+          "label": "De varias plataformas y herramientas diferentes",
+          "basePrice": 15000,
+          "hours": 300,
+          "conversationalText": "¡Obtenemos información de varias plataformas diferentes! 🌐",
+          "description": "La información abarca múltiples sistemas"
+        },
+        {
+          "id": "everywhere-sources",
+          "label": "De muchos lugares: bases de datos, archivos, emails, etc.",
+          "basePrice": 25000,
+          "hours": 500,
+          "conversationalText": "¡La información está en todas partes: bases de datos, archivos, emails, lo que sea! 📁",
+          "description": "La información está muy distribuida"
+        }
+      ],
+      "multipliers": [
+        {
+          "id": "structured-reports",
+          "label": "Principalmente reportes, dashboards y consultas de base de datos",
+          "multiplier": 0.8,
+          "description": "La información viene en formatos estructurados y predecibles",
+          "conversationalText": "¡Principalmente reportes estructurados, dashboards y consultas de base de datos! 📋"
+        },
+        {
+          "id": "mixed-formats",
+          "label": "Mezcla de reportes, documentos e hilos de comunicación",
+          "multiplier": 1.0,
+          "description": "Combinación de información estructurada y no estructurada",
+          "conversationalText": "¡Una mezcla de reportes, documentos, emails y comunicaciones del equipo! 📄"
+        },
+        {
+          "id": "unstructured-heavy",
+          "label": "Muchos documentos, imágenes, grabaciones y conocimiento tribal",
+          "multiplier": 1.3,
+          "description": "Gran dependencia del contenido no estructurado y conocimiento institucional",
+          "conversationalText": "¡Muchos documentos, imágenes, grabaciones y conocimiento que está en las cabezas de las personas! 🧠"
+        }
+      ],
+      "requiresMultiplier": true
+    },
+    {
+      "id": "user-interaction",
+      "botMessage": "Ahora, ¿cómo visualizas que tu equipo y clientes interactúen con este agente de IA? ¿Qué tipo de interacción se siente más natural para tu entorno?",
+      "stage": "Diseño de Experiencia de Usuario",
+      "options": [
+        {
+          "id": "simple-interactions",
+          "label": "Interacciones simples y directas",
+          "basePrice": 0,
+          "hours": 0,
+          "conversationalText": "¡Preferimos interacciones simples y directas! 💬",
+          "description": "Respuestas rápidas y comunicación directa",
+          "subOptions": [
+            {
+              "id": "quick-answers",
+              "label": "Respuestas rápidas a preguntas comunes",
+              "basePrice": 15000,
+              "hours": 300,
+              "conversationalText": "¡Necesitamos respuestas rápidas a preguntas frecuentes! ⚡",
+              "description": "Recuperación eficiente de FAQ y conocimiento"
+            },
+            {
+              "id": "guided-conversations",
+              "label": "Conversaciones guiadas que entienden el contexto",
+              "basePrice": 35000,
+              "hours": 700,
+              "conversationalText": "¡Queremos conversaciones guiadas que realmente entiendan lo que estamos preguntando! 💬",
+              "description": "Diálogo contextual y resolución de problemas"
+            }
+          ]
+        },
+        {
+          "id": "advanced-interactions",
+          "label": "Interacciones avanzadas y manos libres",
+          "basePrice": 0,
+          "hours": 0,
+          "conversationalText": "¡Queremos interacciones avanzadas y manos libres! 🎤",
+          "description": "Interacciones por voz y automatizadas",
+          "subOptions": [
+            {
+              "id": "voice-interactions",
+              "label": "Conversaciones por voz mientras trabajamos manos libres",
+              "basePrice": 50000,
+              "hours": 1000,
+              "conversationalText": "¡Las conversaciones por voz serían perfectas para nuestro entorno de trabajo manos libres! 🎤",
+              "description": "Interacciones habilitadas por voz"
+            },
+            {
+              "id": "background-automation",
+              "label": "Trabajando en segundo plano para manejar tareas rutinarias",
+              "basePrice": 60000,
+              "hours": 1200,
+              "conversationalText": "¡Lo queremos trabajando en segundo plano, manejando tareas rutinarias automáticamente! 🔄",
+              "description": "Procesamiento automatizado de flujos de trabajo"
+            }
+          ]
+        },
+        {
+          "id": "intelligent-coordination",
+          "label": "Coordinación inteligente y aprendizaje",
+          "basePrice": 0,
+          "hours": 0,
+          "conversationalText": "¡Necesitamos capacidades de coordinación inteligente y aprendizaje! 🧠",
+          "description": "Asistentes inteligentes y coordinación de equipos",
+          "subOptions": [
+            {
+              "id": "intelligent-assistant",
+              "label": "Asistente proactivo que aprende y mejora con el tiempo",
+              "basePrice": 100000,
+              "hours": 2000,
+              "conversationalText": "¡Un asistente proactivo que aprende nuestros patrones y se vuelve más inteligente! 🎓",
+              "description": "IA adaptativa con aprendizaje continuo"
+            },
+            {
+              "id": "team-coordination",
+              "label": "Coordinando múltiples miembros del equipo y socios externos",
+              "basePrice": 150000,
+              "hours": 3000,
+              "conversationalText": "¡Coordinando todo nuestro equipo y socios externos sin problemas! 👥",
+              "description": "Orquestación de múltiples partes interesadas"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "external-connections",
+      "botMessage": "Ahora, pensando en tu flujo de trabajo diario, ¿qué herramientas y servicios externos usa regularmente tu equipo que necesitarían mantenerse sincronizados?",
+      "followUpMessage": "¡Entendido! ¿Cómo ha sido tu experiencia con estos sistemas?",
+      "stage": "Requisitos de Integración",
+      "options": [
+        {
+          "id": "essential-tools",
+          "label": "Solo nuestras herramientas comerciales principales (CRM, email, calendario)",
+          "basePrice": 10000,
+          "hours": 200,
+          "conversationalText": "¡Solo nuestras herramientas comerciales esenciales: CRM, email, calendario! 📅",
+          "description": "Integraciones de productividad principales"
+        },
+        {
+          "id": "business-suite",
+          "label": "Suite comercial completa (contabilidad, gestión de proyectos, comunicación)",
+          "basePrice": 20000,
+          "hours": 400,
+          "conversationalText": "¡Nuestra suite comercial completa: contabilidad, gestión de proyectos, herramientas de comunicación! 💼",
+          "description": "Integración integral de herramientas comerciales"
+        },
+        {
+          "id": "specialized-ecosystem",
+          "label": "Herramientas específicas de la industria más aplicaciones comerciales estándar",
+          "basePrice": 25000,
+          "hours": 500,
+          "conversationalText": "¡Herramientas específicas de la industria más todas nuestras aplicaciones comerciales estándar! 🏭",
+          "description": "Integración especializada de la industria"
+        }
+      ],
+      "multipliers": [
+        {
+          "id": "cloud-native",
+          "label": "Herramientas modernas basadas en la nube con excelentes APIs",
+          "multiplier": 1.0,
+          "description": "Plataformas SaaS contemporáneas con capacidades de integración robustas",
+          "conversationalText": "¡Herramientas modernas basadas en la nube que funcionan bien con otras! ☁️"
+        },
+        {
+          "id": "mixed-environment",
+          "label": "Mezcla de sistemas en la nube y locales que hemos construido con el tiempo",
+          "multiplier": 1.3,
+          "description": "Entorno híbrido con varios desafíos de integración",
+          "conversationalText": "¡Una mezcla de sistemas en la nube y locales que hemos construido a lo largo de los años! 🏗️"
+        }
+      ],
+      "requiresMultiplier": true
+    },
+    {
+      "id": "quality-expectations",
+      "botMessage": "¡Casi terminamos! 🧪 ¿Cuáles son tus expectativas sobre confiabilidad y rendimiento? ¿Qué tan crítico es este sistema para tus operaciones diarias?",
+      "stage": "Estándares de Calidad",
+      "options": [
+        {
+          "id": "standard-reliability",
+          "label": "Confiabilidad comercial estándar - problemas ocasionales están bien",
+          "basePrice": 5000,
+          "hours": 100,
+          "conversationalText": "¡La confiabilidad comercial estándar funciona para nosotros - los problemas ocasionales son manejables! ✅",
+          "description": "Confiabilidad de grado comercial normal"
+        },
+        {
+          "id": "high-availability",
+          "label": "Alta confiabilidad - esto será crítico para nuestro equipo",
+          "basePrice": 10000,
+          "hours": 200,
+          "conversationalText": "¡La alta confiabilidad es importante - esto será crítico para nuestras operaciones! 🎯",
+          "description": "Confiabilidad del sistema crítico para la misión"
+        },
+        {
+          "id": "enterprise-grade",
+          "label": "Grado empresarial - el tiempo de inactividad impacta directamente los ingresos",
+          "basePrice": 15000,
+          "hours": 300,
+          "conversationalText": "¡La confiabilidad de grado empresarial es esencial - cualquier tiempo de inactividad impacta directamente nuestros ingresos! 💰",
+          "description": "Confiabilidad del sistema crítico para los ingresos"
+        }
+      ]
+    },
+    {
+      "id": "ongoing-partnership",
+      "botMessage": "¡Última pregunta! 🎉 ¿Cómo prefieres manejar el soporte continuo y la evolución del sistema? ¿Qué enfoque se ajusta mejor a cómo tu organización típicamente maneja la tecnología?",
+      "followUpMessage": "¡Perfecto! ¿Qué nivel de información necesitas típicamente para los sistemas comerciales?",
+      "stage": "Modelo de Asociación",
+      "options": [
+        {
+          "id": "launch-support",
+          "label": "Ayúdanos a lanzar, luego lo manejaremos internamente",
+          "basePrice": 12000,
+          "hours": 240,
+          "conversationalText": "¡Ayúdanos a lanzar exitosamente, luego lo tomaremos desde ahí internamente! 🚀",
+          "description": "Soporte de lanzamiento inicial con transferencia interna"
+        },
+        {
+          "id": "ongoing-partnership",
+          "label": "Asociación continua para optimización y crecimiento",
+          "basePrice": 24000,
+          "hours": 480,
+          "conversationalText": "¡Nos gustaría una asociación continua para optimización continua y crecimiento! 🤝",
+          "description": "Relación colaborativa a largo plazo"
+        },
+        {
+          "id": "strategic-evolution",
+          "label": "Asociación estratégica - evolucionar con nuestras necesidades comerciales",
+          "basePrice": 48000,
+          "hours": 960,
+          "conversationalText": "¡Una asociación estratégica que evolucione con nuestras necesidades comerciales cambiantes! 📈",
+          "description": "Alineación comercial estratégica a largo plazo"
+        }
+      ],
+      "multipliers": [
+        {
+          "id": "operational-metrics",
+          "label": "Métricas operacionales básicas (tiempo de actividad, uso, errores)",
+          "multiplier": 0.8,
+          "description": "Monitoreo y reporte estándar del sistema",
+          "conversationalText": "¡Las métricas operacionales básicas como tiempo de actividad, uso y seguimiento de errores funcionan para nosotros! 📊"
+        },
+        {
+          "id": "business-intelligence",
+          "label": "Inteligencia comercial (ROI, ganancias de eficiencia, satisfacción del usuario)",
+          "multiplier": 1.2,
+          "description": "Medición y reporte del impacto comercial estratégico",
+          "conversationalText": "¡Necesitamos inteligencia comercial: ROI, ganancias de eficiencia, insights de satisfacción del usuario! 📈"
+        }
+      ],
+      "requiresMultiplier": true
+    }
+  ],
+  "ui": {
+    "sliderLabels": {
+      "startup": "Startup",
+      "enterprise": "Empresa"
+    },
+    "buttons": {
+      "confirmCompanySize": "Confirmar Tamaño de Empresa",
+      "back": "Atrás"
+    },
+    "messages": {
+      "subQuestionPrompt": "¡Perfecto! Ahora déjame ser más específico: ¿cuál de estas describe mejor lo que necesitas?",
+      "complexityPrompt": "¡Genial! Ahora déjame preguntar sobre el nivel de complejidad:",
+      "priceUpdate": "¡Perfecto! 💰 Tu estimación actual es US${{price}}.",
+      "finalMessage": "🎉 ¡Fantástico! Tengo todo lo que necesito. Déjame preparar tu cotización personalizada...",
+      "explanationIntro": "Permíteme explicarte la opción \"{{option}}\" con más detalle:"
+    },
+    "headers": {
+      "currentEstimate": "Estimación Actual",
+      "estimatedHours": "Horas Estimadas"
+    }
+  },
+  "explanations": {
+    "centralized-sources": "Esto significa que tu equipo principalmente va a uno o dos lugares principales para encontrar lo que necesita - como una base de datos de la empresa, tu sistema de software principal, o un servidor de archivos central. Si la mayor parte de tu información vive en solo unos pocos sistemas clave que todos conocen, esto te describe.",
+    "distributed-sources": "Esto describe equipos que usan varias herramientas y plataformas diferentes regularmente - tal vez tengas un sistema CRM, una herramienta de gestión de proyectos, algo de almacenamiento en la nube, y algunas otras aplicaciones especializadas. Si tu equipo tiene que revisar 3-6 lugares diferentes para hacer su trabajo, esto se ajusta a tu situación.",
+    "everywhere-sources": "Esto es cuando la información está dispersa en todas partes - en hilos de email, varias bases de datos, diferentes sistemas de archivos, carpetas personales de las personas, mensajes de chat, y a veces solo en las cabezas de las personas. Si encontrar información se siente como una búsqueda del tesoro a través de muchos lugares diferentes, esto describe tu realidad actual.",
+    "quick-answers": "Piensa en esto como tener un motor de búsqueda inteligente que puede responder instantáneamente preguntas comunes que tu equipo hace repetidamente. Si tu equipo a menudo necesita datos rápidos, actualizaciones de estado, o respuestas simples a preguntas rutinarias, esto sería perfecto para ti.",
+    "guided-conversations": "Esto es como tener un asistente conocedor que puede tener conversaciones de ida y vuelta, entender lo que realmente estás preguntando, y ayudarte a trabajar a través de problemas paso a paso. Si tu equipo necesita ayuda pensando a través de situaciones complejas o procesos de múltiples pasos, esto te serviría bien.",
+    "voice-interactions": "Esto significa hablar con tu asistente de IA en voz alta, como lo harías con Siri o Alexa, pero para tus necesidades comerciales. Esto es ideal si tu equipo trabaja con las manos, conduce vehículos, o está a menudo lejos de teclados donde hablar sería más conveniente que escribir.",
+    "background-automation": "Piensa en esto como tener un asistente invisible que maneja tareas rutinarias automáticamente sin que tengas que pedir. Si tu equipo pasa tiempo en tareas repetitivas como entrada de datos, actualizaciones de estado, o notificaciones rutinarias, esto trabajaría en segundo plano para manejar esas cosas.",
+    "intelligent-assistant": "Esto es como tener un miembro inteligente del equipo que aprende tus patrones, anticipa tus necesidades, y mejora con el tiempo. Si quieres una IA que se adapte a cómo trabaja tu equipo y se vuelva más útil mientras aprende tus preferencias, esta es la elección correcta.",
+    "team-coordination": "Esto significa tener una IA que puede manejar comunicaciones y tareas a través de múltiples personas, departamentos, o incluso socios externos. Si tu trabajo involucra coordinar entre diferentes grupos o manejar proyectos complejos con muchas partes móviles, esto sería valioso.",
+    "essential-tools": "Esto cubre las herramientas comerciales básicas que la mayoría de las empresas usan - cosas como email, calendario, gestión de clientes (CRM), y tal vez software de contabilidad. Si tu equipo principalmente usa estas aplicaciones comerciales fundamentales, este nivel de integración funcionaría para ti.",
+    "business-suite": "Esto incluye una gama completa de aplicaciones comerciales - todo desde lo básico más herramientas de gestión de proyectos, plataformas de comunicación, sistemas de contabilidad, y otro software operacional. Si tu negocio funciona con un conjunto integral de herramientas y aplicaciones, esto describe tus necesidades.",
+    "specialized-ecosystem": "Esto significa que usas software específico de la industria junto con herramientas comerciales estándar - como software de práctica médica, gestión de casos legales, sistemas de manufactura, u otras herramientas especializadas únicas a tu campo. Si tu industria requiere software específico que los negocios generales no usan, esto se aplica a ti.",
+    "standard-reliability": "Esta es confiabilidad típica de nivel comercial - el sistema funciona bien la mayor parte del tiempo, pero interrupciones ocasionales breves o problemas menores son aceptables. Si unos pocos minutos de tiempo de inactividad aquí y allá no impactarían significativamente tus operaciones, este nivel es suficiente.",
+    "high-availability": "Esto significa que el sistema es crítico para tus operaciones diarias y necesita estar disponible casi todo el tiempo. Si tu equipo depende mucho del sistema para hacer su trabajo y el tiempo de inactividad notablemente ralentizaría la productividad, necesitas este nivel de confiabilidad.",
+    "enterprise-grade": "Esto es para sistemas donde cualquier tiempo de inactividad directamente te cuesta dinero o impacta significativamente tu negocio. Si los clientes no pueden ser atendidos, las ventas se pierden, o las operaciones críticas se detienen cuando el sistema está caído, necesitas este nivel más alto de confiabilidad.",
+    "launch-support": "Esto significa que te ayudamos a configurar todo y ponerlo en funcionamiento sin problemas, entrenar a tu equipo, y luego entregarlo para que lo manejes internamente. Elige esto si tienes personal técnico que puede manejar el mantenimiento y actualizaciones continuas, o si prefieres manejar sistemas internamente.",
+    "ongoing-partnership": "Esto significa que continuamos trabajando juntos después del lanzamiento para optimizar el rendimiento, agregar nuevas características, y ayudar al sistema a crecer con tu negocio. Esto es ideal si quieres mejora continua y prefieres tener soporte experto disponible mientras tus necesidades evolucionan.",
+    "strategic-evolution": "Esta es una asociación a largo plazo donde ayudamos a que tus capacidades de IA evolucionen mientras tu negocio cambia y crece. Elige esto si ves la IA como una parte clave de tu estrategia futura y quieres un socio que te ayude a mantenerte adelante de la curva mientras la tecnología avanza.",
+    "structured-reports": "Esto significa que tu información viene en formatos organizados y predecibles - como reportes estándar, dashboards con gráficos y tablas, o consultas de base de datos que siempre se ven igual. Si la mayor parte de tu información ya está organizada en tablas, reportes, o formatos estructurados, esto describe tu situación.",
+    "mixed-formats": "Esto describe tener alguna información organizada (como reportes y bases de datos) mezclada con contenido menos estructurado (como emails, documentos, y discusiones del equipo). Si tu información viene en varios formatos - algunos organizados, algunos no - esto se ajusta a tu realidad.",
+    "unstructured-heavy": "Esto significa que mucha de tu información importante existe en documentos, imágenes, grabaciones, presentaciones, o solo en el conocimiento y experiencia de las personas. Si encontrar información a menudo requiere leer a través de documentos, preguntar a colegas, o buscar a través de archivos, esto describe tu situación actual.",
+    "cloud-native": "Esto significa que usas software moderno basado en la web que está diseñado para funcionar bien con otros sistemas - como Google Workspace, Microsoft 365, Salesforce, u otras aplicaciones contemporáneas en la nube. Si la mayoría de tus herramientas se acceden a través de navegadores web y son relativamente nuevas, esto describe tu configuración.",
+    "mixed-environment": "Esto describe tener una combinación de herramientas más nuevas basadas en la nube junto con sistemas más antiguos, software construido a medida, o aplicaciones locales que tu empresa ha usado por años. Si tienes algunas herramientas modernas mezcladas con sistemas heredados o soluciones personalizadas, esto se ajusta a tu situación.",
+    "operational-metrics": "Esto significa que quieres rastrear el rendimiento básico del sistema - cosas como si está funcionando correctamente, qué tan seguido la gente lo usa, y si hay algún problema técnico. Elige esto si principalmente necesitas saber que el sistema está funcionando bien y siendo usado efectivamente.",
+    "business-intelligence": "Esto significa que quieres entender el impacto comercial - como cuánto tiempo ahorra el sistema, si está mejorando la productividad, si los clientes están más felices, y qué retorno estás obteniendo de tu inversión. Elige esto si necesitas demostrar valor comercial y tomar decisiones basadas en datos sobre el sistema."
+  }
+}

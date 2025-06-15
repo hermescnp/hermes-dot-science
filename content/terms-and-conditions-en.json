@@ -1,0 +1,57 @@
+{
+  "title": "Terms and Conditions",
+  "lastUpdated": "Effective Date: June 10, 2025",
+  "introduction": {
+    "content": "These Terms and Conditions (\"Agreement\") govern the provision of services by Hermes Dot Science (\"Provider\") to the Client (\"Client\"). By engaging the Provider for any stage of the custom AI agent service, the Client agrees to be bound by this Agreement."
+  },
+  "sections": [
+    {
+      "title": "1. Definitions",
+      "content": "\"Services\" means the AI consulting, development, integration, testing, and support activities described in the Service Stages.\n\n\"Deliverables\" means any reports, prototypes, code, documentation, or other outputs delivered under this Agreement.\n\n\"Free Stages\" means Stages 1 (Organizational Assessment) and 2 (Demo Proposal & Roadmap), provided at no charge.\n\n\"Confidential Information\" means all non‑public business, technical, or financial information disclosed by one party to the other."
+    },
+    {
+      "title": "2. Scope of Services",
+      "content": "Provider shall perform the Services in accordance with the descriptions and pricing communicated via the automated quoting system. The Free Stages will be delivered at no cost; all other stages are chargeable as per the final quote."
+    },
+    {
+      "title": "3. Fees and Payment",
+      "content": "Quotes and Invoicing: Provider will issue a written quote following completion of the questionnaire. Quotes are valid for 30 days. Invoices will reference the agreed stages and fees.\n\nPayment Terms: Unless otherwise agreed in writing, Client shall pay 50% of the total fee upon project kick‑off and the remaining 50% upon completion of Stage 5 (Implementation). Maintenance and Monitoring fees (Stage 8) are invoiced in advance of the retainer period.\n\nLate Payments: Invoices unpaid 15 days after due date incur a finance charge of 1.5% per month (or the maximum permitted by law)."
+    },
+    {
+      "title": "4. Client Responsibilities",
+      "content": "Access and Cooperation: Client shall provide timely access to systems, data, and personnel as required for Provider to perform Services.\n\nAcceptance Testing: Client shall review and either accept or provide written feedback on each Deliverable within 10 business days of receipt.\n\nSecurity: Client is responsible for provisioning necessary security credentials and ensuring compliance with any internal or regulatory policies."
+    },
+    {
+      "title": "5. Intellectual Property",
+      "content": "Background IP: Each party retains all rights in technology and materials they owned prior to or independently of this Agreement.\n\nDeliverables: Upon full payment, Provider assigns to Client all worldwide right, title, and interest in the Deliverables, except for any Provider Background IP embedded or incorporated therein.\n\nLicense to Provider IP: Provider grants Client a royalty‑free, perpetual license to any Provider tools or frameworks used in Deliverables solely for the Client's internal use."
+    },
+    {
+      "title": "6. Confidentiality",
+      "content": "Both parties agree to: (a) hold Confidential Information in strict confidence; (b) not disclose it to third parties without prior written consent; and (c) use it only to perform obligations under this Agreement. This obligation survives termination for three years."
+    },
+    {
+      "title": "7. Warranties and Disclaimers",
+      "content": "Mutual Warranties: Each party warrants it has the authority to enter into this Agreement.\n\nProvider Warranty: Provider warrants that Services will be performed in a professional manner consistent with industry standards.\n\nDisclaimer: Except as expressly stated, Services and Deliverables are provided \"AS IS,\" and Provider disclaims all other warranties, express or implied, including merchantability and fitness for a particular purpose."
+    },
+    {
+      "title": "8. Limitation of Liability",
+      "content": "Neither party shall be liable for any indirect, incidental, special, or consequential damages, including lost profits. Provider's total liability for any claim arising under this Agreement will not exceed the total fees paid by Client under this Agreement."
+    },
+    {
+      "title": "9. Term and Termination",
+      "content": "Term: This Agreement commences on the Effective Date and continues until completion of all Services unless earlier terminated.\n\nTermination for Cause: Either party may terminate for material breach if the breach is not cured within 30 days of written notice.\n\nEffect of Termination: Client shall pay for Services performed and non‑cancelable commitments made through the termination date. Sections 4, 5, 6, 7, and 8 survive termination."
+    },
+    {
+      "title": "10. Governing Law and Dispute Resolution",
+      "content": "This Agreement is governed by the laws of the Dominican Republic without regard to conflict of laws principles. Any dispute shall be resolved by binding arbitration in Santo Domingo under the rules of the Dominican Arbitration Center."
+    },
+    {
+      "title": "11. Amendments",
+      "content": "Provider may amend these Terms and Conditions by giving 30 days' written notice. Continued engagement in Services after the notice period constitutes acceptance of the amended terms."
+    },
+    {
+      "title": "12. Notices",
+      "content": "All notices must be in writing and delivered to the contact details specified in the quote or purchase order."
+    }
+  ]
+}

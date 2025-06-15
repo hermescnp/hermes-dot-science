@@ -1,0 +1,112 @@
+{
+  "sectionBadge": "Nuestras Plataformas",
+  "platforms": [
+    {
+      "id": "abstra",
+      "name": "Abstra.Space",
+      "description": "Plataforma para mostrar espacios tridimensionales en la web con navegación a través de subespacios e IA espacialmente consciente.",
+      "imageSlides": [
+        "/images/abstra-slides/virtual-office-real-estate.png",
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Virtual%20Office%20Example%2002%20-%20Travel%20Agency%20Office-XWUe41OooiMeGQkt17X9yhC48R3ekh.png",
+        "/images/abstra-slides/virtual-office-lawyer.png",
+        "/images/abstra-slides/virtual-office-cosplay-store.png",
+        "/images/abstra-slides/virtual-office-dream-planner.png",
+        "/images/abstra-slides/virtual-office-mental-care.png",
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Virtual%20Office%20Example%2005%20-%20Jewerly%20Store-sWX1IzxVlZiDqIhZ0bEhG209SZaeNU.png"
+      ],
+      "features": [
+        {
+          "title": "Visualización de Espacios 3D",
+          "description": "Muestra entornos tridimensionales con visualización inmersiva basada en web."
+        },
+        {
+          "title": "Navegación por Subespacios",
+          "description": "Navega sin problemas a través de diferentes áreas y habitaciones dentro de espacios virtuales."
+        },
+        {
+          "title": "IA Espacialmente Consciente",
+          "description": "Asistente de IA que comprende tu ubicación y ruta para proporcionar información contextual."
+        },
+        {
+          "title": "Inteligencia Contextual",
+          "description": "Obtén información detallada sobre cualquier elemento del espacio basado en tu posición y ruta actual."
+        }
+      ]
+    },
+    {
+      "id": "goldenpapers",
+      "name": "GoldenPapers.ai",
+      "description": "Asistente de investigación impulsado por IA para literatura académica y científica.",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Product%20View-LwvaEKO48yu4Fu7dh6UOTX4DIJhKW0.png",
+      "animationType": "scroll",
+      "features": [
+        {
+          "title": "Revisión Inteligente de Literatura",
+          "description": "Analiza y resume automáticamente artículos de investigación relevantes."
+        },
+        {
+          "title": "Generador de Citas",
+          "description": "Genera citas correctamente formateadas en cualquier estilo académico."
+        },
+        {
+          "title": "Perspectivas de Investigación",
+          "description": "Descubre conexiones entre artículos e identifica brechas de investigación."
+        },
+        {
+          "title": "Anotaciones Colaborativas",
+          "description": "Comparte y discute hallazgos de investigación con colegas."
+        }
+      ]
+    },
+    {
+      "id": "prane",
+      "name": "Prané Virtual Band",
+      "description": "Crea música colaborativamente con músicos virtuales impulsados por IA.",
+      "video": "/videos/prane-virtual-band.mp4",
+      "image": "/placeholder.svg?height=400&width=600",
+      "features": [
+        {
+          "title": "Músicos IA",
+          "description": "Colabora con músicos virtuales impulsados por IA en diferentes instrumentos."
+        },
+        {
+          "title": "Adaptación de Estilo",
+          "description": "Genera música en cualquier género o mezcla múltiples estilos juntos."
+        },
+        {
+          "title": "Actuación en Vivo",
+          "description": "Crea actuaciones musicales en tiempo real con acompañamiento de IA."
+        },
+        {
+          "title": "Producción Musical",
+          "description": "Exporta pistas de calidad de estudio para compartir o uso profesional."
+        }
+      ]
+    },
+    {
+      "id": "dotscience",
+      "name": "Dot Science Club",
+      "description": "Tu puerta de entrada al ecosistema Hermes con acceso unificado y beneficios exclusivos de la comunidad.",
+      "video": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Dot%20Science%20Club%20AI%20Video-7vYzX71MJm9wS7NUqCYXlhYRqPPWKV.mp4",
+      "image": "/images/dot-science-club.png",
+      "features": [
+        {
+          "title": "Autenticación Unificada",
+          "description": "Acceso de inicio de sesión único a todas las plataformas y servicios de Hermes Dot Science."
+        },
+        {
+          "title": "Acceso a la Comunidad",
+          "description": "Conecta con innovadores, investigadores y creadores en nuestra comunidad tecnológica."
+        },
+        {
+          "title": "Beneficios de Eventos",
+          "description": "Acceso gratuito y descuentos exclusivos a conferencias y talleres de tecnología."
+        },
+        {
+          "title": "Centro de Innovación",
+          "description": "Acceso temprano a nuevas características, programas beta y proyectos colaborativos."
+        }
+      ]
+    }
+  ]
+}

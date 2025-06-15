@@ -1,0 +1,57 @@
+{
+  "title": "Términos y Condiciones",
+  "lastUpdated": "Fecha de Vigencia: 10 de junio de 2025",
+  "introduction": {
+    "content": "Estos Términos y Condiciones (\"Acuerdo\") rigen la prestación de servicios por parte de Hermes Dot Science (\"Proveedor\") al Cliente (\"Cliente\"). Al contratar al Proveedor para cualquier etapa del servicio de agente de IA personalizado, el Cliente acepta estar sujeto a este Acuerdo."
+  },
+  "sections": [
+    {
+      "title": "1. Definiciones",
+      "content": "\"Servicios\" significa las actividades de consultoría, desarrollo, integración, pruebas y soporte de IA descritas en las Etapas de Servicio.\n\n\"Entregables\" significa cualquier informe, prototipo, código, documentación u otros resultados entregados bajo este Acuerdo.\n\n\"Etapas Gratuitas\" significa las Etapas 1 (Evaluación Organizacional) y 2 (Propuesta de Demo y Hoja de Ruta), proporcionadas sin costo.\n\n\"Información Confidencial\" significa toda información comercial, técnica o financiera no pública divulgada por una parte a la otra."
+    },
+    {
+      "title": "2. Alcance de los Servicios",
+      "content": "El Proveedor realizará los Servicios de acuerdo con las descripciones y precios comunicados a través del sistema de cotización automatizado. Las Etapas Gratuitas se entregarán sin costo; todas las demás etapas son facturables según la cotización final."
+    },
+    {
+      "title": "3. Honorarios y Pago",
+      "content": "Cotizaciones y Facturación: El Proveedor emitirá una cotización por escrito después de completar el cuestionario. Las cotizaciones son válidas por 30 días. Las facturas harán referencia a las etapas y honorarios acordados.\n\nTérminos de Pago: A menos que se acuerde lo contrario por escrito, el Cliente pagará el 50% del honorario total al inicio del proyecto y el 50% restante al completar la Etapa 5 (Implementación). Los honorarios de Mantenimiento y Monitoreo (Etapa 8) se facturan por adelantado del período de retención.\n\nPagos Tardíos: Las facturas no pagadas 15 días después de la fecha de vencimiento incurren en un cargo financiero del 1.5% por mes (o el máximo permitido por la ley)."
+    },
+    {
+      "title": "4. Responsabilidades del Cliente",
+      "content": "Acceso y Cooperación: El Cliente proporcionará acceso oportuno a sistemas, datos y personal según sea requerido para que el Proveedor realice los Servicios.\n\nPruebas de Aceptación: El Cliente revisará y aceptará o proporcionará comentarios por escrito sobre cada Entregable dentro de 10 días hábiles de su recepción.\n\nSeguridad: El Cliente es responsable de proporcionar las credenciales de seguridad necesarias y asegurar el cumplimiento con cualquier política interna o regulatoria."
+    },
+    {
+      "title": "5. Propiedad Intelectual",
+      "content": "PI de Antecedentes: Cada parte retiene todos los derechos en tecnología y materiales que poseía antes o independientemente de este Acuerdo.\n\nEntregables: Tras el pago completo, el Proveedor asigna al Cliente todos los derechos, títulos e intereses mundiales en los Entregables, excepto por cualquier PI de Antecedentes del Proveedor incorporada o incluida en ellos.\n\nLicencia a PI del Proveedor: El Proveedor otorga al Cliente una licencia libre de regalías y perpetua para cualquier herramienta o marco del Proveedor utilizado en los Entregables únicamente para uso interno del Cliente."
+    },
+    {
+      "title": "6. Confidencialidad",
+      "content": "Ambas partes acuerdan: (a) mantener la Información Confidencial en estricta confidencialidad; (b) no divulgarla a terceros sin consentimiento previo por escrito; y (c) usarla solo para cumplir las obligaciones bajo este Acuerdo. Esta obligación sobrevive la terminación por tres años."
+    },
+    {
+      "title": "7. Garantías y Exenciones",
+      "content": "Garantías Mutuas: Cada parte garantiza que tiene la autoridad para celebrar este Acuerdo.\n\nGarantía del Proveedor: El Proveedor garantiza que los Servicios se realizarán de manera profesional consistente con los estándares de la industria.\n\nExención: Excepto como se establece expresamente, los Servicios y Entregables se proporcionan \"TAL COMO ESTÁN,\" y el Proveedor renuncia a todas las demás garantías, expresas o implícitas, incluyendo comerciabilidad e idoneidad para un propósito particular."
+    },
+    {
+      "title": "8. Limitación de Responsabilidad",
+      "content": "Ninguna parte será responsable por daños indirectos, incidentales, especiales o consecuentes, incluyendo pérdida de ganancias. La responsabilidad total del Proveedor por cualquier reclamo que surja bajo este Acuerdo no excederá los honorarios totales pagados por el Cliente bajo este Acuerdo."
+    },
+    {
+      "title": "9. Término y Terminación",
+      "content": "Término: Este Acuerdo comienza en la Fecha de Vigencia y continúa hasta la finalización de todos los Servicios a menos que se termine antes.\n\nTerminación por Causa: Cualquier parte puede terminar por incumplimiento material si el incumplimiento no se subsana dentro de 30 días de notificación por escrito.\n\nEfecto de la Terminación: El Cliente pagará por los Servicios realizados y compromisos no cancelables hechos hasta la fecha de terminación. Las Secciones 4, 5, 6, 7 y 8 sobreviven la terminación."
+    },
+    {
+      "title": "10. Ley Aplicable y Resolución de Disputas",
+      "content": "Este Acuerdo se rige por las leyes de la República Dominicana sin consideración a los principios de conflicto de leyes. Cualquier disputa se resolverá por arbitraje vinculante en Santo Domingo bajo las reglas del Centro de Arbitraje Dominicano."
+    },
+    {
+      "title": "11. Enmiendas",
+      "content": "El Proveedor puede enmendar estos Términos y Condiciones dando aviso por escrito de 30 días. La participación continua en los Servicios después del período de aviso constituye aceptación de los términos enmendados."
+    },
+    {
+      "title": "12. Avisos",
+      "content": "Todos los avisos deben ser por escrito y entregados a los detalles de contacto especificados en la cotización u orden de compra."
+    }
+  ]
+}

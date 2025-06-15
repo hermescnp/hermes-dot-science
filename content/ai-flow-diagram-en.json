@@ -1,0 +1,85 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "x": 50,
+      "y": 50,
+      "label": "User Input",
+      "sublabel": "Natural language query",
+      "type": "input",
+      "width": 140,
+      "iconName": "MessageSquare"
+    },
+    {
+      "id": "2",
+      "x": 300,
+      "y": 50,
+      "label": "AI Processing",
+      "sublabel": "Intent analysis & understanding",
+      "type": "process",
+      "width": 140,
+      "iconName": "Brain"
+    },
+    {
+      "id": "3",
+      "x": 550,
+      "y": 50,
+      "label": "Knowledge Base",
+      "sublabel": "Contextual information retrieval",
+      "type": "decision",
+      "width": 140,
+      "iconName": "Database"
+    },
+    {
+      "id": "4",
+      "x": 50,
+      "y": 300,
+      "label": "Decision Tree",
+      "sublabel": "Logic flow & branching",
+      "type": "decision",
+      "width": 140,
+      "iconName": "GitBranch"
+    },
+    {
+      "id": "5",
+      "x": 300,
+      "y": 300,
+      "label": "AI Engine",
+      "sublabel": "Response generation",
+      "type": "process",
+      "width": 140,
+      "iconName": "Cpu"
+    },
+    {
+      "id": "6",
+      "x": 550,
+      "y": 300,
+      "label": "Tools & Actions",
+      "sublabel": "External integrations",
+      "type": "tool",
+      "width": 140,
+      "iconName": "Wrench"
+    },
+    {
+      "id": "7",
+      "x": 300,
+      "y": 550,
+      "label": "Response Output",
+      "sublabel": "Formatted user response",
+      "type": "output",
+      "width": 140,
+      "iconName": "CheckCircle"
+    }
+  ],
+  "edges": [
+    { "id": "e1-2", "from": "1", "to": "2" },
+    { "id": "e2-3", "from": "2", "to": "3" },
+    { "id": "e2-4", "from": "2", "to": "4" },
+    { "id": "e3-5", "from": "3", "to": "5" },
+    { "id": "e4-5", "from": "4", "to": "5" },
+    { "id": "e5-6", "from": "5", "to": "6" },
+    { "id": "e5-7", "from": "5", "to": "7" },
+    { "id": "e6-7", "from": "6", "to": "7" }
+  ],
+  "statusIndicatorText": "AI Processing Active"
+}

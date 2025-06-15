@@ -1,0 +1,175 @@
+{
+  "badgeText": "Community",
+  "title": "Stay Connected",
+  "subtitle": "Join our vibrant community and stay updated with the latest news, insights, and behind-the-scenes content from Hermes Science.",
+  "tabs": [
+    { "id": "news", "label": "News Feed", "iconName": "ExternalLink" },
+    { "id": "instagram", "label": "Instagram", "iconName": "Heart" },
+    { "id": "twitter", "label": "X (Twitter)", "iconName": "MessageCircle" }
+  ],
+  "newsFeed": {
+    "buttonText": "View All News",
+    "buttonLink": "https://www.linkedin.com/company/hermes-dot-science/",
+    "articles": [
+      {
+        "id": 1,
+        "title": "Conference on Design Transformation with Artificial Intelligence at ENEFA",
+        "excerpt": "We shared our top new paradigms that are transforming design in the 21st century: Deep Learning for AI, Virtual Reality, Augmented Reality, Home Automation, Immersive Experiences and 3D Scans. These innovations are redefining how we conceptualize and interact with spaces.",
+        "date": "2025-05-23",
+        "author": "Hermes Dot Science",
+        "category": "Conference",
+        "readTime": "5 min read",
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Enefa-panel-hermes.jpg-cTwbWldnzsbwaMxZvbqj9Xb7HeVy60.jpeg"
+      },
+      {
+        "id": 2,
+        "title": "UNPHU adopts Hermes Dot Science as a strategic AI and VR consultant",
+        "excerpt": "We showcased our virtual reality experience developed for the Virtual Laboratory of the National Brain Bank at the Pedro Henríquez Ureña National University. We guided the Minister of Higher Education through the metaverse at the inauguration of the Center for Artificial Intelligence Research and Ethics.",
+        "date": "2025-05-15",
+        "author": "Hermes Dot Science",
+        "category": "Partnership",
+        "readTime": "4 min read",
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Virtual-Reality-Hermes-and-Minister.png-DJtihTmSjzNq7M7rqkoyLaNwYg6QCP.jpeg"
+      },
+      {
+        "id": 3,
+        "title": "Talk about AI empowerment for the Ministry of Education at the First Congress on High Abilities",
+        "excerpt": "We are very grateful to be able to share some concepts about artificial intelligence with the teachers of the Ministry of Education at the First Congress on High Abilities. Here, the goal was to make teachers understand how AI can enhance high abilities in students. However, we must always keep in mind that if we enhance something small, the result will be better, but still small. By empowering ourselves as human beings, a tool like AI can make us achieve majestic results.",
+        "date": "2025-05-15",
+        "author": "Hermes Dot Science",
+        "category": "Education",
+        "readTime": "6 min read",
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Miner-hight-abilities-congress-Hermes-ai.png-HcAB6Shefbr0w88cMpixQZ0aTHevBW.jpeg"
+      }
+    ]
+  },
+  "instagramFeed": {
+    "buttonText": "Follow on Instagram",
+    "buttonLink": "https://instagram.com/hermes.science",
+    "posts": [
+      {
+        "id": 1,
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Displacement%20Map-ngzyWzZA1zMJJQDD0R76zBvp9WoiYb.png",
+        "caption": "Displacement mapping is a technique that uses a height map or any grayscale texture to deform the geometry of a 3D model at render time. Unlike Bump or Normal Maps, this effect generates real relief that affects both the silhouette and shadow of the object. 💡 #3DGraphics #DisplacementMap #TechEducation #3DModeling #ComputerGraphics",
+        "likes": 342,
+        "comments": 28,
+        "timestamp": "2h",
+        "link": "https://www.instagram.com/p/DBwGqK3uoVz/",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "authorHandle": "hermes.science"
+      },
+      {
+        "id": 2,
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Normal%20Map-ii6FrwuDdM50mg058Zi3BE5K6WzCWm.png",
+        "caption": "Normal mapping uses the R, G, B components of a texture to indicate the X, Y, Z directions of normals at each point on the surface. This technique is widely used in video games to achieve highly detailed surfaces without needing to handle a high polygon count. 🎮 #NormalMap #GameDev #3DGraphics #TechTips #Rendering",
+        "likes": 298,
+        "comments": 22,
+        "timestamp": "1d",
+        "link": "https://www.instagram.com/p/DBwGTMMOOod/",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "authorHandle": "hermes.science"
+      },
+      {
+        "id": 3,
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bump%20Map-PgSC6sAU4WV6LcXAO7eKoKtd4nsDM8.png",
+        "caption": "Bump mapping is a grayscale texture that simulates small surface variations without modifying the model's geometry. It tricks the rendering engine by changing how light interacts with the surface, creating the illusion of relief. 🔍 #BumpMap #3DRendering #TechEducation #ComputerGraphics #VisualEffects",
+        "likes": 267,
+        "comments": 19,
+        "timestamp": "3d",
+        "link": "https://www.instagram.com/p/DBwGGxsOitd/",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "authorHandle": "hermes.science"
+      }
+    ]
+  },
+  "twitterFeed": {
+    "buttonText": "Follow on X",
+    "buttonLink": "https://twitter.com/hermes_science",
+    "tweets": [
+      {
+        "id": 1,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Conceptualizing is creating a limited universe, and from there exploring its infinite possibilities, while Abstracting is limiting an infinite universe, to make its exploration possible. 🌌 #Philosophy #ConceptualThinking #AI #Innovation #DeepThoughts #UniverseOfIdeas",
+        "timestamp": "2h",
+        "likes": 89,
+        "retweets": 34,
+        "replies": 21,
+        "verified": true
+      },
+      {
+        "id": 2,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Have you ever noticed that conceptualization and abstraction can be seen as opposite processes in some sense? 🤔 #Philosophy #CriticalThinking #AI #ConceptualDesign #ThoughtExperiment #CognitiveScience",
+        "timestamp": "4h",
+        "likes": 67,
+        "retweets": 23,
+        "replies": 15,
+        "verified": true
+      },
+      {
+        "id": 3,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Three dimensions have never been enough, we need to take the fourth dimension off the clock and ask ourselves: could it be that in the fifth dimension we are just a work of art hanging on the wall? 🎨 #Dimensions #Philosophy #Reality #VirtualReality #Metaverse #DeepThoughts",
+        "timestamp": "6h",
+        "likes": 124,
+        "retweets": 56,
+        "replies": 32,
+        "verified": true
+      },
+      {
+        "id": 4,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Breaking: Our Abstra.Space platform now have its own chatbot with spatial awareness. From a virtual office, to a giant building, we're making AI to be connected with the metaverse 🌍 #MetaverseAI #SpatialChatbot",
+        "timestamp": "4d",
+        "likes": 156,
+        "retweets": 47,
+        "replies": 32,
+        "verified": true
+      },
+      {
+        "id": 5,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Customer spotlight: How @UNPHURD reduced document processing time by 85% using our knowledge base integration. Real results, real impact 📊 #CustomerSuccess #Efficiency",
+        "timestamp": "5d",
+        "likes": 203,
+        "retweets": 68,
+        "replies": 41,
+        "verified": true
+      },
+      {
+        "id": 6,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "New research paper published: 'Kinesthetic AI in Creative Environments' - Cross perception as a tool for concept art. Read the full paper at GoldenPapers.ai/CIEIA 📚 #CreativeAI #Research",
+        "timestamp": "6d",
+        "likes": 124,
+        "retweets": 89,
+        "replies": 27,
+        "verified": true
+      },
+      {
+        "id": 7,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Behind the scenes: Our engineering team just shipped 47 improvements this month, including faster response times and enhanced API reliability ⚡ #Engineering #Innovation",
+        "timestamp": "1w",
+        "likes": 78,
+        "retweets": 25,
+        "replies": 19,
+        "verified": true
+      }
+    ]
+  }
+}

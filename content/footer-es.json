@@ -1,0 +1,23 @@
+{
+  "companyName": "Hermes Dot Science",
+  "companyDescription": "Soluciones de IA de nivel empresarial para organizaciones que demandan seguridad, personalización y control.",
+  "sections": [
+    {
+      "title": "Producto",
+      "links": [
+        { "label": "Saber Más", "href": "/es/learn-more" },
+        { "label": "Obtener Cotización", "href": "/es/quote" }
+      ]
+    },
+    {
+      "title": "Legal",
+      "links": [{ "label": "Términos y Condiciones", "href": "/es/terms-and-conditions" }]
+    }
+  ],
+  "copyrightText": "© {year} Hermes Dot Science. Todos los derechos reservados.",
+  "socialLinks": [
+    { "name": "LinkedIn", "href": "https://www.linkedin.com/company/hermes-dot-science/", "iconName": "LinkedInSVG" },
+    { "name": "Twitter", "href": "https://x.com/hermesscience", "iconName": "TwitterSVG" },
+    { "name": "Instagram", "href": "https://www.instagram.com/hermes.science/", "iconName": "InstagramSVG" }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "pageTitle": "Precios Empresariales Personalizados",
+  "pageSubtitle": "Soluciones de IA personalizadas diseñadas para las necesidades específicas y escala de tu organización",
+  "badgeText": "Solución Empresarial",
+  "features": [
+    { "iconName": "Shield", "text": "Seguridad y cumplimiento de nivel empresarial", "color": "text-green-400" },
+    { "iconName": "Database", "text": "Integración personalizada de base de conocimientos", "color": "text-blue-400" },
+    { "iconName": "Bot", "text": "Conversaciones y agentes LLM avanzados", "color": "text-purple-400" },
+    { "iconName": "Users", "text": "Soporte dedicado y capacitación", "color": "text-orange-400" },
+    { "iconName": "Server", "text": "Soporte y personalización de servidor MCP", "color": "text-cyan-400" }
+  ],
+  "ctaSection": {
+    "title": "¿Listo para transformar tu negocio?",
+    "subtitle": "Obtén una cotización personalizada basada en tus requisitos",
+    "getQuoteButton": "Obtener Cotización",
+    "learnMoreButton": "Saber Más"
+  },
+  "formSection": {
+    "title": "Comienza Tu Viaje",
+    "subtitle": "Cuéntanos sobre tu proyecto y te responderemos dentro de 24 horas"
+  },
+  "form": {
+    "title": "Contacta Nuestro Equipo Empresarial",
+    "description": "Completa el formulario a continuación para discutir las necesidades de tu organización y recibir una cotización personalizada.",
+    "labels": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Email de Trabajo",
+      "company": "Empresa/Organización",
+      "role": "Tu Rol",
+      "size": "Tamaño de Organización",
+      "message": "¿Cómo podemos ayudarte?"
+    },
+    "placeholders": {
+      "firstName": "Juan",
+      "lastName": "Pérez",
+      "email": "juan.perez@empresa.com",
+      "company": "Acme Inc.",
+      "role": "CTO, Director de TI, etc.",
+      "message": "Cuéntanos sobre tus requisitos específicos y casos de uso...",
+      "organizationSize": "Seleccionar tamaño de organización"
+    },
+    "selectOptions": {
+      "organizationSize": [
+        { "value": "1-50", "label": "1-50 empleados" },
+        { "value": "51-200", "label": "51-200 empleados" },
+        { "value": "201-500", "label": "201-500 empleados" },
+        { "value": "501-1000", "label": "501-1000 empleados" },
+        { "value": "1001+", "label": "1001+ empleados" },
+        { "value": "government", "label": "Agencia Gubernamental" }
+      ]
+    },
+    "submitButtonText": "Solicitar Información",
+    "submittingText": "Enviando...",
+    "responseNote": "Típicamente respondemos a todas las consultas dentro de 24-48 horas hábiles. Gracias por tu paciencia.",
+    "successMessage": {
+      "title": "¡Gracias!",
+      "description": "Tu consulta ha sido recibida. Nuestro equipo empresarial te contactará pronto para discutir tus requisitos específicos.",
+      "buttonText": "Enviar Otra Consulta"
+    },
+    "validationMessages": {
+      "invalidEmail": "Por favor ingresa una dirección de email válida.",
+      "loading": "Cargando..."
+    }
+  }
+}

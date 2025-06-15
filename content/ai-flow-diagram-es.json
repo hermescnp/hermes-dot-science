@@ -1,0 +1,85 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "x": 50,
+      "y": 50,
+      "label": "Entrada del Usuario",
+      "sublabel": "Consulta en lenguaje natural",
+      "type": "input",
+      "width": 140,
+      "iconName": "MessageSquare"
+    },
+    {
+      "id": "2",
+      "x": 300,
+      "y": 50,
+      "label": "Procesamiento IA",
+      "sublabel": "Análisis de intención y comprensión",
+      "type": "process",
+      "width": 140,
+      "iconName": "Brain"
+    },
+    {
+      "id": "3",
+      "x": 550,
+      "y": 50,
+      "label": "Base de Conocimiento",
+      "sublabel": "Recuperación de información contextual",
+      "type": "decision",
+      "width": 140,
+      "iconName": "Database"
+    },
+    {
+      "id": "4",
+      "x": 50,
+      "y": 300,
+      "label": "Árbol de Decisión",
+      "sublabel": "Flujo lógico y ramificación",
+      "type": "decision",
+      "width": 140,
+      "iconName": "GitBranch"
+    },
+    {
+      "id": "5",
+      "x": 300,
+      "y": 300,
+      "label": "Motor de IA",
+      "sublabel": "Generación de respuestas",
+      "type": "process",
+      "width": 140,
+      "iconName": "Cpu"
+    },
+    {
+      "id": "6",
+      "x": 550,
+      "y": 300,
+      "label": "Herramientas y Acciones",
+      "sublabel": "Integraciones externas",
+      "type": "tool",
+      "width": 140,
+      "iconName": "Wrench"
+    },
+    {
+      "id": "7",
+      "x": 300,
+      "y": 550,
+      "label": "Respuesta de Salida",
+      "sublabel": "Respuesta formateada al usuario",
+      "type": "output",
+      "width": 140,
+      "iconName": "CheckCircle"
+    }
+  ],
+  "edges": [
+    { "id": "e1-2", "from": "1", "to": "2" },
+    { "id": "e2-3", "from": "2", "to": "3" },
+    { "id": "e2-4", "from": "2", "to": "4" },
+    { "id": "e3-5", "from": "3", "to": "5" },
+    { "id": "e4-5", "from": "4", "to": "5" },
+    { "id": "e5-6", "from": "5", "to": "6" },
+    { "id": "e5-7", "from": "5", "to": "7" },
+    { "id": "e6-7", "from": "6", "to": "7" }
+  ],
+  "statusIndicatorText": "Procesamiento IA Activo"
+}

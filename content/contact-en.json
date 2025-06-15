@@ -1,0 +1,66 @@
+{
+  "pageTitle": "Custom Enterprise Pricing",
+  "pageSubtitle": "Tailored AI solutions designed for your organization's specific needs and scale",
+  "badgeText": "Enterprise Solution",
+  "features": [
+    { "iconName": "Shield", "text": "Enterprise-grade security & compliance", "color": "text-green-400" },
+    { "iconName": "Database", "text": "Custom knowledge base integration", "color": "text-blue-400" },
+    { "iconName": "Bot", "text": "Advanced LLM conversations & agents", "color": "text-purple-400" },
+    { "iconName": "Users", "text": "Dedicated support & training", "color": "text-orange-400" },
+    { "iconName": "Server", "text": "MCP server support & customization", "color": "text-cyan-400" }
+  ],
+  "ctaSection": {
+    "title": "Ready to transform your business?",
+    "subtitle": "Get a personalized quote based on your requirements",
+    "getQuoteButton": "Get a Quote",
+    "learnMoreButton": "Learn More"
+  },
+  "formSection": {
+    "title": "Start Your Journey",
+    "subtitle": "Tell us about your project and we'll get back to you within 24 hours"
+  },
+  "form": {
+    "title": "Contact Our Enterprise Team",
+    "description": "Fill out the form below to discuss your organization's needs and receive a custom quote.",
+    "labels": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Work Email",
+      "company": "Company/Organization",
+      "role": "Your Role",
+      "size": "Organization Size",
+      "message": "How can we help?"
+    },
+    "placeholders": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@company.com",
+      "company": "Acme Inc.",
+      "role": "CTO, IT Director, etc.",
+      "message": "Tell us about your specific requirements and use cases...",
+      "organizationSize": "Select organization size"
+    },
+    "selectOptions": {
+      "organizationSize": [
+        { "value": "1-50", "label": "1-50 employees" },
+        { "value": "51-200", "label": "51-200 employees" },
+        { "value": "201-500", "label": "201-500 employees" },
+        { "value": "501-1000", "label": "501-1000 employees" },
+        { "value": "1001+", "label": "1001+ employees" },
+        { "value": "government", "label": "Government Agency" }
+      ]
+    },
+    "submitButtonText": "Create Account",
+    "submittingText": "Submitting...",
+    "responseNote": "We typically respond to all inquiries within 24-48 business hours. Thank you for your patience.",
+    "successMessage": {
+      "title": "Thank You!",
+      "description": "Your inquiry has been received. Our enterprise team will contact you shortly to discuss your specific requirements.",
+      "buttonText": "Submit Another Inquiry"
+    },
+    "validationMessages": {
+      "invalidEmail": "Please enter a valid email address.",
+      "loading": "Loading..."
+    }
+  }
+}

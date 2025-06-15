@@ -1,0 +1,26 @@
+{
+  "title": "How It Works",
+  "subtitle": "We create custom AI agents tailored to your specific business needs and workflows.",
+  "steps": [
+    {
+      "number": "1",
+      "title": "Discovery & Analysis",
+      "description": "We analyze your business processes, data sources, and specific requirements to design the perfect AI agent for your needs."
+    },
+    {
+      "number": "2",
+      "title": "Custom Development",
+      "description": "Our team builds and trains your personalized AI agent, integrating it with your existing systems and workflows."
+    },
+    {
+      "number": "3",
+      "title": "Deploy & Support",
+      "description": "We deploy your custom AI agent and provide ongoing support, monitoring, and optimization to ensure peak performance."
+    }
+  ],
+  "cta": {
+    "text": "Want to dive deeper into our custom AI agent development process?",
+    "buttonText": "Learn More",
+    "buttonLink": "/learn-more"
+  }
+}

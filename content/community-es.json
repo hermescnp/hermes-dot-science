@@ -1,0 +1,175 @@
+{
+  "badgeText": "Comunidad",
+  "title": "Mantente Conectado",
+  "subtitle": "Únete a nuestra vibrante comunidad y mantente actualizado con las últimas noticias, perspectivas y contenido detrás de escena de Hermes Science.",
+  "tabs": [
+    { "id": "news", "label": "Noticias", "iconName": "ExternalLink" },
+    { "id": "instagram", "label": "Instagram", "iconName": "Heart" },
+    { "id": "twitter", "label": "X (Twitter)", "iconName": "MessageCircle" }
+  ],
+  "newsFeed": {
+    "buttonText": "Ver Todas las Noticias",
+    "buttonLink": "https://www.linkedin.com/company/hermes-dot-science/",
+    "articles": [
+      {
+        "id": 1,
+        "title": "Conferencia sobre Transformación del Diseño con Inteligencia Artificial en ENEFA",
+        "excerpt": "Compartimos nuestros principales nuevos paradigmas que están transformando el diseño en el siglo XXI: Deep Learning para IA, Realidad Virtual, Realidad Aumentada, Domótica, Experiencias Inmersivas y Escaneos 3D. Estas innovaciones están redefiniendo cómo conceptualizamos e interactuamos con los espacios.",
+        "date": "2025-05-23",
+        "author": "Hermes Dot Science",
+        "category": "Conferencia",
+        "readTime": "5 min de lectura",
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Enefa-panel-hermes.jpg-cTwbWldnzsbwaMxZvbqj9Xb7HeVy60.jpeg"
+      },
+      {
+        "id": 2,
+        "title": "UNPHU adopta a Hermes Dot Science como consultor estratégico de IA y RV",
+        "excerpt": "Mostramos nuestra experiencia de realidad virtual desarrollada para el Laboratorio Virtual del Banco Nacional de Cerebros en la Universidad Nacional Pedro Henríquez Ureña. Guiamos al Ministro de Educación Superior a través del metaverso en la inauguración del Centro de Investigación y Ética en Inteligencia Artificial.",
+        "date": "2025-05-15",
+        "author": "Hermes Dot Science",
+        "category": "Alianza",
+        "readTime": "4 min de lectura",
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Virtual-Reality-Hermes-and-Minister.png-DJtihTmSjzNq7M7rqkoyLaNwYg6QCP.jpeg"
+      },
+      {
+        "id": 3,
+        "title": "Charla sobre empoderamiento de IA para el Ministerio de Educación en el Primer Congreso de Altas Capacidades",
+        "excerpt": "Estamos muy agradecidos de poder compartir algunos conceptos sobre inteligencia artificial con los maestros del Ministerio de Educación en el Primer Congreso de Altas Capacidades. Aquí, el objetivo era hacer que los maestros entendieran cómo la IA puede potenciar las altas capacidades en los estudiantes. Sin embargo, siempre debemos tener en cuenta que si potenciamos algo pequeño, el resultado será mejor, pero aún pequeño. Al empoderarnos como seres humanos, una herramienta como la IA puede hacernos lograr resultados majestuosos.",
+        "date": "2025-05-15",
+        "author": "Hermes Dot Science",
+        "category": "Educación",
+        "readTime": "6 min de lectura",
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Miner-hight-abilities-congress-Hermes-ai.png-HcAB6Shefbr0w88cMpixQZ0aTHevBW.jpeg"
+      }
+    ]
+  },
+  "instagramFeed": {
+    "buttonText": "Seguir en Instagram",
+    "buttonLink": "https://instagram.com/hermes.science",
+    "posts": [
+      {
+        "id": 1,
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Displacement%20Map-ngzyWzZA1zMJJQDD0R76zBvp9WoiYb.png",
+        "caption": "El mapeo de desplazamiento es una técnica que utiliza un mapa de altura o cualquier textura en escala de grises para deformar la geometría de un modelo 3D en tiempo de renderizado. A diferencia de los Bump o Normal Maps, este efecto genera relieve real que afecta tanto la silueta como la sombra del objeto. 💡 #Gráficos3D #MapaDesplazamiento #EducaciónTech #Modelado3D #GráficosComputacionales",
+        "likes": 342,
+        "comments": 28,
+        "timestamp": "2h",
+        "link": "https://www.instagram.com/p/DBwGqK3uoVz/",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "authorHandle": "hermes.science"
+      },
+      {
+        "id": 2,
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Normal%20Map-ii6FrwuDdM50mg058Zi3BE5K6WzCWm.png",
+        "caption": "El mapeo normal utiliza los componentes R, G, B de una textura para indicar las direcciones X, Y, Z de las normales en cada punto de la superficie. Esta técnica es ampliamente utilizada en videojuegos para lograr superficies muy detalladas sin necesidad de manejar un alto conteo de polígonos. 🎮 #MapaNormal #DesarrolloJuegos #Gráficos3D #ConsejosTech #Renderizado",
+        "likes": 298,
+        "comments": 22,
+        "timestamp": "1d",
+        "link": "https://www.instagram.com/p/DBwGTMMOOod/",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "authorHandle": "hermes.science"
+      },
+      {
+        "id": 3,
+        "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bump%20Map-PgSC6sAU4WV6LcXAO7eKoKtd4nsDM8.png",
+        "caption": "El mapeo de relieve es una textura en escala de grises que simula pequeñas variaciones de superficie sin modificar la geometría del modelo. Engaña al motor de renderizado cambiando cómo la luz interactúa con la superficie, creando la ilusión de relieve. 🔍 #MapaRelieve #Renderizado3D #EducaciónTech #GráficosComputacionales #EfectosVisuales",
+        "likes": 267,
+        "comments": 19,
+        "timestamp": "3d",
+        "link": "https://www.instagram.com/p/DBwGGxsOitd/",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "authorHandle": "hermes.science"
+      }
+    ]
+  },
+  "twitterFeed": {
+    "buttonText": "Seguir en X",
+    "buttonLink": "https://twitter.com/hermes_science",
+    "tweets": [
+      {
+        "id": 1,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Conceptualizar es crear un universo limitado, y desde ahí explorar sus infinitas posibilidades, mientras que Abstraer es limitar un universo infinito, para hacer posible su exploración. 🌌 #Filosofía #PensamientoConceptual #IA #Innovación #PensamientosProfundos #UniversoDeIdeas",
+        "timestamp": "2h",
+        "likes": 89,
+        "retweets": 34,
+        "replies": 21,
+        "verified": true
+      },
+      {
+        "id": 2,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "¿Alguna vez has notado que la conceptualización y la abstracción pueden verse como procesos opuestos en cierto sentido? 🤔 #Filosofía #PensamientoCrítico #IA #DiseñoConceptual #ExperimentoMental #CienciaCognitiva",
+        "timestamp": "4h",
+        "likes": 67,
+        "retweets": 23,
+        "replies": 15,
+        "verified": true
+      },
+      {
+        "id": 3,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Tres dimensiones nunca han sido suficientes, necesitamos quitarle la cuarta dimensión al reloj y preguntarnos: ¿podría ser que en la quinta dimensión solo seamos una obra de arte colgada en la pared? 🎨 #Dimensiones #Filosofía #Realidad #RealidadVirtual #Metaverso #PensamientosProfundos",
+        "timestamp": "6h",
+        "likes": 124,
+        "retweets": 56,
+        "replies": 32,
+        "verified": true
+      },
+      {
+        "id": 4,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Noticia de última hora: Nuestra plataforma Abstra.Space ahora tiene su propio chatbot con conciencia espacial. Desde una oficina virtual hasta un edificio gigante, estamos haciendo que la IA se conecte con el metaverso 🌍 #IAMetaverso #ChatbotEspacial",
+        "timestamp": "4d",
+        "likes": 156,
+        "retweets": 47,
+        "replies": 32,
+        "verified": true
+      },
+      {
+        "id": 5,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Destacado del cliente: Cómo @UNPHURD redujo el tiempo de procesamiento de documentos en un 85% usando nuestra integración de base de conocimientos. Resultados reales, impacto real 📊 #ÉxitoDelCliente #Eficiencia",
+        "timestamp": "5d",
+        "likes": 203,
+        "retweets": 68,
+        "replies": 41,
+        "verified": true
+      },
+      {
+        "id": 6,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Nuevo artículo de investigación publicado: 'IA Kinestésica en Entornos Creativos' - Percepción cruzada como herramienta para arte conceptual. Lee el artículo completo en GoldenPapers.ai/CIEIA 📚 #IACreativa #Investigación",
+        "timestamp": "6d",
+        "likes": 124,
+        "retweets": 89,
+        "replies": 27,
+        "verified": true
+      },
+      {
+        "id": 7,
+        "author": "Hermes Dot Science",
+        "handle": "@HermesDotSci",
+        "avatar": "/images/hermes-logo-icon.svg",
+        "content": "Detrás de escena: Nuestro equipo de ingeniería acaba de entregar 47 mejoras este mes, incluyendo tiempos de respuesta más rápidos y mayor confiabilidad de la API ⚡ #Ingeniería #Innovación",
+        "timestamp": "1w",
+        "likes": 78,
+        "retweets": 25,
+        "replies": 19,
+        "verified": true
+      }
+    ]
+  }
+}

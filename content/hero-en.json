@@ -1,0 +1,18 @@
+{
+  "badgeText": "Hermes Dot Science",
+  "title": "Secure AI Agents for Enterprise & Government",
+  "subtitle": "Unlock the power of AI with enterprise-grade security, customizable agents, and comprehensive knowledge management.",
+  "typingPrompts": [
+    "Analyze our customer feedback and identify key trends...",
+    "Summarize the latest documents and highlight important changes...",
+    "Create a knowledge base article about our new security features...",
+    "Generate a report on our department's performance metrics...",
+    "Draft a response based on our previous submissions..."
+  ],
+  "ctaButton1": { "text": "Request Demo", "icon": "Zap" },
+  "ctaButton2": { "text": "Learn More" },
+  "scrollDownButton": {
+    "targetSectionId": "platforms",
+    "text": "Explore Platforms"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Cómo Funciona",
+  "subtitle": "Creamos agentes de IA personalizados adaptados a las necesidades específicas de tu negocio y flujos de trabajo.",
+  "steps": [
+    {
+      "number": "1",
+      "title": "Descubrimiento y Análisis",
+      "description": "Analizamos tus procesos de negocio, fuentes de datos y requisitos específicos para diseñar el agente de IA perfecto para tus necesidades."
+    },
+    {
+      "number": "2",
+      "title": "Desarrollo Personalizado",
+      "description": "Nuestro equipo construye y entrena tu agente de IA personalizado, integrándolo con tus sistemas y flujos de trabajo existentes."
+    },
+    {
+      "number": "3",
+      "title": "Despliegue y Soporte",
+      "description": "Desplegamos tu agente de IA personalizado y proporcionamos soporte continuo, monitoreo y optimización para asegurar el máximo rendimiento."
+    }
+  ],
+  "cta": {
+    "text": "¿Quieres profundizar en nuestro proceso de desarrollo de agentes de IA personalizados?",
+    "buttonText": "Saber Más",
+    "buttonLink": "/learn-more"
+  }
+}

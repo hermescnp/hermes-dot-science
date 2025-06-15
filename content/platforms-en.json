@@ -1,0 +1,103 @@
+{
+  "sectionBadge": "Our Platforms",
+  "platforms": [
+    {
+      "id": "abstra",
+      "name": "Abstra.Space",
+      "description": "Platform for displaying three-dimensional spaces on the web with navigation through subspaces and spatially aware AI.",
+      "imageSlides": [
+        "/images/abstra-slides/virtual-office-real-estate.png",
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Virtual%20Office%20Example%2002%20-%20Travel%20Agency%20Office-XWUe41OooiMeGQkt17X9yhC48R3ekh.png",
+        "/images/abstra-slides/virtual-office-lawyer.png",
+        "/images/abstra-slides/virtual-office-cosplay-store.png",
+        "/images/abstra-slides/virtual-office-dream-planner.png",
+        "/images/abstra-slides/virtual-office-mental-care.png",
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Virtual%20Office%20Example%2005%20-%20Jewerly%20Store-sWX1IzxVlZiDqIhZ0bEhG209SZaeNU.png"
+      ],
+      "features": [
+        {
+          "title": "3D Space Display",
+          "description": "Showcase three-dimensional environments with immersive web-based visualization."
+        },
+        {
+          "title": "Subspace Navigation",
+          "description": "Navigate seamlessly through different areas and rooms within virtual spaces."
+        },
+        {
+          "title": "Spatially Aware AI",
+          "description": "AI assistant that understands your location and route to provide contextual information."
+        },
+        {
+          "title": "Contextual Intelligence",
+          "description": "Get detailed information about any space element based on your current position and path."
+        }
+      ]
+    },
+    {
+      "id": "goldenpapers",
+      "name": "GoldenPapers.ai",
+      "description": "AI-powered research assistant for academic and scientific literature.",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Product%20View-LwvaEKO48yu4Fu7dh6UOTX4DIJhKW0.png",
+      "animationType": "scroll",
+      "features": [
+        {
+          "title": "Smart Literature Review",
+          "description": "Automatically analyze and summarizing relevant research papers."
+        },
+        {
+          "title": "Citation Generator",
+          "description": "Generate properly formatted citations in any academic style."
+        },
+        {
+          "title": "Research Insights",
+          "description": "Discover connections between papers and identify research gaps."
+        },
+        { "title": "Collaborative Annotations", "description": "Share and discuss research findings with colleagues." }
+      ]
+    },
+    {
+      "id": "prane",
+      "name": "Prané Virtual Band",
+      "description": "Create music collaboratively with AI-powered virtual musicians.",
+      "video": "/videos/prane-virtual-band.mp4",
+      "image": "/placeholder.svg?height=400&width=600",
+      "features": [
+        {
+          "title": "AI Musicians",
+          "description": "Collaborate with AI-powered virtual musicians across different instruments."
+        },
+        {
+          "title": "Style Adaptation",
+          "description": "Generate music in any genre or blend multiple styles together."
+        },
+        { "title": "Live Performance", "description": "Create real-time music performances with AI accompaniment." },
+        { "title": "Music Production", "description": "Export studio-quality tracks for sharing or professional use." }
+      ]
+    },
+    {
+      "id": "dotscience",
+      "name": "Dot Science Club",
+      "description": "Your gateway to the Hermes ecosystem with unified access and exclusive community benefits.",
+      "video": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Dot%20Science%20Club%20AI%20Video-7vYzX71MJm9wS7NUqCYXlhYRqPPWKV.mp4",
+      "image": "/images/dot-science-club.png",
+      "features": [
+        {
+          "title": "Unified Authentication",
+          "description": "Single sign-on access to all Hermes Dot Science platforms and services."
+        },
+        {
+          "title": "Community Access",
+          "description": "Connect with innovators, researchers, and creators in our tech community."
+        },
+        {
+          "title": "Event Benefits",
+          "description": "Free access and exclusive discounts to technology conferences and workshops."
+        },
+        {
+          "title": "Innovation Hub",
+          "description": "Early access to new features, beta programs, and collaborative projects."
+        }
+      ]
+    }
+  ]
+}

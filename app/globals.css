@@ -1,0 +1,727 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 213 59% 5%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 213 59% 5%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom slow spin animation */
+@keyframes slow-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-slow-spin {
+  animation: slow-spin 80s linear infinite;
+}
+
+/* Ultra slow spin for outer elements */
+@keyframes ultra-slow-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-ultra-slow-spin {
+  animation: ultra-slow-spin 120s linear infinite;
+}
+
+/* Counter-rotating animation - MUST match slow-spin timing exactly */
+@keyframes counter-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-counter-spin {
+  animation: counter-spin 80s linear infinite;
+}
+
+/* Remove the combined animations and replace with separate ones */
+
+/* Soft scale animations with dramatic ranges and slower timing */
+@keyframes soft-scale-1 {
+  0%,
+  100% {
+    transform: scale(1.0);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+}
+
+@keyframes soft-scale-2 {
+  0%,
+  100% {
+    transform: scale(0.8);
+  }
+  33% {
+    transform: scale(1.3);
+  }
+  66% {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes soft-scale-3 {
+  0%,
+  100% {
+    transform: scale(1.1);
+  }
+  25% {
+    transform: scale(0.75);
+  }
+  75% {
+    transform: scale(1.35);
+  }
+}
+
+@keyframes soft-scale-4 {
+  0%,
+  100% {
+    transform: scale(0.85);
+  }
+  20% {
+    transform: scale(1.2);
+  }
+  40% {
+    transform: scale(0.9);
+  }
+  60% {
+    transform: scale(1.4);
+  }
+  80% {
+    transform: scale(1.0);
+  }
+}
+
+@keyframes soft-scale-5 {
+  0%,
+  100% {
+    transform: scale(1.15);
+  }
+  50% {
+    transform: scale(0.7);
+  }
+}
+
+@keyframes soft-scale-6 {
+  0%,
+  100% {
+    transform: scale(0.9);
+  }
+  16% {
+    transform: scale(1.25);
+  }
+  33% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.45);
+  }
+  66% {
+    transform: scale(1.1);
+  }
+  83% {
+    transform: scale(0.75);
+  }
+}
+
+/* Individual scaling animation classes */
+.animate-soft-scale-1 {
+  animation: soft-scale-1 12s ease-in-out infinite;
+}
+
+.animate-soft-scale-2 {
+  animation: soft-scale-2 15s ease-in-out infinite;
+}
+
+.animate-soft-scale-3 {
+  animation: soft-scale-3 10.5s ease-in-out infinite;
+}
+
+.animate-soft-scale-4 {
+  animation: soft-scale-4 16.5s ease-in-out infinite;
+}
+
+.animate-soft-scale-5 {
+  animation: soft-scale-5 9.5s ease-in-out infinite;
+}
+
+.animate-soft-scale-6 {
+  animation: soft-scale-6 13.5s ease-in-out infinite;
+}
+
+/* Remove the combined slow-spin-scale animations - replace with original approach */
+/* Keep the original rotation animations separate */
+
+/* Update the radial gradient classes with new colors */
+.bg-gradient-radial-primary {
+  background: radial-gradient(circle, #0a1727 0%, #0a5e95 100%);
+  border: 0.5px solid #68dbff;
+}
+
+.hover\:bg-gradient-radial-primary-hover:hover {
+  background: radial-gradient(circle, rgba(23, 46, 73, 0.9) 0%, rgba(10, 94, 149, 0.9) 100%);
+  border: 0.5px solid rgba(104, 219, 255, 0.9);
+}
+
+/* Light mode grid background */
+.grid-background {
+  background-image: linear-gradient(to right, rgba(0, 148, 194, 0.2) 0.5px, transparent 0.5px),
+    linear-gradient(to bottom, rgba(0, 148, 194, 0.2) 0.5px, transparent 0.5px) !important;
+  background-size: 80px 80px !important;
+}
+
+.grid-gradient {
+  background: radial-gradient(70% 70% at 50% 50%, transparent 0%, rgba(0, 148, 194, 0.05) 100%) !important;
+}
+
+/* Update grid background to use brand colors */
+.dark .grid-background {
+  background-image: linear-gradient(to right, rgba(10, 94, 149, 0.3) 0.5px, transparent 0.5px),
+    linear-gradient(to bottom, rgba(10, 94, 149, 0.3) 0.5px, transparent 0.5px) !important;
+  background-size: 80px 80px !important;
+}
+
+.dark .grid-gradient {
+  background: radial-gradient(70% 70% at 50% 50%, transparent 0%, rgba(10, 94, 149, 0.1) 100%) !important;
+}
+
+/* Card styling improvements for dark mode */
+.dark .card {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border));
+}
+
+.dark .card-description {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Frosted glass effect */
+.frost-glass {
+  @apply backdrop-blur-md border shadow-sm;
+  /* Light mode specific */
+  @apply bg-white/80 border-primary/10 text-gray-800 shadow-[0_4px_20px_rgba(36,101,237,0.2)];
+  /* Dark mode specific */
+  @apply dark:bg-black/20 dark:border-white/10 dark:text-white dark:shadow-[0_4px_20px_rgba(36,101,237,0.3)];
+}
+
+/* Input focus effect */
+.frost-glass-input:focus {
+  @apply border-primary/30 ring-2 ring-primary/20 ring-offset-0;
+}
+
+/* Enter Space button smooth gradient transition */
+.enter-space-button {
+  position: relative;
+  box-shadow: 0 0 20px rgba(104, 219, 255, 0.4);
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.enter-space-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, #68dbff 0%, #0a5e95 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.enter-space-button:hover::before {
+  opacity: 1;
+}
+
+.enter-space-button:hover {
+  box-shadow: 0 0 30px rgba(104, 219, 255, 0.6);
+}
+
+.enter-space-button > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Smooth scrolling for touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .carousel-container {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Modern platform carousel glass effects */
+.platform-card-modern {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .platform-card-modern {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Feature icon containers */
+.feature-icon-container {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(34, 211, 238, 0.2));
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.dark .feature-icon-container {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(34, 211, 238, 0.15));
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile feature icon containers */
+.feature-icon-container-mobile {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(34, 211, 238, 0.2));
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 1px 6px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.dark .feature-icon-container-mobile {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(34, 211, 238, 0.12));
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 1px 6px rgba(59, 130, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Pulse animation for feature icons */
+@keyframes feature-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+.feature-icon-container .animate-pulse,
+.feature-icon-container-mobile .animate-pulse {
+  animation: feature-pulse 2s ease-in-out infinite;
+}
+
+/* Add this CSS to hide scrollbars while maintaining scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Custom scrollbar styles for modal */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-track-transparent {
+  scrollbar-color: transparent transparent;
+}
+\
+.scrollbar-thumb-\[#141823\] {
+  scrollbar-color: #141823 transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #141823;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: #1a1f2e;
+}
+
+/* Enhanced input focus states for modals */
+.modal-input-focus:focus {
+  outline: none !important;
+  ring: 0 !important;
+  ring-offset: 0 !important;
+  border-color: #315f8c !important;
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 0 0 2px rgba(49, 95, 140, 0.2) !important;
+}
+
+/* Modal backdrop blur enhancement */
+.modal-backdrop {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Custom gradient text for modal titles */
+.gradient-text-modal {
+  background: linear-gradient(135deg, #315f8c 0%, #68dbff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsive platform card styles */
+@media (max-width: 1279px) {
+  .platform-card-modern {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feature-row-layout {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .feature-item-responsive {
+    width: 50%;
+    padding: 0 0.5rem;
+  }
+}
+
+/* Ensure proper spacing in the stacked layout */
+.stacked-features-container {
+  background-color: rgba(10, 23, 39, 0.95);
+  border-top: 1px solid rgba(104, 219, 255, 0.3);
+}
+
+/* Adaptive height platform cards */
+.platform-card-adaptive-height {
+  /* Portrait mode (below xl): Height = 2 times the image height */
+  /* Image width is 70vw, with 7:4 aspect ratio, image height = (70vw * 4) / 7 = 40vw */
+  /* Total height = 2 * 40vw = 80vw, but with reasonable min/max constraints */
+  height: clamp(500px, 80vw, 800px);
+}
+
+@media (min-width: 1280px) {
+  .platform-card-adaptive-height {
+    /* Landscape mode (xl and above): Fixed height that matches image container */
+    /* 
+    Calculation: 
+    - Card width is 70vw
+    - Image takes 75% of card width = 52.5vw
+    - Image aspect ratio is 7:4, so height = (52.5vw * 4) / 7 = 30vw
+    */
+    height: 30vw;
+    min-height: 300px; /* Minimum height for very small screens */
+    max-height: 500px; /* Maximum height for very large screens */
+  }
+}
+
+/* Image container - maintains 7:4 aspect ratio in both modes */
+.image-container-adaptive {
+  /* Portrait mode: Fill exactly half the container height while maintaining aspect ratio */
+  height: 100%; /* Fill the allocated grid row (50% of total container) */
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 1280px) {
+  .image-container-adaptive {
+    /* Landscape mode: Height fills the fixed container height */
+    height: 100%; /* Fill the fixed container height */
+    width: 100%; /* Full width of the 3/4 section */
+    aspect-ratio: unset; /* Remove aspect ratio constraint since height is fixed */
+  }
+}
+
+/* Images inside the container should fit the container */
+.image-container-adaptive .absolute {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* For background images, ensure they cover the container properly */
+.image-container-adaptive [style*="background-image"] {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Simplified features container with CSS Grid */
+.features-container-grid {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 0; /* Changed from 16px to 0 */
+  overflow: hidden;
+  height: 100%; /* Ensure it fills the parent grid cell */
+  width: 100%; /* Ensure it fills the parent grid cell */
+  position: relative;
+}
+
+/* Position the gradient so its bottom aligns with the bottom of the features grid cell */
+.features-container-grid::after {
+  content: "";
+  position: absolute;
+  bottom: 60px; /* Bottom edge of gradient aligns with bottom of features grid cell */
+  left: 0;
+  right: 0;
+  height: 80px; /* 80px tall gradient as requested */
+  background: linear-gradient(to bottom, transparent, rgba(10, 23, 39, 0.95) 90%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Find the .features-area class and update it to remove the gradient and padding */
+.features-area {
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  position: relative;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  padding-bottom: 0; /* Remove any bottom padding */
+  margin-bottom: 0; /* Remove any bottom margin */
+}
+
+.features-area::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Button area - auto-sized at bottom with responsive text scaling */
+.button-area {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 20; /* Higher than gradient z-index of 10 */
+  width: 100%; /* Force button container to fit parent width */
+  max-width: 100%; /* Prevent overflow */
+  overflow: hidden; /* Hide any potential overflow */
+}
+
+/* Responsive button text scaling */
+.button-area .w-full {
+  width: 100% !important; /* Force button to fill container width */
+  max-width: 100% !important; /* Prevent button from overflowing */
+  min-width: 0; /* Allow button to shrink if needed */
+  overflow: hidden; /* Hide text overflow */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.button-area .w-full span {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* Responsive font sizing */
+  font-size: clamp(0.75rem, 2.5vw, 0.9375rem); /* Scale between 12px and 15px */
+  line-height: 1.2;
+}
+
+/* Additional responsive scaling for very small containers */
+@media (max-width: 1400px) {
+  .button-area .w-full span {
+    font-size: clamp(0.625rem, 2vw, 0.875rem); /* Scale between 10px and 14px */
+  }
+}
+
+@media (max-width: 1200px) {
+  .button-area .w-full span {
+    font-size: clamp(0.5rem, 1.8vw, 0.8125rem); /* Scale between 8px and 13px */
+  }
+}
+
+/* Mobile-specific image container with 7:4 aspect ratio */
+.mobile-image-container-7-4 {
+  height: 50%; /* 50% of the 600px mobile container = 300px */
+  aspect-ratio: 7 / 4;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Mobile features container */
+.mobile-features-container {
+  height: 50%; /* 50% of the 600px mobile container = 300px */
+}
+
+/* Ensure mobile images fit their containers properly */
+.mobile-image-container-7-4 .absolute {
+  object-fit: cover;
+  object-position: center;
+}
+
+.mobile-image-container-7-4 [style*="background-image"] {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Scroll snap for learn-more page */
+.learn-more-container {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.learn-more-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Special snap point for the very top */
+.hero-snap-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ensure smooth scrolling */
+.learn-more-container {
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  height: 100vh;
+}

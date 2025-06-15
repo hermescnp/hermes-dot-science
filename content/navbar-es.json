@@ -1,0 +1,17 @@
+{
+  "logoImage": "/images/hermes-logo.svg",
+  "logoAlt": "Hermes Dot Science",
+  "navItems": [
+    { "label": "Plataformas", "href": "#platforms" },
+    { "label": "Casos de Uso", "href": "#use-cases" },
+    { "label": "Comunidad", "href": "#community" },
+    { "label": "Conectar", "href": "#contact" }
+  ],
+  "enterOfficeButton": {
+    "href": "https://hermes.science",
+    "imageSrc": "/images/office-logo.svg",
+    "imageAlt": "Laboratorio Hermes Science",
+    "mainText": "EXPLORAR OFICINA",
+    "subText": "Laboratorio Hermes Science"
+  }
+}

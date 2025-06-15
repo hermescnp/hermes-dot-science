@@ -1,0 +1,114 @@
+{
+  "pageTitle": "Conoce Más Sobre Hermes Dot Science",
+  "pageSubtitle": "Descubre cómo nuestra plataforma de IA empresarial transforma negocios y operaciones gubernamentales con soluciones seguras y personalizables.",
+  "heroSection": {
+    "title": "IA Empresarial Que Funciona Para Ti",
+    "subtitle": "Construida para seguridad, diseñada para escala, optimizada para resultados.",
+    "features": [
+      "Cifrado de extremo a extremo",
+      "Implementación local",
+      "Agentes de IA personalizados",
+      "Soporte empresarial 24/7"
+    ]
+  },
+  "sections": [
+    {
+      "id": "security",
+      "title": "Seguridad de Nivel Empresarial",
+      "subtitle": "Tus datos permanecen seguros con cifrado de grado militar y estándares de cumplimiento.",
+      "content": "Hermes Dot Science implementa arquitectura de confianza cero con cifrado de extremo a extremo, asegurando que tus datos sensibles nunca salgan de tu control. Nuestra plataforma cumple con SOC 2, GDPR y requisitos de seguridad gubernamentales.",
+      "features": [
+        {
+          "icon": "Shield",
+          "title": "Arquitectura de Confianza Cero",
+          "description": "Cada solicitud es verificada y cifrada antes del procesamiento."
+        },
+        {
+          "icon": "Lock",
+          "title": "Cifrado de Extremo a Extremo",
+          "description": "Los datos se cifran en tránsito y en reposo con cifrado AES-256."
+        },
+        {
+          "icon": "FileCheck",
+          "title": "Listo para Cumplimiento",
+          "description": "Cumplimiento SOC 2, GDPR, HIPAA y gubernamental integrado."
+        }
+      ]
+    },
+    {
+      "id": "customization",
+      "title": "Agentes de IA Totalmente Personalizables",
+      "subtitle": "Crea agentes de IA adaptados a tus necesidades específicas de negocio y flujos de trabajo.",
+      "content": "Nuestra plataforma te permite construir agentes de IA personalizados que entienden el contexto de tu negocio, se integran con tus sistemas existentes y siguen tus protocolos y procedimientos específicos.",
+      "features": [
+        {
+          "icon": "Bot",
+          "title": "Entrenamiento Personalizado",
+          "description": "Entrena agentes con tus datos específicos y procesos de negocio."
+        },
+        {
+          "icon": "Workflow",
+          "title": "Integración de Flujos de Trabajo",
+          "description": "Integra perfectamente con tus flujos de trabajo empresariales existentes."
+        },
+        {
+          "icon": "Settings",
+          "title": "Control Fino",
+          "description": "Ajusta el comportamiento y respuestas del agente según tus requisitos."
+        }
+      ]
+    },
+    {
+      "id": "deployment",
+      "title": "Opciones de Implementación Flexibles",
+      "subtitle": "Implementa en las instalaciones, en la nube o en configuraciones híbridas.",
+      "content": "Elige el modelo de implementación que mejor se adapte a tus requisitos de seguridad e infraestructura. Desde instalaciones locales aisladas hasta implementaciones nativas en la nube.",
+      "features": [
+        {
+          "icon": "Server",
+          "title": "En las Instalaciones",
+          "description": "Control completo con instalaciones aisladas."
+        },
+        {
+          "icon": "Cloud",
+          "title": "Nativo en la Nube",
+          "description": "Implementaciones escalables en la nube con seguridad empresarial."
+        },
+        {
+          "icon": "Network",
+          "title": "Soluciones Híbridas",
+          "description": "Combina local y nube para flexibilidad óptima."
+        }
+      ]
+    },
+    {
+      "id": "integration",
+      "title": "Integración Perfecta",
+      "subtitle": "Conecta con tus herramientas y sistemas existentes sin esfuerzo.",
+      "content": "Nuestra plataforma se integra con más de 100+ herramientas y sistemas empresariales, desde sistemas CRM y ERP hasta software especializado de la industria.",
+      "features": [
+        {
+          "icon": "Plug",
+          "title": "Diseño API-First",
+          "description": "APIs RESTful y webhooks para integración fácil."
+        },
+        {
+          "icon": "Database",
+          "title": "Conectores de Datos",
+          "description": "Conectores pre-construidos para sistemas empresariales populares."
+        },
+        {
+          "icon": "Zap",
+          "title": "Sincronización en Tiempo Real",
+          "description": "Mantén tus datos sincronizados en todas las plataformas."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "¿Listo Para Transformar Tu Negocio?",
+    "subtitle": "Únete a cientos de empresas que ya usan Hermes Dot Science para revolucionar sus operaciones.",
+    "primaryButton": "Solicitar Demo",
+    "secondaryButton": "Obtener Cotización"
+  }
+}
