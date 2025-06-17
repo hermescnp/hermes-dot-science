@@ -6,6 +6,8 @@ import { useLanguage } from "@/contexts/language-context"
 import { Footer } from "@/components/footer"
 import Navbar from "@/components/navbar"
 import DemoRequestModal from "@/components/demo-request-modal"
+import { use } from "react"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 // Import custom components
 import { HeroSection } from "@/components/learn-more/hero-section"
@@ -66,7 +68,8 @@ interface LearnMoreContent {
   }
 }
 
-export default function LearnMorePage({ params: { lang } }: { params: { lang: string } }) {
+export default function LearnMorePage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = use(params)
   const { language, t } = useLanguage()
   const [content, setContent] = useState<LearnMoreContent | null>(null)
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false)
@@ -84,7 +87,7 @@ export default function LearnMorePage({ params: { lang } }: { params: { lang: st
   // Use our custom hook for section scrolling
   const { currentSnapPoint, isAtFooter, scrollToSection, nextSection, prevSection } = useSectionScroll({
     sections,
-    footerRef,
+    footerRef: footerRef as React.RefObject<HTMLDivElement>,
   })
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -137,16 +140,12 @@ export default function LearnMorePage({ params: { lang } }: { params: { lang: st
   }, [content])
 
   if (!content) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#141823] text-white">
-        <p>{t("loading") || "Loading..."}</p>
-      </div>
-    )
+    return <LoadingSpinner text={t("loading")} />
   }
 
   return (
     <div className="flex min-h-screen flex-col bg-[#141823] text-white overflow-x-hidden learn-more-container">
-      <Navbar className="relative z-[90]" />
+      <Navbar />
 
       {/* Snap anchor for very top of page */}
       <div className="hero-snap-anchor" />

@@ -5,21 +5,33 @@ import { motion, useMotionValue, useSpring } from "framer-motion"
 
 // Create a safe version of useActiveSection that doesn't throw errors
 function useSafeActiveSection() {
-  let activeSectionHook
-  let useActiveSection
-  try {
-    useActiveSection = require("@/hooks/use-active-section").useActiveSection
-  } catch {
-    useActiveSection = () => ({
+  const [isClient, setIsClient] = useState(false)
+  
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // During SSR or before hydration, return default values
+  if (!isClient) {
+    return {
       activeSection: "hero",
       setActiveSection: () => {},
       isActive: (section: string) => section === "hero",
-    })
+    }
   }
 
-  activeSectionHook = useActiveSection()
-
-  return activeSectionHook
+  // On client side, try to use the actual hook
+  try {
+    const { useActiveSection } = require("@/hooks/use-active-section")
+    return useActiveSection()
+  } catch {
+    // Fallback if the hook is not available
+    return {
+      activeSection: "hero",
+      setActiveSection: () => {},
+      isActive: (section: string) => section === "hero",
+    }
+  }
 }
 
 interface OptimizedFramerSpotlightProps {

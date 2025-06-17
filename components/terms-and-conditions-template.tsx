@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, FileText, Menu, X } from "lucide-react"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 interface TermsSection {
   title: string
@@ -94,14 +95,7 @@ export function TermsAndConditionsTemplate({ lang = "en" }: { lang?: string }) {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0A1727]">
-        <div className="flex items-center gap-3">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-highlight border-t-transparent"></div>
-          <span className="text-[#68DBFF] text-lg">Loading documentation...</span>
-        </div>
-      </div>
-    )
+    return <LoadingSpinner text="Loading documentation..." />
   }
 
   if (!termsData) {

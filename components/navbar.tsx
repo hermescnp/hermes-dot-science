@@ -12,6 +12,7 @@ import { useLanguage } from "@/contexts/language-context"
 import { usePathname, useRouter } from "next/navigation"
 import { MobileBackButton } from "@/components/learn-more/navigation-ui"
 import { createPortal } from "react-dom"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 interface NavItem {
   label: string
@@ -452,7 +453,7 @@ export default function Navbar() {
     return (
       <header className="fixed top-0 w-full h-20 bg-background/50 backdrop-blur-md z-50">
         <div className="flex h-full items-center justify-between px-4 sm:px-8 md:px-12">
-          <div>{t("loading")}</div>
+          <LoadingSpinner text={t("loading")} className="min-h-0" />
         </div>
       </header>
     )

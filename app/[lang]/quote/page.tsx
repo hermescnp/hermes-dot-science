@@ -8,6 +8,7 @@ import OptimizedFramerSpotlight from "@/components/optimized-framer-spotlight"
 import { ConversationalQuoteChat } from "@/components/quote/conversational-quote-chat"
 import QuoteResults from "@/components/quote/quote-results"
 import { useLanguage } from "@/contexts/language-context"
+import { use } from "react"
 import QuoteDataModal from "@/components/quote-data-modal"
 
 type QuoteStep = "chat" | "results"
@@ -21,7 +22,8 @@ interface Answer {
   hours: number
 }
 
-export default function QuotePage({ params: { lang } }: { params: { lang: string } }) {
+export default function QuotePage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = use(params)
   const { language } = useLanguage()
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState<QuoteStep>("chat")
