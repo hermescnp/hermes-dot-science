@@ -50,8 +50,12 @@
         { "value": "government", "label": "Agencia Gubernamental" }
       ]
     },
-    "submitButtonText": "Solicitar Información",
-    "submittingText": "Enviando...",
+    "submitButtonText": "Crear Cuenta",
+    "submittingText": "Creando cuenta...",
+    "googleSignUpText": "Registrarse con Google",
+    "alreadyHaveAccountText": "Ya tengo una cuenta",
+    "orText": "o",
+    "termsText": "Acepto los términos y condiciones",
     "responseNote": "Típicamente respondemos a todas las consultas dentro de 24-48 horas hábiles. Gracias por tu paciencia.",
     "successMessage": {
       "title": "¡Gracias!",

@@ -10,6 +10,10 @@
       ]
     },
     {
+      "title": "Cuenta",
+      "links": [{ "label": "Iniciar Sesión", "href": "/es/sign-in" }, { "label": "Registrarse", "href": "/es/sign-up" }]
+    },
+    {
       "title": "Legal",
       "links": [{ "label": "Términos y Condiciones", "href": "/es/terms-and-conditions" }]
     }

@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { LanguageProvider } from "@/contexts/language-context"
+import { ActiveSectionProvider } from "@/hooks/use-active-section"
 
 export const metadata: Metadata = {
   title: "Hermes Dot Science | Secure AI Solutions for Business & Government",
@@ -20,7 +21,11 @@ export default function LocaleLayout({
 
   console.log(`LocaleLayout: Received lang param: ${lang}, using: ${validLang}`)
 
-  return <LanguageProvider initialLanguage={validLang as "en" | "es"}>{children}</LanguageProvider>
+  return (
+    <LanguageProvider initialLanguage={validLang as "en" | "es"}>
+      <ActiveSectionProvider>{children}</ActiveSectionProvider>
+    </LanguageProvider>
+  )
 }
 
 // Define the valid language parameters

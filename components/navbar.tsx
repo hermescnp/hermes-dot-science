@@ -618,7 +618,10 @@ export default function Navbar() {
                     <span className="sr-only">Toggle menu</span>
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="z-[110] w-[300px] sm:w-[340px] flex flex-col">
+                <SheetContent
+                  side="right"
+                  className="z-[110] w-[300px] sm:w-[340px] flex flex-col overflow-y-auto max-h-screen"
+                >
                   <div className="flex justify-center pt-6 pb-4">
                     <Image
                       src={logoImage || "/placeholder.svg"}

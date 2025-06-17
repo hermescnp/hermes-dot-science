@@ -7,7 +7,6 @@ export async function GET(request: Request) {
     const lang = searchParams.get("lang") || "en"
 
     const contactData = await loadJsonContent<any>(`contact-${lang}.json`)
-    // Return the data in the expected structure
     return NextResponse.json(contactData)
   } catch (error) {
     console.error("API Error fetching contact form content:", error)

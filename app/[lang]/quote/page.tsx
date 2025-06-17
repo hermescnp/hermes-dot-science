@@ -8,6 +8,7 @@ import OptimizedFramerSpotlight from "@/components/optimized-framer-spotlight"
 import { ConversationalQuoteChat } from "@/components/quote/conversational-quote-chat"
 import QuoteResults from "@/components/quote/quote-results"
 import { useLanguage } from "@/contexts/language-context"
+import QuoteDataModal from "@/components/quote-data-modal"
 
 type QuoteStep = "chat" | "results"
 
@@ -25,6 +26,8 @@ export default function QuotePage({ params: { lang } }: { params: { lang: string
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState<QuoteStep>("chat")
   const [answers, setAnswers] = useState<Answer[]>([])
+  const [showDataModal, setShowDataModal] = useState(false)
+  const [hasUserData, setHasUserData] = useState(false)
 
   // Replace the existing language detection with:
   const currentLanguage = lang || language || "en"
@@ -46,6 +49,20 @@ export default function QuotePage({ params: { lang } }: { params: { lang: string
     return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [])
 
+  // Check if user data exists
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("quoteUserData")
+      const hasData = userData && userData !== "null"
+      setHasUserData(hasData)
+
+      // If no user data exists, show the modal
+      if (!hasData) {
+        setShowDataModal(true)
+      }
+    }
+  }, [])
+
   // Make sure the language is properly passed to the components
   const handleQuoteComplete = (quoteAnswers: Answer[]) => {
     setAnswers(quoteAnswers)
@@ -65,6 +82,20 @@ export default function QuotePage({ params: { lang } }: { params: { lang: string
     router.push(`/${currentLanguage}/learn-more`)
   }
 
+  const handleDataModalClose = () => {
+    // Check if user data was provided after modal interaction
+    const userData = localStorage.getItem("quoteUserData")
+    const hasData = userData && userData !== "null"
+
+    if (hasData) {
+      setHasUserData(true)
+      setShowDataModal(false)
+    } else {
+      // If user closes modal without completing, redirect back to learn-more
+      router.push(`/${currentLanguage}/learn-more`)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#0A1727] text-white overflow-x-hidden">
       {/* Background effects container */}
@@ -82,6 +113,14 @@ export default function QuotePage({ params: { lang } }: { params: { lang: string
           </div>
         )}
       </div>
+
+      {/* Quote Data Modal - shown when user data is missing */}
+      <QuoteDataModal
+        isOpen={showDataModal}
+        onClose={handleDataModalClose}
+        lang={currentLanguage}
+        isOnQuotePage={true}
+      />
     </div>
   )
 }

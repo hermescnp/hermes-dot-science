@@ -17,6 +17,7 @@ interface QuoteDataModalProps {
   isOpen: boolean
   onClose: () => void
   lang: string
+  isOnQuotePage?: boolean // Add this new prop
 }
 
 interface QuoteFormContent {
@@ -45,7 +46,7 @@ interface FormData {
   email: string
 }
 
-export default function QuoteDataModal({ isOpen, onClose, lang }: QuoteDataModalProps) {
+export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = false }: QuoteDataModalProps) {
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -104,13 +105,17 @@ export default function QuoteDataModal({ isOpen, onClose, lang }: QuoteDataModal
         title: language === "es" ? "¡Datos Guardados!" : "Data Saved!",
         description:
           language === "es"
-            ? "Ahora serás redirigido a la calculadora de cotización personalizada."
-            : "You will now be redirected to the personalized quote calculator.",
+            ? isOnQuotePage
+              ? "Ahora puedes continuar con la calculadora de cotización."
+              : "Ahora serás redirigido a la calculadora de cotización personalizada."
+            : isOnQuotePage
+              ? "You can now continue with the quote calculator."
+              : "You will now be redirected to the personalized quote calculator.",
         buttonText: language === "es" ? "Continuar" : "Continue",
       },
     }
     setContent(quoteContent)
-  }, [language])
+  }, [language, isOnQuotePage])
 
   // Reset form when modal closes
   useEffect(() => {
@@ -263,9 +268,11 @@ export default function QuoteDataModal({ isOpen, onClose, lang }: QuoteDataModal
     setTimeout(() => {
       setIsSubmitting(false)
       setIsSubmitted(true)
-      // Redirect to quote page after a short delay
+      // Redirect to quote page after a short delay only if not already on quote page
       setTimeout(() => {
-        router.push(`/${lang}/quote`)
+        if (!isOnQuotePage) {
+          router.push(`/${lang}/quote`)
+        }
         onClose()
       }, 2000)
     }, 1500)
@@ -659,7 +666,13 @@ ${
               <p className="text-slate-600 dark:text-slate-300 max-w-sm">{content.successMessage.description}</p>
               <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                 <div className="w-4 h-4 border-2 border-[#68DBFF] border-t-transparent rounded-full animate-spin" />
-                {language === "es" ? "Redirigiendo..." : "Redirecting..."}
+                {!isOnQuotePage
+                  ? language === "es"
+                    ? "Redirigiendo..."
+                    : "Redirecting..."
+                  : language === "es"
+                    ? "Guardando..."
+                    : "Saving..."}
               </div>
             </motion.div>
           )}

@@ -3,7 +3,7 @@
   "logoAlt": "Hermes Dot Science",
   "navItems": [
     { "label": "Platforms", "href": "#platforms" },
-    { "label": "Use Cases", "href": "#use-cases" },
+    { "label": "Tools", "href": "#use-cases" },
     { "label": "Community", "href": "#community" },
     { "label": "Connect", "href": "#contact" }
   ],
