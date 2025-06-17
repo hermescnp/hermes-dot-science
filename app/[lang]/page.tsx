@@ -173,7 +173,7 @@ export default function HomePage({ params }: { params: Promise<{ lang: string }>
         {/* Hero Section */}
         <section
           id="hero"
-          className="relative min-h-[calc(100vh-400px)] flex items-center justify-center overflow-hidden z-[60] bg-background mt-20"
+          className="relative min-h-[calc(100vh-400px)] flex items-center justify-center overflow-hidden z-[60] bg-background mt-20 pb-20 md:pb-0"
           style={{
             borderRadius: "25px",
             boxShadow: "0 0 30px 5px rgba(0, 0, 0, 0.1)",
@@ -183,9 +183,9 @@ export default function HomePage({ params }: { params: Promise<{ lang: string }>
           <CssGridBackground />
           <OptimizedFramerSpotlight />
           <div className="w-full max-w-none px-6 md:px-12 py-12 md:py-16">
-            <div className="grid grid-cols-1 xl:grid-cols-2 items-center">
-              <div className="relative z-10 flex flex-col justify-center w-auto pl-4 md:pl-8 space-y-10">
-                <div className="inline-block rounded-lg bg-gradient-to-r from-[#68DBFF] via-[#0A5E95] to-[#E27D4A] p-[1px] w-fit">
+            <div className="grid grid-cols-1 xl:grid-cols-2 items-center justify-center">
+              <div className="relative z-10 flex flex-col justify-center w-auto pl-4 md:pl-8 space-y-10 text-center xl:text-left">
+                <div className="inline-block rounded-lg bg-gradient-to-r from-[#68DBFF] via-[#0A5E95] to-[#E27D4A] p-[1px] w-fit mx-auto xl:mx-0">
                   <div className="rounded-lg px-5 py-2.5 text-sm" style={{ backgroundColor: "#0B1E33" }}>
                     Powered by Hermes Dot Science
                   </div>
@@ -197,11 +197,11 @@ export default function HomePage({ params }: { params: Promise<{ lang: string }>
                   {heroContent.subtitle}
                 </p>
 
-                <div className="w-full max-w-2xl">
+                <div className="w-full max-w-2xl mx-auto xl:mx-0">
                   <TypingPromptInput prompts={heroContent.typingPrompts} />
                 </div>
 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3 justify-center xl:justify-start">
                   <Button
                     onClick={() => setIsDemoModalOpen(true)}
                     className="flex items-center gap-3 px-5 py-6 h-[60px] bg-gradient-radial-primary hover:bg-gradient-radial-primary-hover text-white rounded-xl border-0 shadow-none hover:shadow-[0_0_35px_rgba(104,219,255,0.7)] transition-all duration-300 relative overflow-hidden group"
@@ -220,7 +220,7 @@ export default function HomePage({ params }: { params: Promise<{ lang: string }>
                 </div>
               </div>
 
-              <div className="relative z-10 flex items-center justify-center w-full">
+              <div className="relative z-10 hidden md:flex items-center justify-center w-full">
                 <div className="w-full max-w-full">
                   <ResponsiveFlowWrapper>
                     <OptimizedAIFlowDiagram />

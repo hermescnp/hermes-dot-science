@@ -52,6 +52,10 @@
     },
     "submitButtonText": "Create Account",
     "submittingText": "Submitting...",
+    "googleSignUpText": "Sign up with Google",
+    "alreadyHaveAccountText": "I already have an account",
+    "orText": "or",
+    "termsText": "I agree to the terms and conditions",
     "responseNote": "We typically respond to all inquiries within 24-48 business hours. Thank you for your patience.",
     "successMessage": {
       "title": "Thank You!",
