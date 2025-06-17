@@ -22,6 +22,8 @@ import DemoRequestModal from "@/components/demo-request-modal"
 import Link from "next/link"
 import QuoteDataModal from "@/components/quote-data-modal"
 import ElegantSeparator from "@/components/neon-separator"
+import { use } from "react"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 const ResponsiveFlowWrapper = dynamic(() => import("@/components/responsive-flow-wrapper"), { ssr: false })
 
@@ -72,7 +74,8 @@ function SectionObservers() {
   return null
 }
 
-export default function HomePage({ params: { lang } }: { params: { lang: string } }) {
+export default function HomePage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = use(params)
   const { language, t } = useLanguage()
   const [heroContent, setHeroContent] = useState<HeroContent | null>(null)
   const [howItWorksContent, setHowItWorksContent] = useState<HowItWorksContent | null>(null)
@@ -158,11 +161,7 @@ export default function HomePage({ params: { lang } }: { params: { lang: string 
   }, [language])
 
   if (!heroContent || !howItWorksContent || !contactContent) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0A1727] text-white">
-        <p>{t("loading")}</p>
-      </div>
-    )
+    return <LoadingSpinner text={t("loading")} />
   }
 
   return (

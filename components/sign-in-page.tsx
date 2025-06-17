@@ -14,6 +14,7 @@ import CssGridBackground from "@/components/css-grid-background"
 import Image from "next/image"
 import SignInSpotlight from "@/components/sign-in-spotlight"
 import { BackButton, MobileBackButton } from "@/components/learn-more/navigation-ui"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 interface SignInContent {
   title: string
@@ -148,11 +149,7 @@ export default function SignInPage({ lang }: SignInPageProps) {
   }
 
   if (!content) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>{language === "es" ? "Cargando..." : "Loading..."}</p>
-      </div>
-    )
+    return <LoadingSpinner text={language === "es" ? "Cargando..." : "Loading..."} />
   }
 
   if (isSubmitted) {

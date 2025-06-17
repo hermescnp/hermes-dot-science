@@ -15,6 +15,7 @@ import CssGridBackground from "@/components/css-grid-background"
 import Image from "next/image"
 import SignInSpotlight from "@/components/sign-in-spotlight"
 import { BackButton, MobileBackButton } from "@/components/learn-more/navigation-ui"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 interface SignUpContent {
   title: string
@@ -236,11 +237,7 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
   }, [firstName, lastName, email, company, acceptTerms])
 
   if (!content) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>{language === "es" ? "Cargando..." : "Loading..."}</p>
-      </div>
-    )
+    return <LoadingSpinner text={language === "es" ? "Cargando..." : "Loading..."} />
   }
 
   if (isSubmitted) {
@@ -770,7 +767,7 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
                       className="mt-1 border-slate-300 data-[state=checked]:bg-[#68DBFF] data-[state=checked]:border-[#68DBFF]"
                     />
                     <Label htmlFor="terms" className="text-sm text-muted-foreground leading-relaxed cursor-pointer">
-                      {content.termsText?.split("términos y condiciones").length > 1 ? (
+                      {content.termsText && content.termsText.split("términos y condiciones").length > 1 ? (
                         <>
                           {content.termsText.split("términos y condiciones")[0]}
                           <a
@@ -782,7 +779,7 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
                             términos y condiciones
                           </a>
                         </>
-                      ) : content.termsText?.split("terms and conditions").length > 1 ? (
+                      ) : content.termsText && content.termsText.split("terms and conditions").length > 1 ? (
                         <>
                           {content.termsText.split("terms and conditions")[0]}
                           <a

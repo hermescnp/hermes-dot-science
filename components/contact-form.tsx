@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { RenderIcon } from "@/components/icon-mapper"
 import { useLanguage } from "@/contexts/language-context"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 interface ContactFormContent {
   title: string
@@ -183,7 +184,7 @@ export default function ContactForm() {
     return (
       <Card>
         <CardContent className="pt-6 min-h-[400px]">
-          <p>{language === "es" ? "Cargando..." : "Loading..."}</p>
+          <LoadingSpinner text={language === "es" ? "Cargando..." : "Loading..."} className="min-h-[400px]" />
         </CardContent>
       </Card>
     )
@@ -365,7 +366,7 @@ export default function ContactForm() {
               className="mt-1 border-slate-300 data-[state=checked]:bg-[#68DBFF] data-[state=checked]:border-[#68DBFF]"
             />
             <Label htmlFor="terms" className="text-sm text-muted-foreground leading-relaxed cursor-pointer">
-              {content.termsText?.split("términos y condiciones").length > 1 ? (
+              {content.termsText && content.termsText.split("términos y condiciones").length > 1 ? (
                 <>
                   {content.termsText.split("términos y condiciones")[0]}
                   <a
@@ -377,7 +378,7 @@ export default function ContactForm() {
                     términos y condiciones
                   </a>
                 </>
-              ) : content.termsText?.split("terms and conditions").length > 1 ? (
+              ) : content.termsText && content.termsText.split("terms and conditions").length > 1 ? (
                 <>
                   {content.termsText.split("terms and conditions")[0]}
                   <a

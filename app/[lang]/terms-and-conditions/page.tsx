@@ -1,7 +1,9 @@
 import { TermsAndConditionsTemplate } from "@/components/terms-and-conditions-template"
+import { use } from "react"
 
-export default function TermsAndConditionsPage({ params }: { params: { lang: string } }) {
-  return <TermsAndConditionsTemplate lang={params.lang} />
+export default function TermsAndConditionsPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = use(params)
+  return <TermsAndConditionsTemplate lang={lang} />
 }
 
 // Define the valid language parameters

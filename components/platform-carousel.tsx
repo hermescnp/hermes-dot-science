@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import MobilePlatformCarousel from "@/components/mobile-platform-carousel"
 import { RenderIcon } from "@/components/icon-mapper"
 import { useLanguage } from "@/contexts/language-context"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 interface PlatformFeature {
   title: string
