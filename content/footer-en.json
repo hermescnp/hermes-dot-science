@@ -7,6 +7,10 @@
       "links": [{ "label": "Learn More", "href": "/learn-more" }, { "label": "Get Quote", "href": "/quote" }]
     },
     {
+      "title": "Account",
+      "links": [{ "label": "Sign In", "href": "/sign-in" }, { "label": "Sign Up", "href": "/sign-up" }]
+    },
+    {
       "title": "Legal",
       "links": [{ "label": "Terms & Conditions", "href": "/terms-and-conditions" }]
     }

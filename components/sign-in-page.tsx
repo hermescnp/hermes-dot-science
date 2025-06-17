@@ -78,7 +78,7 @@ export default function SignInPage({ lang }: SignInPageProps) {
       createAccountText: language === "es" ? "Crear cuenta" : "Create account",
       orText: language === "es" ? "o" : "or",
       successMessage: {
-        title: language === "es" ? "¡Bienvenido de vuelta!" : "Welcome back!",
+        title: language === "es" ? "¡Bienvenido de vuelta! 👋" : "Welcome back! 👋",
         description: language === "es" ? "Has iniciado sesión correctamente." : "You have successfully signed in.",
         buttonText: language === "es" ? "Continuar" : "Continue",
       },
@@ -210,32 +210,39 @@ export default function SignInPage({ lang }: SignInPageProps) {
                 </div>
 
                 <h3 className="text-3xl font-bold mb-3 bg-gradient-to-r from-[#68DBFF] to-[#315F8C] bg-clip-text text-transparent">
-                  Welcome back! 👋
+                  {content.successMessage.title}
                 </h3>
 
                 <div className="max-w-md mb-6">
                   <p className="text-muted-foreground mb-4 leading-relaxed">
-                    You have successfully signed in to your account. You will be automatically redirected to the
-                    official
-                    <span className="font-semibold text-[#68DBFF]"> Hermes Dot Science Workspace</span> in a few seconds
-                    where you can continue working with our AI-powered tools and features.
+                    {language === "es"
+                      ? "Has iniciado sesión correctamente en tu cuenta. Serás redirigido automáticamente al "
+                      : "You have successfully signed in to your account. You will be automatically redirected to the official "}
+                    <span className="font-semibold text-[#68DBFF]">
+                      {language === "es" ? "Espacio de Trabajo de Hermes Dot Science" : "Hermes Dot Science Workspace"}
+                    </span>
+                    {language === "es"
+                      ? " oficial en unos segundos donde podrás continuar trabajando con nuestras herramientas y funciones impulsadas por IA."
+                      : " in a few seconds where you can continue working with our AI-powered tools and features."}
                   </p>
                 </div>
 
                 <div className="flex items-center justify-center mb-8 p-4 rounded-xl bg-background/50 border border-[#68DBFF]/20">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#68DBFF] mr-3"></div>
-                  <span className="text-sm text-muted-foreground">Loading your workspace...</span>
+                  <span className="text-sm text-muted-foreground">
+                    {language === "es" ? "Cargando tu espacio de trabajo..." : "Loading your workspace..."}
+                  </span>
                 </div>
 
                 <div className="flex flex-col gap-3 w-full max-w-sm">
                   <Button
                     onClick={() => {
                       // This would redirect to the actual workspace
-                      window.open("https://workspace.hermesdotscience.com", "_blank")
+                      window.open("https://workspace.hermes.science/", "_blank")
                     }}
                     className="w-full h-[60px] py-6 bg-gradient-radial-primary hover:bg-gradient-radial-primary-hover text-white shadow-none hover:shadow-[0_0_30px_rgba(104,219,255,0.6)] transition-all duration-300 rounded-xl"
                   >
-                    Access Workspace Manually
+                    {language === "es" ? "Acceder al Espacio de Trabajo Manualmente" : "Access Workspace Manually"}
                   </Button>
 
                   <Button
@@ -243,7 +250,7 @@ export default function SignInPage({ lang }: SignInPageProps) {
                     onClick={() => setIsSubmitted(false)}
                     className="w-full h-[60px] text-muted-foreground hover:text-foreground hover:bg-black/30 transition-colors rounded-xl"
                   >
-                    Go Back to Form
+                    {language === "es" ? "Volver al Formulario" : "Go Back to Form"}
                   </Button>
                 </div>
               </div>
@@ -655,7 +662,7 @@ export default function SignInPage({ lang }: SignInPageProps) {
                     <Button
                       type="button"
                       variant="ghost"
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      className="text-sm text-muted-foreground hover:text-foreground hover:bg-[#0A1727] transition-colors"
                     >
                       {content.forgotPasswordText}
                     </Button>

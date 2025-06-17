@@ -3,7 +3,7 @@
   "logoAlt": "Hermes Dot Science",
   "navItems": [
     { "label": "Plataformas", "href": "#platforms" },
-    { "label": "Casos de Uso", "href": "#use-cases" },
+    { "label": "Herramientas", "href": "#use-cases" },
     { "label": "Comunidad", "href": "#community" },
     { "label": "Conectar", "href": "#contact" }
   ],
@@ -11,7 +11,7 @@
     "href": "https://hermes.science",
     "imageSrc": "/images/office-logo.svg",
     "imageAlt": "Laboratorio Hermes Science",
-    "mainText": "EXPLORAR OFICINA",
-    "subText": "Laboratorio Hermes Science"
+    "mainText": "EXPLORAR",
+    "subText": "Oficina Virtual"
   }
 }

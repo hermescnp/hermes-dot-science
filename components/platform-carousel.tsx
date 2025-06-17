@@ -436,7 +436,7 @@ export default function PlatformCarousel() {
           </div>
 
           {/* Mobile version */}
-          <div className="md:hidden px-4">
+          <div className="md:hidden">
             {platforms.length > 0 ? (
               <MobilePlatformCarousel
                 platforms={platforms}
