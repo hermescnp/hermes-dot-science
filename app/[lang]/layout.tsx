@@ -22,11 +22,7 @@ export default function LocaleLayout({
 
   console.log(`LocaleLayout: Received lang param: ${lang}, using: ${validLang}`)
 
-  return (
-    <LanguageProvider initialLanguage={validLang as "en" | "es"}>
-      <ActiveSectionProvider>{children}</ActiveSectionProvider>
-    </LanguageProvider>
-  )
+  return <LanguageProvider initialLanguage={validLang as "en" | "es"}>{children}</LanguageProvider>
 }
 
 // Define the valid language parameters
