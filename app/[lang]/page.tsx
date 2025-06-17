@@ -11,7 +11,7 @@ import OptimizedFramerSpotlight from "@/components/optimized-framer-spotlight"
 import CssGridBackground from "@/components/css-grid-background"
 import StructuredData from "@/components/structured-data"
 import OptimizedAIFlowDiagram from "@/components/optimized-ai-flow-diagram"
-import { ActiveSectionProvider, useSectionObserver } from "@/hooks/use-active-section"
+import { useSectionObserver } from "@/hooks/use-active-section"
 import dynamic from "next/dynamic"
 import PlatformCarousel from "@/components/platform-carousel"
 import OptimizedUseCases from "@/components/optimized-use-cases"
@@ -165,7 +165,7 @@ export default function HomePage({ params }: { params: Promise<{ lang: string }>
   }
 
   return (
-    <ActiveSectionProvider>
+    <>
       <SectionObservers />
       <StructuredData />
       <div className="flex min-h-screen flex-col bg-[#0A1727] text-white">
@@ -433,6 +433,6 @@ export default function HomePage({ params }: { params: Promise<{ lang: string }>
         <DemoRequestModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
         <QuoteDataModal isOpen={isQuoteModalOpen} onClose={() => setIsQuoteModalOpen(false)} lang={lang} />
       </div>
-    </ActiveSectionProvider>
+    </>
   )
 }
