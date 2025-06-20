@@ -2,37 +2,7 @@
 
 import { useRef, useState, useEffect, useMemo } from "react"
 import { motion, useMotionValue, useSpring } from "framer-motion"
-
-// Create a safe version of useActiveSection that doesn't throw errors
-function useSafeActiveSection() {
-  const [isClient, setIsClient] = useState(false)
-  
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
-  // During SSR or before hydration, return default values
-  if (!isClient) {
-    return {
-      activeSection: "hero",
-      setActiveSection: () => {},
-      isActive: (section: string) => section === "hero",
-    }
-  }
-
-  // On client side, try to use the actual hook
-  try {
-    const { useActiveSection } = require("@/hooks/use-active-section")
-    return useActiveSection()
-  } catch {
-    // Fallback if the hook is not available
-    return {
-      activeSection: "hero",
-      setActiveSection: () => {},
-      isActive: (section: string) => section === "hero",
-    }
-  }
-}
+import { useActiveSection } from "@/hooks/use-active-section"
 
 interface OptimizedFramerSpotlightProps {
   showMainSpotlight?: boolean
@@ -43,8 +13,8 @@ export default function OptimizedFramerSpotlight({ showMainSpotlight = true }: O
   const [windowDimensions, setWindowDimensions] = useState({ width: 1200, height: 800 })
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Use the safe version of the hook
-  const { isActive } = useSafeActiveSection()
+  // Use the active section hook directly
+  const { isActive } = useActiveSection()
   const isDark = true
 
   // Motion values for the spotlight position with spring physics - same as learn-more page
