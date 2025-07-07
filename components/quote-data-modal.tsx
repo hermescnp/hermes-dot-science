@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -246,29 +246,77 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsSubmitting(true)
 
-    // Format the full phone number
-    const fullPhoneNumber =
-      formData.phoneCountryCode === "Other" ? formData.phone : `${formData.phoneCountryCode} ${formData.phone}`
+    try {
+      // Format the full phone number for display
+      const fullPhoneNumber =
+        formData.phoneCountryCode === "Other" ? formData.phone : `${formData.phoneCountryCode} ${formData.phone}`
 
-    // Create the user data object to store
-    const userData = {
-      ...formData,
-      fullName: `${formData.firstName} ${formData.lastName}`,
-      fullPhone: fullPhoneNumber,
-      timestamp: new Date().toISOString(),
-    }
+      // Create clean numeric phone number for database
+      const cleanPhoneNumber = fullPhoneNumber.replace(/[\s\-\(\)]/g, '')
 
-    // Store the data in localStorage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("quoteUserData", JSON.stringify(userData))
-    }
+      // Create the user data object to store
+      const userData = {
+        ...formData,
+        fullName: `${formData.firstName} ${formData.lastName}`,
+        fullPhone: fullPhoneNumber,
+        timestamp: new Date().toISOString(),
+      }
 
-    setTimeout(() => {
+      // Store the data in localStorage for the quote flow
+      if (typeof window !== "undefined") {
+        localStorage.setItem("quoteUserData", JSON.stringify(userData))
+      }
+
+      // Import the lead capture service
+      const { createQuoteRequest, validateLeadData, storeLeadData } = await import('@/lib/lead-capture-service.js')
+      
+      // Validate the data
+      const validation = validateLeadData({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+        role: formData.role,
+        phone: fullPhoneNumber
+      }) as { isValid: boolean; errors: string[] }
+      
+      if (!validation.isValid) {
+        throw new Error(validation.errors.join(', '))
+      }
+      
+      // Store lead data for potential future use
+      storeLeadData({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+        role: formData.role,
+        phone: cleanPhoneNumber,
+        language: language
+      })
+      
+      // Create the quote request (quote data will be added later in the quote flow)
+      const result = await createQuoteRequest({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+        role: formData.role,
+        phone: cleanPhoneNumber,
+        language: language,
+        quoteData: {} // Will be populated when quote is completed
+      }) as { success: boolean; data?: any; error?: string }
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Unknown error occurred')
+      }
+
       setIsSubmitting(false)
       setIsSubmitted(true)
+      
       // Redirect to quote page after a short delay only if not already on quote page
       setTimeout(() => {
         if (!isOnQuotePage) {
@@ -276,7 +324,12 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
         }
         onClose()
       }, 2000)
-    }, 1500)
+    } catch (error) {
+      console.error('Error submitting quote request:', error)
+      setIsSubmitting(false)
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred while submitting your request. Please try again.'
+      alert(errorMessage)
+    }
   }
 
   const isStepValid = (step: number) => {
@@ -327,6 +380,15 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
       >
         <div className="overflow-y-auto p-6 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-[#141823] hover:scrollbar-thumb-[#1a1f2e]">
           <DialogHeader className="relative">
+            <DialogTitle className="sr-only">
+              {isSubmitted
+                ? language === "es"
+                  ? "Datos Guardados Exitosamente"
+                  : "Data Saved Successfully"
+                : language === "es"
+                  ? "Obtener Cotización"
+                  : "Get a Quote"}
+            </DialogTitle>
             {/* Logotype */}
             <div className="flex justify-center mb-6 mt-2">
               <Image src="/images/hermes-logo.svg" alt="Hermes Logo" width={240} height={80} className="w-auto h-16" />

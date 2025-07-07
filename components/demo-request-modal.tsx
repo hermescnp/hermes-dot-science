@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -45,6 +45,9 @@ interface FormData {
   role: string
   size: string
   message: string
+  phoneCountryCode: "+1 (809)" | "+1 (829)" | "+1 (849)" | "Other"
+  phone: string
+  language?: string
 }
 
 export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalProps) {
@@ -60,6 +63,8 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
     role: "",
     size: "",
     message: "",
+    phoneCountryCode: "+1 (809)",
+    phone: "",
   })
   const [sizeSliderValue, setSizeSliderValue] = useState([0])
   const { language, t } = useLanguage()
@@ -79,6 +84,7 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
   ]
 
   const [emailError, setEmailError] = useState<string | null>(null)
+  const [phoneError, setPhoneError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -99,6 +105,7 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
             firstName: language === "es" ? "Nombre" : "First Name",
             lastName: language === "es" ? "Apellido" : "Last Name",
             email: language === "es" ? "Email de Trabajo" : "Work Email",
+            phone: language === "es" ? "Teléfono" : "Phone Number",
             company: language === "es" ? "Empresa/Organización" : "Company/Organization",
             role: language === "es" ? "Tu Rol" : "Your Role",
             size: language === "es" ? "Tamaño de Organización" : "Organization Size",
@@ -108,6 +115,7 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
             firstName: "Juan",
             lastName: "Pérez",
             email: "juan.perez@empresa.com",
+            phone: language === "es" ? "+57 300 123 4567" : "+1 (555) 123-4567",
             company: "Acme Inc.",
             role: "CTO, Director de TI, etc.",
             message:
@@ -142,6 +150,7 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
       setCurrentStep(1)
       setIsSubmitted(false)
       setEmailError(null) // Add this line to clear email error state
+      setPhoneError(null) // Clear phone error state
       setFormData({
         firstName: "",
         lastName: "",
@@ -150,6 +159,8 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
         role: "",
         size: organizationSizes[0]?.value || "",
         message: "",
+        phoneCountryCode: "+1 (809)",
+        phone: "",
       })
       setSizeSliderValue([0])
     } else {
@@ -191,9 +202,44 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
     return emailRegex.test(email)
   }
 
+  const formatPhone = (value: string): string => {
+    // Remove all non-numeric characters
+    const numbers = value.replace(/\D/g, "")
+
+    // If "Other" is selected, return numbers without formatting but limit to reasonable length
+    if (formData.phoneCountryCode === "Other") {
+      return numbers.slice(0, 15) // Reasonable limit for international numbers
+    }
+
+    // Limit to 7 digits for Dominican numbers
+    const limitedNumbers = numbers.slice(0, 7)
+
+    // Apply format: 000-0000
+    if (limitedNumbers.length <= 3) {
+      return limitedNumbers
+    } else {
+      return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(3)}`
+    }
+  }
+
+  const validatePhone = (value: string): boolean => {
+    if (formData.phoneCountryCode === "Other") {
+      // For "Other", just check if there are at least some digits
+      return value.length >= 7
+    }
+    // Check if it matches the format 000-0000 (exactly 7 digits)
+    const phoneRegex = /^\d{3}-\d{4}$/
+    return phoneRegex.test(value)
+  }
+
   // Update the updateFormData function to only show error when email is not empty
   const updateFormData = (field: keyof FormData, value: string) => {
     console.log(`Updating ${field} to ${value}`)
+
+    // Handle phone formatting
+    if (field === "phone") {
+      value = formatPhone(value)
+    }
 
     // Validate email when it changes
     if (field === "email") {
@@ -207,6 +253,21 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
         )
       } else {
         setEmailError(null)
+      }
+    }
+
+    // Validate phone when it changes
+    if (field === "phone") {
+      if (!value) {
+        setPhoneError(null)
+      } else if (!validatePhone(value)) {
+        setPhoneError(
+          language === "es"
+            ? "Asegúrate de proporcionar un número de teléfono válido"
+            : "Make sure to provide a valid phone number"
+        )
+      } else {
+        setPhoneError(null)
       }
     }
 
@@ -243,18 +304,72 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsSubmitting(true)
-    setTimeout(() => {
+    
+    try {
+      // Import the lead capture service
+      const { createDemoRequest, validateLeadData, storeLeadData } = await import('@/lib/lead-capture-service.js')
+      
+            // Format phone number for display
+      const fullPhoneNumber = formData.phoneCountryCode === "Other" ? formData.phone : `${formData.phoneCountryCode} ${formData.phone}`
+      
+      // Create clean numeric phone number for database
+      const cleanPhoneNumber = fullPhoneNumber.replace(/[\s\-\(\)]/g, '')
+      
+      // Validate the data with the full phone number
+      const validation = validateLeadData({
+        ...formData,
+        phone: fullPhoneNumber
+      }) as { isValid: boolean; errors: string[] }
+      if (!validation.isValid) {
+        throw new Error(validation.errors.join(', '))
+      }
+      
+      // Store lead data for potential future use
+      storeLeadData({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+        role: formData.role,
+        phone: cleanPhoneNumber,
+        organizationSize: formData.size,
+        language: language
+      })
+      
+      // Create the demo request
+      const result = await createDemoRequest({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+        role: formData.role,
+        phone: cleanPhoneNumber,
+        message: formData.message,
+        organizationSize: formData.size,
+        language: language
+      }) as { success: boolean; data?: any; error?: string }
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Unknown error occurred')
+      }
+      
       setIsSubmitting(false)
       setIsSubmitted(true)
-    }, 1500)
+    } catch (error) {
+      console.error('Error submitting demo request:', error)
+      setIsSubmitting(false)
+      // You can add error handling UI here if needed
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred while submitting your request. Please try again.'
+      alert(errorMessage)
+    }
   }
 
   const isStepValid = (step: number) => {
     switch (step) {
       case 1:
-        return formData.firstName && formData.lastName && formData.email && !emailError
+        return formData.firstName && formData.lastName && formData.email && formData.phone && !emailError && !phoneError
       case 2:
         return formData.company && formData.role
       case 3:
@@ -291,14 +406,23 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
       >
         <div className="overflow-y-auto p-6 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-[#141823] hover:scrollbar-thumb-[#1a1f2e]">
           <DialogHeader className="relative">
+            <DialogTitle className="sr-only">
+              {isSubmitted
+                ? language === "es"
+                  ? "Demo Solicitada Exitosamente"
+                  : "Demo Requested Successfully"
+                : language === "es"
+                  ? "Solicitar una Demo"
+                  : "Request a Demo"}
+            </DialogTitle>
             {/* Logotype */}
-            <div className="flex justify-center mb-6 mt-2">
+            <div className="flex justify-center mb-8 mt-2">
               <Image src="/images/hermes-logo.svg" alt="Hermes Logo" width={240} height={80} className="w-auto h-16" />
             </div>
           </DialogHeader>
 
           {/* Step Indicator */}
-          <div className="flex justify-center items-center mb-4">
+          <div className="flex justify-center items-center mb-4 mt-4">
             {[1, 2, 3].map((step) => (
               <div key={step} className="flex items-center">
                 <div
@@ -423,6 +547,54 @@ ${
                           }`}
                         />
                         {emailError && <p className="text-[#E27D4A] text-xs mt-1">{emailError}</p>}
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="phone" className="text-slate-700 dark:text-slate-300">
+                          {content.labels.phone}
+                        </Label>
+                        <div className="flex">
+                          <div className="relative">
+                            <select
+                              value={formData.phoneCountryCode}
+                              onChange={(e) => {
+                                updateFormData(
+                                  "phoneCountryCode",
+                                  e.target.value as "+1 (809)" | "+1 (829)" | "+1 (849)" | "Other",
+                                )
+                                // Clear phone when country code changes
+                                updateFormData("phone", "")
+                              }}
+                              className="h-12 px-3 pr-10 border border-r-0 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-l-md focus:outline-none focus:border-[#315F8C] min-w-[120px] appearance-none cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200"
+                            >
+                              <option value="+1 (809)">+1 (809)</option>
+                              <option value="+1 (829)">+1 (829)</option>
+                              <option value="+1 (849)">+1 (849)</option>
+                              <option value="Other">{language === "es" ? "Otro" : "Other"}</option>
+                            </select>
+                            <RenderIcon
+                              iconName="ChevronDown"
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
+                            />
+                          </div>
+                          <Input
+                            id="phone"
+                            type="tel"
+                            placeholder={
+                              formData.phoneCountryCode === "Other"
+                                ? language === "es"
+                                  ? "123456789"
+                                  : "123456789"
+                                : "000-0000"
+                            }
+                            value={formData.phone}
+                            onChange={(e) => updateFormData("phone", e.target.value)}
+                            className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 rounded-l-none flex-1 ${
+                              phoneError ? "!border-[#E27D4A]" : ""
+                            }`}
+                            maxLength={formData.phoneCountryCode === "Other" ? 15 : 8}
+                          />
+                        </div>
+                        {phoneError && <p className="text-[#E27D4A] text-xs mt-1">{phoneError}</p>}
                       </div>
                     </div>
                   )}

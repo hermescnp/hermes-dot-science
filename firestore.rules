@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Leads collection - only Cloud Functions can write, authenticated users can read their own
+    match /leads/{leadId} {
+      allow read: if request.auth != null && 
+        (request.auth.token.email == resource.data.email || 
+         request.auth.token.email_verified == true);
+      allow write: if false; // Only Cloud Functions can write
+    }
+    
+    // Requests collection - only Cloud Functions can write, authenticated users can read their own
+    match /requests/{requestId} {
+      allow read: if request.auth != null && 
+        (
+          // User can read if they are the requester (lead or user)
+          (resource.data.requester.type == "lead" && 
+           exists(/databases/$(database)/documents/leads/$(resource.data.requester.id)) &&
+           request.auth.token.email == get(/databases/$(database)/documents/leads/$(resource.data.requester.id)).data.email) ||
+          (resource.data.requester.type == "user" && 
+           resource.data.requester.id == request.auth.uid) ||
+          // User can read if they are the recipient
+          (resource.data.recipient.type == "user" && 
+           resource.data.recipient.id == request.auth.uid) ||
+          // User can read if they belong to the recipient unit (you can implement unit membership logic)
+          (resource.data.recipient.type == "unit" && 
+           request.auth.token.email_verified == true)
+        );
+      allow write: if false; // Only Cloud Functions can write
+    }
+    
+    // Default rule - deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+} 
