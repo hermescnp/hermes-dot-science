@@ -38,7 +38,7 @@ interface QuoteFormContent {
 interface FormData {
   firstName: string
   lastName: string
-  identificationType: "id" | "passport"
+  identificationType: "id" | "ein" | "passport"
   identification: string
   phoneCountryCode: "+1 (809)" | "+1 (829)" | "+1 (849)" | "Other"
   phone: string
@@ -55,7 +55,7 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
-    identificationType: "id",
+    identificationType: "ein",
     identification: "",
     phoneCountryCode: "+1 (809)",
     phone: "",
@@ -82,9 +82,10 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
       labels: {
         firstName: language === "es" ? "Nombre" : "First Name",
         lastName: language === "es" ? "Apellido" : "Last Name",
-        identification: language === "es" ? "Identificación" : "Identification",
+        identification: language === "es" ? "Identificación Empresarial" : "Business Identification",
         idCard: language === "es" ? "Cédula" : "ID Card",
         passport: language === "es" ? "Pasaporte" : "Passport",
+        rnc: language === "es" ? "RNC" : "EIN",
         phone: language === "es" ? "Teléfono" : "Phone Number",
         company: language === "es" ? "Empresa/Organización" : "Company/Organization",
         role: language === "es" ? "Tu Rol" : "Your Role",
@@ -95,6 +96,7 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
         lastName: "Pérez",
         identificationId: "000-0000000-0",
         identificationPassport: language === "es" ? "A1234567" : "A1234567",
+        identificationRnc: language === "es" ? "000-00000-0" : "00-0000000",
         phone: language === "es" ? "+57 300 123 4567" : "+1 (555) 123-4567",
         company: "Acme Inc.",
         role: "CTO, Director de TI, etc.",
@@ -127,7 +129,7 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
       setFormData({
         firstName: "",
         lastName: "",
-        identificationType: "id",
+        identificationType: "ein",
         identification: "",
         phoneCountryCode: "+1 (809)",
         phone: "",
@@ -169,6 +171,33 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
     }
   }
 
+  const formatEinRnc = (value: string): string => {
+    // Remove all non-numeric characters
+    const numbers = value.replace(/\D/g, "")
+
+    // For English EIN: XX-XXXXXXX (9 digits)
+    // For Spanish RNC: XXX-XXXXX-X (9 digits)
+    const limitedNumbers = numbers.slice(0, 9)
+
+    if (language === "es") {
+      // Spanish RNC format: XXX-XXXXX-X
+      if (limitedNumbers.length <= 3) {
+        return limitedNumbers
+      } else if (limitedNumbers.length <= 8) {
+        return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(3)}`
+      } else {
+        return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(3, 8)}-${limitedNumbers.slice(8)}`
+      }
+    } else {
+      // English EIN format: XX-XXXXXXX
+      if (limitedNumbers.length <= 2) {
+        return limitedNumbers
+      } else {
+        return `${limitedNumbers.slice(0, 2)}-${limitedNumbers.slice(2)}`
+      }
+    }
+  }
+
   const formatPhone = (value: string): string => {
     // Remove all non-numeric characters
     const numbers = value.replace(/\D/g, "")
@@ -193,6 +222,11 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
     // Handle identification formatting
     if (field === "identification" && formData.identificationType === "id") {
       value = formatIdCard(value)
+    }
+
+    // Handle EIN/RNC formatting
+    if (field === "identification" && formData.identificationType === "ein") {
+      value = formatEinRnc(value)
     }
 
     // Handle phone formatting
@@ -222,6 +256,18 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
     // Check if it matches the format 000-0000000-0 (exactly 11 digits)
     const idRegex = /^\d{3}-\d{7}-\d{1}$/
     return idRegex.test(value)
+  }
+
+  const validateEinRnc = (value: string): boolean => {
+    if (language === "es") {
+      // Spanish RNC format: XXX-XXXXX-X (9 digits)
+      const rncRegex = /^\d{3}-\d{5}-\d{1}$/
+      return rncRegex.test(value)
+    } else {
+      // English EIN format: XX-XXXXXXX (9 digits)
+      const einRegex = /^\d{2}-\d{7}$/
+      return einRegex.test(value)
+    }
   }
 
   const validatePhone = (value: string): boolean => {
@@ -257,23 +303,39 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
       // Create clean numeric phone number for database
       const cleanPhoneNumber = fullPhoneNumber.replace(/[\s\-\(\)]/g, '')
 
-      // Create the user data object to store
-      const userData = {
-        ...formData,
-        fullName: `${formData.firstName} ${formData.lastName}`,
-        fullPhone: fullPhoneNumber,
+      // Separate lead data from quote data
+      const leadData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+        role: formData.role,
+        phone: cleanPhoneNumber,
+        language: language,
         timestamp: new Date().toISOString(),
       }
 
-      // Store the data in localStorage for the quote flow
+      // Store business identification data locally for quote completion
+      const quoteData = {
+        identificationType: formData.identificationType,
+        identification: formData.identification,
+        // This will be completed when the quote is finished
+      }
+
+      // Store both lead and quote data in localStorage
       if (typeof window !== "undefined") {
-        localStorage.setItem("quoteUserData", JSON.stringify(userData))
+        localStorage.setItem("quoteUserData", JSON.stringify({
+          ...leadData,
+          fullName: `${formData.firstName} ${formData.lastName}`,
+          fullPhone: fullPhoneNumber,
+        }))
+        localStorage.setItem("quoteBusinessData", JSON.stringify(quoteData))
       }
 
       // Import the lead capture service
-      const { createQuoteRequest, validateLeadData, storeLeadData } = await import('@/lib/lead-capture-service.js')
+      const { createLead, validateLeadData, storeLeadData } = await import('@/lib/lead-capture-service.js')
       
-      // Validate the data
+      // Validate the lead data (excluding business identification)
       const validation = validateLeadData({
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -287,7 +349,7 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
         throw new Error(validation.errors.join(', '))
       }
       
-      // Store lead data for potential future use
+      // Store lead data (without business identification)
       storeLeadData({
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -298,20 +360,36 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
         language: language
       })
       
-      // Create the quote request (quote data will be added later in the quote flow)
-      const result = await createQuoteRequest({
+      // Create the lead using the new cloud function
+      console.log('Sending data to createLead:', {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
         company: formData.company,
         role: formData.role,
         phone: cleanPhoneNumber,
-        language: language,
-        quoteData: {} // Will be populated when quote is completed
-      }) as { success: boolean; data?: any; error?: string }
+        language: language
+      })
+      
+      const result = await createLead({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+        role: formData.role,
+        phone: cleanPhoneNumber,
+        language: language
+      }) as { success: boolean; leadId?: string; error?: string }
+      
+      console.log('createLead result:', result)
       
       if (!result.success) {
         throw new Error(result.error || 'Unknown error occurred')
+      }
+
+      // Store the leadId for use in quote calculation
+      if (result.leadId && typeof window !== "undefined") {
+        localStorage.setItem("quoteLeadId", result.leadId)
       }
 
       setIsSubmitting(false)
@@ -335,20 +413,21 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
   const isStepValid = (step: number) => {
     switch (step) {
       case 1:
-        const isIdValid =
-          formData.identificationType === "passport" ||
-          (formData.identificationType === "id" && validateIdCard(formData.identification))
         const isPhoneValid = validatePhone(formData.phone)
         return (
           formData.firstName &&
           formData.lastName &&
-          formData.identification &&
-          isIdValid &&
+          formData.email &&
+          !emailError &&
           formData.phone &&
           isPhoneValid
         )
       case 2:
-        return formData.company && formData.role && formData.email && !emailError
+        const isIdValid =
+          formData.identificationType === "passport" ||
+          (formData.identificationType === "id" && validateIdCard(formData.identification)) ||
+          (formData.identificationType === "ein" && validateEinRnc(formData.identification))
+        return formData.company && formData.role && formData.identification && isIdValid
       default:
         return false
     }
@@ -396,7 +475,7 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
           </DialogHeader>
 
           {/* Step Indicator */}
-          <div className="flex justify-center items-center mb-4">
+          <div className="flex justify-center items-center mb-4 mt-4">
             {[1, 2].map((step) => (
               <div key={step} className="flex items-center">
                 <div
@@ -501,51 +580,21 @@ ${
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="identification" className="text-slate-700 dark:text-slate-300">
-                          {content.labels.identification}
+                        <Label htmlFor="email" className="text-slate-700 dark:text-slate-300">
+                          {content.labels.email}
                         </Label>
-                        <div className="flex">
-                          <div className="relative">
-                            <select
-                              value={formData.identificationType}
-                              onChange={(e) => {
-                                updateFormData("identificationType", e.target.value as "id" | "passport")
-                                // Clear identification when type changes
-                                updateFormData("identification", "")
-                              }}
-                              className="h-12 px-3 pr-10 border border-r-0 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-l-md focus:outline-none focus:border-[#315F8C] min-w-[120px] appearance-none cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200"
-                            >
-                              <option value="id">{content.labels.idCard}</option>
-                              <option value="passport">{content.labels.passport}</option>
-                            </select>
-                            <RenderIcon
-                              iconName="ChevronDown"
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
-                            />
-                          </div>
-                          <Input
-                            id="identification"
-                            placeholder={
-                              formData.identificationType === "id"
-                                ? content.placeholders.identificationId
-                                : content.placeholders.identificationPassport
-                            }
-                            value={formData.identification}
-                            onChange={(e) => updateFormData("identification", e.target.value)}
-                            required
-                            className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 rounded-l-none flex-1"
-                            maxLength={formData.identificationType === "id" ? 13 : undefined}
-                          />
-                        </div>
-                        {formData.identificationType === "id" &&
-                          formData.identification &&
-                          !validateIdCard(formData.identification) && (
-                            <p className="text-[#E27D4A] text-xs mt-1">
-                              {language === "es"
-                                ? "Asegúrate de proporcionar un número de cédula dominicana válido"
-                                : "Make sure to provide a valid Dominican ID number"}
-                            </p>
-                          )}
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder={content.placeholders.email}
+                          value={formData.email}
+                          onChange={(e) => updateFormData("email", e.target.value)}
+                          required
+                          className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                            emailError ? "!border-[#E27D4A]" : ""
+                          }`}
+                        />
+                        {emailError && <p className="text-[#E27D4A] text-xs mt-1">{emailError}</p>}
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="phone" className="text-slate-700 dark:text-slate-300">
@@ -627,6 +676,73 @@ ${
                         />
                       </div>
                       <div className="space-y-2">
+                        <Label htmlFor="identification" className="text-slate-700 dark:text-slate-300">
+                          {content.labels.identification}
+                        </Label>
+                        <div className="flex">
+                          <div className="relative">
+                            <select
+                              value={formData.identificationType}
+                              onChange={(e) => {
+                                updateFormData("identificationType", e.target.value as "id" | "passport" | "ein")
+                                // Clear identification when type changes
+                                updateFormData("identification", "")
+                              }}
+                              className="h-12 px-3 pr-10 border border-r-0 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-l-md focus:outline-none focus:border-[#315F8C] min-w-[120px] appearance-none cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200"
+                            >
+                              <option value="ein">{content.labels.rnc}</option>
+                              <option value="id">{content.labels.idCard}</option>
+                              <option value="passport">{content.labels.passport}</option>
+                            </select>
+                            <RenderIcon
+                              iconName="ChevronDown"
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
+                            />
+                          </div>
+                          <Input
+                            id="identification"
+                            placeholder={
+                              formData.identificationType === "id"
+                                ? content.placeholders.identificationId
+                                : formData.identificationType === "passport"
+                                  ? content.placeholders.identificationPassport
+                                  : content.placeholders.identificationRnc
+                            }
+                            value={formData.identification}
+                            onChange={(e) => updateFormData("identification", e.target.value)}
+                            required
+                            className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 rounded-l-none flex-1"
+                            maxLength={
+                              formData.identificationType === "id" 
+                                ? 13 
+                                : formData.identificationType === "passport" 
+                                  ? 8 
+                                  : formData.identificationType === "ein"
+                                    ? (language === "es" ? 11 : 10)
+                                    : undefined
+                            }
+                          />
+                        </div>
+                        {formData.identificationType === "id" &&
+                          formData.identification &&
+                          !validateIdCard(formData.identification) && (
+                            <p className="text-[#E27D4A] text-xs mt-1">
+                              {language === "es"
+                                ? "Asegúrate de proporcionar un número de cédula dominicana válido"
+                                : "Make sure to provide a valid Dominican ID number"}
+                            </p>
+                          )}
+                        {formData.identificationType === "ein" &&
+                          formData.identification &&
+                          !validateEinRnc(formData.identification) && (
+                            <p className="text-[#E27D4A] text-xs mt-1">
+                              {language === "es"
+                                ? "Asegúrate de proporcionar un número de RNC válido"
+                                : "Make sure to provide a valid EIN number"}
+                            </p>
+                          )}
+                      </div>
+                      <div className="space-y-2">
                         <Label htmlFor="role" className="text-slate-700 dark:text-slate-300">
                           {content.labels.role}
                         </Label>
@@ -638,23 +754,6 @@ ${
                           required
                           className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
                         />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email" className="text-slate-700 dark:text-slate-300">
-                          {content.labels.email}
-                        </Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder={content.placeholders.email}
-                          value={formData.email}
-                          onChange={(e) => updateFormData("email", e.target.value)}
-                          required
-                          className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
-                            emailError ? "!border-[#E27D4A]" : ""
-                          }`}
-                        />
-                        {emailError && <p className="text-[#E27D4A] text-xs mt-1">{emailError}</p>}
                       </div>
                     </div>
                   )}

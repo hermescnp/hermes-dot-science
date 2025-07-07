@@ -33,12 +33,50 @@ interface Answer {
   basePrice: number
   finalPrice: number
   hours: number
+  // Detailed step information
+  stepDetails: {
+    question: {
+      id: string
+      stage: string
+      botMessage: string
+      followUpMessage?: string
+    }
+    selectedOption: {
+      id: string
+      label: string
+      description?: string
+      conversationalText: string
+      basePrice: number
+      hours: number
+    }
+    selectedMultiplier?: {
+      id: string
+      label: string
+      description: string
+      conversationalText: string
+      multiplier: number
+    }
+    pricing: {
+      basePrice: number
+      priceAfterComplexity: number
+      companySizeMultiplier: number
+      finalPrice: number
+    }
+    companySize?: {
+      id: string
+      label: string
+      description: string
+      multiplier: number
+      icon: string
+    }
+  }
 }
 
 interface QuoteResultsProps {
   answers: Answer[]
   onBack: () => void
   onStartOver: () => void
+  quoteSubmitted?: boolean
 }
 
 interface UserData {
@@ -216,7 +254,7 @@ const allStageDefinitions = [
   },
 ]
 
-export default function QuoteResults({ answers, onBack, onStartOver }: QuoteResultsProps) {
+export default function QuoteResults({ answers, onBack, onStartOver, quoteSubmitted = false }: QuoteResultsProps) {
   // Add language context and translations state
   const { language } = useLanguage()
   const [translations, setTranslations] = useState<QuoteResultsTranslations | null>(null)
@@ -225,7 +263,10 @@ export default function QuoteResults({ answers, onBack, onStartOver }: QuoteResu
   // Create the final stages array by mapping the 6 prices to stages 3-8
   const allStages = allStageDefinitions.map((stage, index) => {
     if (stage.isFree) {
-      return stage
+      return {
+        ...stage,
+        basePrice: 0,
+      }
     } else {
       // Map the 6 answers to stages 3-8 (indices 2-7)
       const answerIndex = index - 2 // Convert stage index to answer index
@@ -240,7 +281,10 @@ export default function QuoteResults({ answers, onBack, onStartOver }: QuoteResu
         }
       } else {
         // Fallback if no answer found
-        return stage
+        return {
+          ...stage,
+          basePrice: 0,
+        }
       }
     }
   })
@@ -367,8 +411,14 @@ export default function QuoteResults({ answers, onBack, onStartOver }: QuoteResu
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Quote submitted:", { answers, contactData, totalPrice, userData })
-    alert("Quote request submitted! We'll get back to you within 24 hours.")
+    
+    if (quoteSubmitted) {
+      alert("Quote has already been submitted successfully!")
+      return
+    }
+    
+    // If quote wasn't submitted automatically, show a message
+    alert("Quote data has been captured. Our team will review your requirements and get back to you within 24 hours.")
   }
 
   const generateQuotePDF = () => {
@@ -782,78 +832,93 @@ export default function QuoteResults({ answers, onBack, onStartOver }: QuoteResu
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
               <Card className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/20">
                 <CardHeader>
-                  <CardTitle className="text-white text-lg">{translations.contactForm.title}</CardTitle>
-                  <p className="text-gray-400 text-sm">{translations.contactForm.description}</p>
+                  <CardTitle className="text-white text-lg">
+                    {quoteSubmitted ? "Quote Already Submitted" : translations.contactForm.title}
+                  </CardTitle>
+                  <p className="text-gray-400 text-sm">
+                    {quoteSubmitted 
+                      ? "Your quote has been successfully submitted. Our team will review your requirements and get back to you within 24 hours."
+                      : translations.contactForm.description
+                    }
+                  </p>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleContactSubmit} className="space-y-4">
-                    <div>
-                      <Label htmlFor="name" className="text-white">
-                        {translations.contactForm.fullName}
-                      </Label>
-                      <Input
-                        id="name"
-                        required
-                        value={contactData.name}
-                        onChange={(e) => setContactData((prev) => ({ ...prev, name: e.target.value }))}
-                        className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/30 text-white"
-                      />
+                  {quoteSubmitted ? (
+                    <div className="text-center py-8">
+                      <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+                      <p className="text-white text-lg mb-4">Quote Submitted Successfully!</p>
+                      <p className="text-gray-300">Thank you for your interest. We'll be in touch soon.</p>
                     </div>
-                    <div>
-                      <Label htmlFor="email" className="text-white">
-                        {translations.contactForm.emailAddress}
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        required
-                        value={contactData.email}
-                        onChange={(e) => setContactData((prev) => ({ ...prev, email: e.target.value }))}
-                        className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/30 text-white"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="company" className="text-white">
-                        {translations.contactForm.company}
-                      </Label>
-                      <Input
-                        id="company"
-                        value={contactData.company}
-                        onChange={(e) => setContactData((prev) => ({ ...prev, company: e.target.value }))}
-                        className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/30 text-white"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="phone" className="text-white">
-                        {translations.contactForm.phoneNumber}
-                      </Label>
-                      <Input
-                        id="phone"
-                        value={contactData.phone}
-                        onChange={(e) => setContactData((prev) => ({ ...prev, phone: e.target.value }))}
-                        className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/30 text-white"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="message" className="text-white">
-                        {translations.contactForm.additionalRequirements}
-                      </Label>
-                      <Textarea
-                        id="message"
-                        value={contactData.message}
-                        onChange={(e) => setContactData((prev) => ({ ...prev, message: e.target.value }))}
-                        className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/30 text-white"
-                        placeholder={translations.contactForm.placeholder}
-                        rows={3}
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      className="w-full bg-gradient-to-r from-[#68DBFF] to-[#4A9EFF] hover:from-[#5BC5FF] hover:to-[#3D8BFF] text-white font-semibold py-3"
-                    >
-                      {translations.contactForm.submitButton}
-                    </Button>
-                  </form>
+                  ) : (
+                    <form onSubmit={handleContactSubmit} className="space-y-4">
+                      <div>
+                        <Label htmlFor="name" className="text-white">
+                          {translations.contactForm.fullName}
+                        </Label>
+                        <Input
+                          id="name"
+                          required
+                          value={contactData.name}
+                          onChange={(e) => setContactData((prev) => ({ ...prev, name: e.target.value }))}
+                          className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/30 text-white"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="email" className="text-white">
+                          {translations.contactForm.emailAddress}
+                        </Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          required
+                          value={contactData.email}
+                          onChange={(e) => setContactData((prev) => ({ ...prev, email: e.target.value }))}
+                          className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/30 text-white"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="company" className="text-white">
+                          {translations.contactForm.company}
+                        </Label>
+                        <Input
+                          id="company"
+                          value={contactData.company}
+                          onChange={(e) => setContactData((prev) => ({ ...prev, company: e.target.value }))}
+                          className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/30 text-white"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="phone" className="text-white">
+                          {translations.contactForm.phoneNumber}
+                        </Label>
+                        <Input
+                          id="phone"
+                          value={contactData.phone}
+                          onChange={(e) => setContactData((prev) => ({ ...prev, phone: e.target.value }))}
+                          className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/30 text-white"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="message" className="text-white">
+                          {translations.contactForm.additionalRequirements}
+                        </Label>
+                        <Textarea
+                          id="message"
+                          value={contactData.message}
+                          onChange={(e) => setContactData((prev) => ({ ...prev, message: e.target.value }))}
+                          className="bg-black/10 backdrop-blur-sm border-[#68DBFF]/30 text-white"
+                          placeholder={translations.contactForm.placeholder}
+                          rows={3}
+                        />
+                      </div>
+                      <Button
+                        type="submit"
+                        className="w-full bg-gradient-to-r from-[#68DBFF] to-[#4A9EFF] hover:from-[#5BC5FF] hover:to-[#3D8BFF] text-white font-semibold py-3"
+                      >
+                        {translations.contactForm.submitButton}
+                      </Button>
+                    </form>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>

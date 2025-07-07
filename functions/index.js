@@ -292,6 +292,163 @@ exports.createQuoteRequest = functions.https.onCall(async (data, context) => {
   }
 });
 
+// Final quote creation function (stores in quotations collection)
+exports.createFinalQuote = functions.https.onCall(async (data, context) => {
+  try {
+    // Rate limiting check
+    const clientIP = context.rawRequest.ip || context.rawRequest.connection.remoteAddress;
+    if (isRateLimited(clientIP)) {
+      throw new functions.https.HttpsError('resource-exhausted', 'Too many requests. Please try again later.');
+    }
+
+    // Validate required fields
+    const { leadData, businessData, quoteAnswers, totalPrice, totalHours, language, attachedTo, attachedId, quoteSteps } = data;
+
+    if (!leadData || !businessData || !quoteAnswers || !totalPrice || !totalHours || !attachedTo || !attachedId) {
+      throw new functions.https.HttpsError('invalid-argument', 'Missing required fields');
+    }
+
+    // Validate business identification
+    if (!businessData.identificationType || !businessData.identification) {
+      throw new functions.https.HttpsError('invalid-argument', 'Business identification is required');
+    }
+
+    // Create the final quote document with detailed step information
+    const quoteDoc = {
+      leadData: {
+        firstName: leadData.firstName,
+        lastName: leadData.lastName,
+        email: leadData.email,
+        company: leadData.company,
+        role: leadData.role,
+        phone: leadData.phone,
+        language: language || 'en'
+      },
+      businessData: {
+        identificationType: businessData.identificationType,
+        identification: businessData.identification
+      },
+      quoteAnswers: quoteAnswers,
+      quoteSteps: quoteSteps || [], // Detailed step-by-step information
+      totalPrice: totalPrice,
+      totalHours: totalHours,
+      attachedTo: attachedTo, // 'lead' or 'user'
+      attachedId: attachedId,
+      status: 'active',
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      clientIP: clientIP,
+      userAgent: context.rawRequest.headers['user-agent'] || 'unknown'
+    };
+
+    // Add to quotations collection
+    const quoteRef = await db.collection('quotations').add(quoteDoc);
+
+    return {
+      success: true,
+      quoteId: quoteRef.id,
+      message: 'Quote created successfully'
+    };
+
+  } catch (error) {
+    console.error('Error creating final quote:', error);
+    
+    if (error instanceof functions.https.HttpsError) {
+      throw error;
+    }
+    
+    throw new functions.https.HttpsError('internal', 'An error occurred while creating the quote');
+  }
+});
+
+// Create or update a lead and return its ID
+exports.createLead = functions.https.onCall(async (data, context) => {
+  try {
+    console.log('createLead called with data:', data);
+    const clientIP = context.rawRequest.ip || context.rawRequest.connection?.remoteAddress || '';
+    const userAgent = context.rawRequest.headers['user-agent'] || '';
+    console.log('Client IP:', clientIP, 'User Agent:', userAgent);
+    
+    // Validate required fields
+    const { firstName, lastName, email, company, role, phone, organizationSize, language } = data;
+    console.log('Extracted fields:', { firstName, lastName, email, company, role, phone, language });
+    
+    if (!firstName || !lastName || !email || !company || !role) {
+      console.log('Missing required fields');
+      throw new functions.https.HttpsError('invalid-argument', 'Missing required fields');
+    }
+    if (!validateEmail(email)) {
+      console.log('Invalid email:', email);
+      throw new functions.https.HttpsError('invalid-argument', 'Invalid email address');
+    }
+    if (phone && !validatePhone(phone)) {
+      console.log('Invalid phone:', phone);
+      throw new functions.https.HttpsError('invalid-argument', 'Invalid phone number');
+    }
+    
+    console.log('All validations passed, calling createOrUpdateLead');
+    const leadId = await createOrUpdateLead(data, clientIP, userAgent, context);
+    console.log('Lead created/updated with ID:', leadId);
+    return { success: true, leadId };
+  } catch (error) {
+    console.error('Error creating lead:', error);
+    if (error instanceof functions.https.HttpsError) throw error;
+    throw new functions.https.HttpsError('internal', 'An error occurred while creating the lead');
+  }
+});
+
+// Create a quotation attached to a lead (using the simplified quote data structure)
+exports.createQuotation = functions.https.onCall(async (data, context) => {
+  try {
+    const clientIP = context.rawRequest.ip || context.rawRequest.connection?.remoteAddress || '';
+    
+    // Add detailed logging to debug the issue
+    console.log('createQuotation called with data:', JSON.stringify(data, null, 2));
+    
+    // Validate required fields
+    const { leadId, clientInfo, quoteDetails, totalPrice, totalHours, language, summary } = data;
+    
+    console.log('Extracted fields:', {
+      leadId: !!leadId,
+      clientInfo: !!clientInfo,
+      quoteDetails: !!quoteDetails,
+      totalPrice: totalPrice,
+      totalHours: totalHours,
+      language: language
+    });
+    
+    if (!leadId || !clientInfo || !quoteDetails || !totalPrice || !totalHours) {
+      console.log('Missing required fields - validation failed');
+      throw new functions.https.HttpsError('invalid-argument', 'Missing required fields');
+    }
+    
+    // Attach the quotation to the lead
+    const quoteDoc = {
+      leadId,
+      clientInfo,
+      quoteDetails,
+      totalPrice,
+      totalHours,
+      language: language || 'en',
+      summary: summary || {
+        totalInvestment: totalPrice,
+        totalHours: totalHours,
+        estimatedWeeks: Math.ceil(totalHours / 40),
+        estimatedCompletion: new Date(Date.now() + Math.ceil(totalHours / 40) * 7 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      clientIP,
+      status: 'pending',
+    };
+    const quoteRef = await db.collection('quotations').add(quoteDoc);
+    return { success: true, quoteId: quoteRef.id };
+  } catch (error) {
+    console.error('Error creating quotation:', error);
+    if (error instanceof functions.https.HttpsError) throw error;
+    throw new functions.https.HttpsError('internal', 'An error occurred while creating the quotation');
+  }
+});
+
 // Function to get lead by email (for authenticated users)
 exports.getLeadByEmail = functions.https.onCall(async (data, context) => {
   try {

@@ -92,6 +92,43 @@ interface Answer {
   basePrice: number
   finalPrice: number
   hours: number
+  // Detailed step information
+  stepDetails: {
+    question: {
+      id: string
+      stage: string
+      botMessage: string
+      followUpMessage?: string
+    }
+    selectedOption: {
+      id: string
+      label: string
+      description?: string
+      conversationalText: string
+      basePrice: number
+      hours: number
+    }
+    selectedMultiplier?: {
+      id: string
+      label: string
+      description: string
+      conversationalText: string
+      multiplier: number
+    }
+    pricing: {
+      basePrice: number
+      priceAfterComplexity: number
+      companySizeMultiplier: number
+      finalPrice: number
+    }
+    companySize?: {
+      id: string
+      label: string
+      description: string
+      multiplier: number
+      icon: string
+    }
+  }
 }
 
 interface ConversationalQuoteChatProps {
@@ -271,48 +308,19 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
           setMessages([greetingMessage])
           console.log("Added greeting message")
 
-          // Add a delay before showing the first question
+          // Set flag to show slider after the greeting (don't add first question here)
           setTimeout(() => {
-            // Add the first question after the greeting
-            const questionMessage: ChatMessage = {
-              id: (Date.now() + 1).toString(),
-              type: "bot",
-              content: currentQuestion.botMessage,
-              timestamp: new Date(),
-              isGreeting: false,
-            }
-
-            setMessages((prev) => [...prev, questionMessage])
-            console.log("Added first question message")
-
-            // Set flag to show slider after the first question
-            setTimeout(() => {
-              console.log("Setting shouldShowSlider flag")
-              setShouldShowSlider(true)
-            }, 1000)
+            console.log("Setting shouldShowSlider flag")
+            setShouldShowSlider(true)
           }, 2000)
         } else {
-          // Default behavior without user data - just add the first question
-          const questionMessage: ChatMessage = {
-            id: Date.now().toString(),
-            type: "bot",
-            content: currentQuestion.botMessage,
-            timestamp: new Date(),
-            isGreeting: false,
-          }
-
-          setMessages([questionMessage])
-          console.log("Added first question message (no greeting)")
-
-          // Set flag to show slider after the first question
-          setTimeout(() => {
-            console.log("Setting shouldShowSlider flag (no greeting)")
-            setShouldShowSlider(true)
-          }, 1000)
+          // Default behavior without user data - just set flag to show slider
+          console.log("Setting shouldShowSlider flag (no greeting)")
+          setShouldShowSlider(true)
         }
       }, 1000)
     }
-  }, [content, userData])
+  }, [content, messages.length, currentQuestion, userData])
 
   const handleSliderMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true)
@@ -376,7 +384,7 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
       setIsTyping(true)
       setTimeout(() => {
         const newMessage: ChatMessage = {
-          id: Date.now().toString(),
+          id: `bot-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           type: "bot",
           content: messageContent,
           timestamp: new Date(),
@@ -410,9 +418,27 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     }, delay)
   }
 
+  // Separate function for adding explanation messages that doesn't interfere with questionnaire flow
+  const addExplanationMessage = (messageContent: string) => {
+    setTimeout(() => {
+      setIsTyping(true)
+      setTimeout(() => {
+        const newMessage: ChatMessage = {
+          id: `explanation-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          type: "bot",
+          content: messageContent,
+          timestamp: new Date(),
+        }
+        setMessages((prev) => [...prev, newMessage])
+        setIsTyping(false)
+        scrollToBottom()
+      }, 1500) // Typing delay
+    }, 0)
+  }
+
   const addUserMessage = (messageContent: string) => {
     const newMessage: ChatMessage = {
-      id: Date.now().toString(),
+      id: `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type: "user",
       content: messageContent,
       timestamp: new Date(),
@@ -428,6 +454,50 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     addUserMessage(`${selectedSize.icon} ${selectedSize.label} - ${selectedSize.description}`)
     setShowCompanySizeSlider(false)
     setIsWaitingForResponse(true)
+
+    // Create a special answer for company size selection
+    const companySizeAnswer: Answer = {
+      questionId: "company-size",
+      optionId: selectedSize.id,
+      multiplierId: undefined,
+      basePrice: 0,
+      finalPrice: 0,
+      hours: 0,
+      stepDetails: {
+        question: {
+          id: "company-size",
+          stage: "Company Profile",
+          botMessage: "Before we dive into your AI agent requirements, I'd love to understand the scale we're working with. What's the size of your organization?",
+          followUpMessage: undefined,
+        },
+        selectedOption: {
+          id: selectedSize.id,
+          label: selectedSize.label,
+          description: selectedSize.description,
+          conversationalText: `${selectedSize.icon} ${selectedSize.label} - ${selectedSize.description}`,
+          basePrice: 0,
+          hours: 0,
+        },
+        selectedMultiplier: undefined,
+        pricing: {
+          basePrice: 0,
+          priceAfterComplexity: 0,
+          companySizeMultiplier: selectedSize.multiplier,
+          finalPrice: 0,
+        },
+        companySize: selectedCompanySize !== undefined ? {
+          id: content.companySizes[selectedCompanySize].id,
+          label: content.companySizes[selectedCompanySize].label,
+          description: content.companySizes[selectedCompanySize].description,
+          multiplier: content.companySizes[selectedCompanySize].multiplier,
+          icon: content.companySizes[selectedCompanySize].icon
+        } : undefined
+      },
+    }
+
+    // Add company size answer to the answers array
+    const newAnswers = [...answers, companySizeAnswer]
+    setAnswers(newAnswers)
 
     // Increment steps completed (company size selection counts as 1 step)
     setTotalStepsCompleted((prev) => prev + 1)
@@ -553,6 +623,20 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     processAnswer(selectedOption, multiplierId)
   }
 
+  const handleQuoteComplete = () => {
+    // Personalize the final message if we have user data
+    let finalMessage = content?.ui.messages.finalMessage || "Thank you! Your quote calculation is complete."
+    if (userData && userData.firstName) {
+      finalMessage = finalMessage.replace("Thank you", `Thank you, ${userData.firstName}`)
+      finalMessage = finalMessage.replace("Gracias", `Gracias, ${userData.firstName}`)
+    }
+
+    addBotMessage(finalMessage)
+    setTimeout(() => {
+      onComplete(answers)
+    }, 2000)
+  }
+
   const processAnswer = (optionId: string, multiplierId: string) => {
     if (!currentQuestion || !content) return
 
@@ -579,68 +663,80 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     const basePrice = option.basePrice
     const priceAfterComplexity = multiplierItem ? Math.round(basePrice * multiplierItem.multiplier) : basePrice
     const finalPrice = Math.round(priceAfterComplexity * companySizeMultiplier)
+    const hours = option.hours
 
-    const answer: Answer = {
-      questionId: currentQuestion.id,
-      optionId,
-      multiplierId: multiplierId || undefined,
-      basePrice,
-      finalPrice,
-      hours: option.hours,
+    // Create detailed step information that matches the results page structure
+    const stepDetails = {
+      question: {
+        id: currentQuestion.id,
+        stage: currentQuestion.stage,
+        botMessage: currentQuestion.botMessage,
+        followUpMessage: currentQuestion.followUpMessage
+      },
+      selectedOption: {
+        id: option.id,
+        label: option.label,
+        description: option.description,
+        conversationalText: option.conversationalText,
+        basePrice: option.basePrice,
+        hours: option.hours
+      },
+      selectedMultiplier: multiplierItem ? {
+        id: multiplierItem.id,
+        label: multiplierItem.label,
+        description: multiplierItem.description,
+        conversationalText: multiplierItem.conversationalText,
+        multiplier: multiplierItem.multiplier
+      } : undefined,
+      pricing: {
+        basePrice: basePrice,
+        priceAfterComplexity: priceAfterComplexity,
+        companySizeMultiplier: companySizeMultiplier,
+        finalPrice: finalPrice
+      },
+      companySize: selectedCompanySize !== undefined ? {
+        id: content.companySizes[selectedCompanySize].id,
+        label: content.companySizes[selectedCompanySize].label,
+        description: content.companySizes[selectedCompanySize].description,
+        multiplier: content.companySizes[selectedCompanySize].multiplier,
+        icon: content.companySizes[selectedCompanySize].icon
+      } : undefined
     }
 
-    const newAnswers = [...answers, answer]
-    setAnswers(newAnswers)
-    setTotalPrice(newAnswers.reduce((sum, ans) => sum + ans.finalPrice, 0))
+    // Create the answer with detailed step information
+    const answer: Answer = {
+      questionId: currentQuestion.id,
+      optionId: optionId,
+      multiplierId: multiplierId,
+      basePrice: basePrice,
+      finalPrice: finalPrice,
+      hours: hours,
+      stepDetails: stepDetails
+    }
 
-    // Show price update
+    setAnswers((prev) => [...prev, answer])
+    setTotalPrice((prev) => prev + finalPrice)
+    setTotalStepsCompleted((prev) => prev + 1)
+
+    // User message was already added in the selection handlers, so we don't need to add it again
+    setIsWaitingForResponse(true)
+
+    // Move to next question
     setTimeout(() => {
-      const newTotal = newAnswers.reduce((sum, ans) => sum + ans.finalPrice, 0)
-      const priceMessage = content.ui.messages.priceUpdate.replace("{{price}}", newTotal.toLocaleString())
-      addBotMessage(priceMessage)
+      setCurrentQuestionIndex((prev) => prev + 1)
+      setIsWaitingForResponse(false)
+      setShowOptions(false)
+      setShowMultipliers(false)
+      setShowSubOptions(false)
+      setShowCompanySizeSlider(false)
 
-      if (currentQuestionIndex < content.questions.length - 1) {
-        setTimeout(() => {
-          setCurrentQuestionIndex((prev) => prev + 1)
-          setSelectedOption("")
-          setSelectedMainOption(null)
-          setIsWaitingForResponse(false)
-          // Reset ALL UI states before showing new question
-          setShowOptions(false)
-          setShowMultipliers(false)
-          setShowSubOptions(false)
-          setShowCompanySizeSlider(false)
-          if (content.questions[currentQuestionIndex + 1]) {
-            addBotMessage(
-              content.questions[currentQuestionIndex + 1].botMessage,
-              0,
-              false,
-              false,
-              currentQuestionIndex + 1,
-            )
-          }
-        }, 3000)
+      if (content.questions[currentQuestionIndex + 1]) {
+        addBotMessage(content.questions[currentQuestionIndex + 1].botMessage, 0, false, false, currentQuestionIndex + 1)
       } else {
-        // Complete the quote - ensure progress reaches 100%
-        // Remove this line from the processAnswer function:
-        // setTotalStepsCompleted(totalSteps)
-
-        // The progress will naturally reach 100% on the second-to-last step
-        setTimeout(() => {
-          // Personalize the final message if we have user data
-          let finalMessage = content.ui.messages.finalMessage
-          if (userData && userData.firstName) {
-            finalMessage = finalMessage.replace("Thank you", `Thank you, ${userData.firstName}`)
-            finalMessage = finalMessage.replace("Gracias", `Gracias, ${userData.firstName}`)
-          }
-
-          addBotMessage(finalMessage)
-          setTimeout(() => {
-            onComplete(newAnswers)
-          }, 2000)
-        }, 3000)
+        // Quote calculation is complete
+        handleQuoteComplete()
       }
-    }, 1500)
+    }, 1000)
   }
 
   const formatPrice = (price: number) => {
@@ -682,7 +778,7 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     const introMessage = content.ui.messages.explanationIntro.replace("{{option}}", option.label)
 
     setTimeout(() => {
-      addBotMessage(`${introMessage}
+      addExplanationMessage(`${introMessage}
 
 ${explanation}`)
 
@@ -714,7 +810,7 @@ ${explanation}`)
     const introMessage = content.ui.messages.explanationIntro.replace("{{option}}", multiplier.label)
 
     setTimeout(() => {
-      addBotMessage(`${introMessage}
+      addExplanationMessage(`${introMessage}
 
 ${explanation}`)
 
@@ -884,7 +980,7 @@ ${explanation}`)
                           {content.companySizes[selectedCompanySize].icon}
                         </motion.div>
                         <motion.div
-                          key={selectedCompanySize}
+                          key={`company-size-${content.companySizes[selectedCompanySize].id}`}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#315F8C] to-[#68DBFF] mb-2"
