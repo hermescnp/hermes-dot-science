@@ -38,7 +38,7 @@ interface QuoteFormContent {
 interface FormData {
   firstName: string
   lastName: string
-  identificationType: "id" | "ein" | "passport"
+  identificationType: "id" | "ein" | "rnc" | "passport"
   identification: string
   phoneCountryCode: "+1 (809)" | "+1 (829)" | "+1 (849)" | "Other"
   phone: string
@@ -55,7 +55,7 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
-    identificationType: "ein",
+    identificationType: "rnc",
     identification: "",
     phoneCountryCode: "+1 (809)",
     phone: "",
@@ -85,7 +85,8 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
         identification: language === "es" ? "Identificación Empresarial" : "Business Identification",
         idCard: language === "es" ? "Cédula" : "ID Card",
         passport: language === "es" ? "Pasaporte" : "Passport",
-        rnc: language === "es" ? "RNC" : "EIN",
+        ein: "EIN",
+        rnc: "RNC",
         phone: language === "es" ? "Teléfono" : "Phone Number",
         company: language === "es" ? "Empresa/Organización" : "Company/Organization",
         role: language === "es" ? "Tu Rol" : "Your Role",
@@ -96,7 +97,8 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
         lastName: "Pérez",
         identificationId: "000-0000000-0",
         identificationPassport: language === "es" ? "A1234567" : "A1234567",
-        identificationRnc: language === "es" ? "000-00000-0" : "00-0000000",
+        identificationEin: "00-0000000",
+        identificationRnc: "000-00000-0",
         phone: language === "es" ? "+57 300 123 4567" : "+1 (555) 123-4567",
         company: "Acme Inc.",
         role: "CTO, Director de TI, etc.",
@@ -129,7 +131,7 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
       setFormData({
         firstName: "",
         lastName: "",
-        identificationType: "ein",
+        identificationType: "rnc",
         identification: "",
         phoneCountryCode: "+1 (809)",
         phone: "",
@@ -171,30 +173,33 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
     }
   }
 
-  const formatEinRnc = (value: string): string => {
+  const formatEin = (value: string): string => {
     // Remove all non-numeric characters
     const numbers = value.replace(/\D/g, "")
 
-    // For English EIN: XX-XXXXXXX (9 digits)
-    // For Spanish RNC: XXX-XXXXX-X (9 digits)
+    // English EIN format: XX-XXXXXXX (9 digits)
     const limitedNumbers = numbers.slice(0, 9)
 
-    if (language === "es") {
-      // Spanish RNC format: XXX-XXXXX-X
-      if (limitedNumbers.length <= 3) {
-        return limitedNumbers
-      } else if (limitedNumbers.length <= 8) {
-        return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(3)}`
-      } else {
-        return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(3, 8)}-${limitedNumbers.slice(8)}`
-      }
+    if (limitedNumbers.length <= 2) {
+      return limitedNumbers
     } else {
-      // English EIN format: XX-XXXXXXX
-      if (limitedNumbers.length <= 2) {
-        return limitedNumbers
-      } else {
-        return `${limitedNumbers.slice(0, 2)}-${limitedNumbers.slice(2)}`
-      }
+      return `${limitedNumbers.slice(0, 2)}-${limitedNumbers.slice(2)}`
+    }
+  }
+
+  const formatRnc = (value: string): string => {
+    // Remove all non-numeric characters
+    const numbers = value.replace(/\D/g, "")
+
+    // Spanish RNC format: XXX-XXXXX-X (9 digits)
+    const limitedNumbers = numbers.slice(0, 9)
+
+    if (limitedNumbers.length <= 3) {
+      return limitedNumbers
+    } else if (limitedNumbers.length <= 8) {
+      return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(3)}`
+    } else {
+      return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(3, 8)}-${limitedNumbers.slice(8)}`
     }
   }
 
@@ -226,7 +231,10 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
 
     // Handle EIN/RNC formatting
     if (field === "identification" && formData.identificationType === "ein") {
-      value = formatEinRnc(value)
+      value = formatEin(value)
+    }
+    if (field === "identification" && formData.identificationType === "rnc") {
+      value = formatRnc(value)
     }
 
     // Handle phone formatting
@@ -258,16 +266,16 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
     return idRegex.test(value)
   }
 
-  const validateEinRnc = (value: string): boolean => {
-    if (language === "es") {
-      // Spanish RNC format: XXX-XXXXX-X (9 digits)
-      const rncRegex = /^\d{3}-\d{5}-\d{1}$/
-      return rncRegex.test(value)
-    } else {
-      // English EIN format: XX-XXXXXXX (9 digits)
-      const einRegex = /^\d{2}-\d{7}$/
-      return einRegex.test(value)
-    }
+  const validateEin = (value: string): boolean => {
+    // English EIN format: XX-XXXXXXX (9 digits)
+    const einRegex = /^\d{2}-\d{7}$/
+    return einRegex.test(value)
+  }
+
+  const validateRnc = (value: string): boolean => {
+    // Spanish RNC format: XXX-XXXXX-X (9 digits)
+    const rncRegex = /^\d{3}-\d{5}-\d{1}$/
+    return rncRegex.test(value)
   }
 
   const validatePhone = (value: string): boolean => {
@@ -426,7 +434,8 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
         const isIdValid =
           formData.identificationType === "passport" ||
           (formData.identificationType === "id" && validateIdCard(formData.identification)) ||
-          (formData.identificationType === "ein" && validateEinRnc(formData.identification))
+          (formData.identificationType === "ein" && validateEin(formData.identification)) ||
+          (formData.identificationType === "rnc" && validateRnc(formData.identification))
         return formData.company && formData.role && formData.identification && isIdValid
       default:
         return false
@@ -684,13 +693,14 @@ ${
                             <select
                               value={formData.identificationType}
                               onChange={(e) => {
-                                updateFormData("identificationType", e.target.value as "id" | "passport" | "ein")
+                                updateFormData("identificationType", e.target.value as "id" | "passport" | "ein" | "rnc")
                                 // Clear identification when type changes
                                 updateFormData("identification", "")
                               }}
                               className="h-12 px-3 pr-10 border border-r-0 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-l-md focus:outline-none focus:border-[#315F8C] min-w-[120px] appearance-none cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200"
                             >
-                              <option value="ein">{content.labels.rnc}</option>
+                              <option value="ein">{content.labels.ein}</option>
+                              <option value="rnc">{content.labels.rnc}</option>
                               <option value="id">{content.labels.idCard}</option>
                               <option value="passport">{content.labels.passport}</option>
                             </select>
@@ -706,7 +716,11 @@ ${
                                 ? content.placeholders.identificationId
                                 : formData.identificationType === "passport"
                                   ? content.placeholders.identificationPassport
-                                  : content.placeholders.identificationRnc
+                                  : formData.identificationType === "ein"
+                                    ? content.placeholders.identificationEin
+                                    : formData.identificationType === "rnc"
+                                      ? content.placeholders.identificationRnc
+                                      : ""
                             }
                             value={formData.identification}
                             onChange={(e) => updateFormData("identification", e.target.value)}
@@ -718,8 +732,10 @@ ${
                                 : formData.identificationType === "passport" 
                                   ? 8 
                                   : formData.identificationType === "ein"
-                                    ? (language === "es" ? 11 : 10)
-                                    : undefined
+                                    ? 9 
+                                    : formData.identificationType === "rnc"
+                                      ? 11
+                                      : undefined
                             }
                           />
                         </div>
@@ -734,11 +750,20 @@ ${
                           )}
                         {formData.identificationType === "ein" &&
                           formData.identification &&
-                          !validateEinRnc(formData.identification) && (
+                          !validateEin(formData.identification) && (
+                            <p className="text-[#E27D4A] text-xs mt-1">
+                              {language === "es"
+                                ? "Asegúrate de proporcionar un número de EIN válido"
+                                : "Make sure to provide a valid EIN number"}
+                            </p>
+                          )}
+                        {formData.identificationType === "rnc" &&
+                          formData.identification &&
+                          !validateRnc(formData.identification) && (
                             <p className="text-[#E27D4A] text-xs mt-1">
                               {language === "es"
                                 ? "Asegúrate de proporcionar un número de RNC válido"
-                                : "Make sure to provide a valid EIN number"}
+                                : "Make sure to provide a valid RNC number"}
                             </p>
                           )}
                       </div>
