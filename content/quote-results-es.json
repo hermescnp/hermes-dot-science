@@ -45,7 +45,7 @@
     },
     "knowledge-base": {
       "title": "Curación de Base de Conocimientos y Preparación de Entrada",
-      "description": "Inventario, ingesta y preprocesamiento de todas las fuentes de datos relevantes—estructuradas, semi-estructuradas y no estructuradas—limpiando y organizando el contenido para que pueda ser ingerido de manera confiable en tus modelos de IA."
+      "description": "Inventario, ingesta y preprocesamiento de todas las fuentes de datos relevantes (estructuradas, semi-estructuradas y no estructuradas) limpiando y organizando el contenido para que pueda ser ingerido de manera confiable en tus modelos de IA."
     },
     "implementation": {
       "title": "Implementación / Desarrollo",

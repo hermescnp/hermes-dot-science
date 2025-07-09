@@ -1,0 +1,1 @@
+export const HERMES_SCIENCE_URL = process.env.NEXT_PUBLIC_HERMES_SCIENCE_URL || "https://lab.hermes.science" 

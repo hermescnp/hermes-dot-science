@@ -13,6 +13,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { MobileBackButton } from "@/components/learn-more/navigation-ui"
 import { createPortal } from "react-dom"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import { HERMES_SCIENCE_URL } from "@/lib/config"
 
 interface NavItem {
   label: string
@@ -106,7 +107,7 @@ export default function Navbar() {
           logoAlt: "Hermes Dot Science",
           navItems: fallbackNavItems,
           enterOfficeButton: {
-            href: "https://hermes.science",
+            href: HERMES_SCIENCE_URL,
             imageSrc: "/images/office-logo.svg",
             imageAlt: language === "es" ? "Laboratorio Hermes Science" : "Hermes Science Lab",
             mainText: language === "es" ? "ENTRAR OFICINA" : "ENTER OFFICE",
