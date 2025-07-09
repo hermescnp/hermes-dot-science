@@ -280,9 +280,9 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
         </div>
 
         {/* Success Content */}
-        <div className="relative z-10 w-full max-w-md mx-auto px-4">
+        <div className="relative z-10 w-full max-w-2xl mx-auto px-4">
           <Card className="bg-gradient-to-br from-[#68DBFF]/10 via-background/90 to-[#315F8C]/10 backdrop-blur-md border-[#68DBFF]/30 shadow-2xl">
-            <CardContent className="pt-8 pb-8 flex flex-col items-center justify-center min-h-[500px] text-center relative overflow-hidden">
+            <CardContent className="pt-8 pb-8 flex flex-col items-center justify-center min-h-[400px] text-center relative overflow-hidden">
               {/* Background decoration */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#68DBFF]/5 to-transparent"></div>
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#68DBFF]/10 rounded-full blur-3xl"></div>
@@ -295,49 +295,29 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
                 </div>
 
                 <h3 className="text-3xl font-bold mb-3 bg-gradient-to-r from-[#68DBFF] to-[#315F8C] bg-clip-text text-transparent">
-                  {language === "es" ? `¡Bienvenido a bordo, ${firstName}! 🚀` : `Welcome aboard, ${firstName}! 🚀`}
+                  {language === "es" ? `¡Bienvenido a bordo, ${firstName}!` : `Welcome aboard, ${firstName}!`}
                 </h3>
 
-                <div className="max-w-md mb-6">
+                <div className="max-w-lg mb-6">
                   <p className="text-muted-foreground mb-4 leading-relaxed">
                     {language === "es"
-                      ? `Tu cuenta ha sido creada exitosamente. Serás redirigido automáticamente al `
-                      : `Your account has been successfully created. You will be automatically redirected to the official `}
-                    <span className="font-semibold text-[#68DBFF]">
-                      {language === "es"
-                        ? " Espacio de Trabajo Oficial de Hermes Dot Science"
-                        : " Hermes Dot Science Workspace"}
-                    </span>
+                      ? `Gracias por registrarte. Estás en lista de espera para unirte a nuestro ecosistema de aplicaciones inteligentes, diseñado para impulsar la productividad empresarial y optimizar los flujos de trabajo. Nuestra plataforma aún se encuentra en desarrollo y nos esforzamos por ofrecerte una experiencia impecable y confiable.`
+                      : `Thank you for signing up. You're now on the waitlist to join our ecosystem of intelligent applications, designed to boost enterprise productivity and streamline workflows. Our platform is still in active development, and we're working hard to bring you a polished, reliable experience.`}
+                  </p>
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
                     {language === "es"
-                      ? ` en unos segundos donde podrás comenzar a explorar nuestras herramientas y funciones impulsadas por IA.`
-                      : ` in a few seconds where you can start exploring our AI-powered tools and features.`}
+                      ? `En cuanto haya una plaza disponible, te enviaremos una invitación por correo electrónico con los pasos a seguir. Mientras tanto, si quieres conocer más sobre nosotros, puedes visitar nuestra oficina virtual.`
+                      : `As soon as your spot opens up, we'll send you an email invitation with next steps. In the meantime, if you'd like to learn more about us, you can visit our virtual office.`}
                   </p>
                 </div>
 
-                <div className="flex items-center justify-center mb-8 p-4 rounded-xl bg-background/50 border border-[#68DBFF]/20">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#68DBFF] mr-3"></div>
-                  <span className="text-sm text-muted-foreground">
-                    {language === "es" ? "Preparando tu espacio de trabajo..." : "Preparing your workspace..."}
-                  </span>
-                </div>
-
+                {/* Only show the Visit our science lab button */}
                 <div className="flex flex-col gap-3 w-full max-w-sm">
                   <Button
-                    onClick={() => {
-                      // This would redirect to the actual workspace
-                      window.open("https://workspace.hermes.science/", "_blank")
-                    }}
+                    onClick={() => window.open("https://hermes.science", "_blank")}
                     className="w-full h-[60px] py-6 bg-gradient-radial-primary hover:bg-gradient-radial-primary-hover text-white shadow-none hover:shadow-[0_0_30px_rgba(104,219,255,0.6)] transition-all duration-300 rounded-xl"
                   >
-                    {language === "es" ? "Acceder al Espacio de Trabajo Manualmente" : "Access Workspace Manually"}
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    onClick={() => setIsSubmitted(false)}
-                    className="w-full h-[60px] text-muted-foreground hover:text-foreground hover:bg-black/30 transition-colors rounded-xl"
-                  >
-                    {language === "es" ? "Volver al Formulario" : "Go Back to Form"}
+                    {language === "es" ? "Visitar nuestro laboratorio" : "Visit our science lab"}
                   </Button>
                 </div>
               </div>
