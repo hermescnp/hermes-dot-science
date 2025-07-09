@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { RenderIcon } from "@/components/icon-mapper"
 import { useLanguage } from "@/contexts/language-context"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import { HERMES_SCIENCE_URL } from "@/lib/config"
 
 interface ContactFormContent {
   title: string
@@ -225,7 +226,7 @@ export default function ContactForm() {
             {/* Only show the Visit our science lab button */}
             <div className="flex flex-col gap-3 w-full max-w-sm">
               <Button
-                onClick={() => window.open("https://hermes.science", "_blank")}
+                onClick={() => window.open(HERMES_SCIENCE_URL, "_blank")}
                 className="w-full h-[60px] py-6 bg-gradient-radial-primary hover:bg-gradient-radial-primary-hover text-white shadow-none hover:shadow-[0_0_30px_rgba(104,219,255,0.6)] transition-all duration-300 rounded-xl"
               >
                 {language === "es" ? "Visitar nuestro laboratorio" : "Visit our science lab"}
