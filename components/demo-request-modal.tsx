@@ -308,48 +308,32 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
     setIsSubmitting(true)
     
     try {
-      // Import the lead capture service
-      const { createDemoRequest, validateLeadData, storeLeadData } = await import('@/lib/lead-capture-service.js')
-      
-            // Format phone number for display
+      // Format phone number for display
       const fullPhoneNumber = formData.phoneCountryCode === "Other" ? formData.phone : `${formData.phoneCountryCode} ${formData.phone}`
       
       // Create clean numeric phone number for database
       const cleanPhoneNumber = fullPhoneNumber.replace(/[\s\-\(\)]/g, '')
       
-      // Validate the data with the full phone number
-      const validation = validateLeadData({
-        ...formData,
-        phone: fullPhoneNumber
-      }) as { isValid: boolean; errors: string[] }
-      if (!validation.isValid) {
-        throw new Error(validation.errors.join(', '))
-      }
-      
-      // Store lead data for potential future use
-      storeLeadData({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        company: formData.company,
-        role: formData.role,
-        phone: cleanPhoneNumber,
-        organizationSize: formData.size,
-        language: language
+      // Submit demo request to our API route
+      const response = await fetch('/api/demo-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          company: formData.company,
+          role: formData.role,
+          phone: cleanPhoneNumber,
+          message: formData.message,
+          organizationSize: formData.size,
+          language: language
+        })
       })
       
-      // Create the demo request
-      const result = await createDemoRequest({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        company: formData.company,
-        role: formData.role,
-        phone: cleanPhoneNumber,
-        message: formData.message,
-        organizationSize: formData.size,
-        language: language
-      }) as { success: boolean; data?: any; error?: string }
+      const result = await response.json()
       
       if (!result.success) {
         throw new Error(result.error || 'Unknown error occurred')
