@@ -12,6 +12,7 @@ import { Slider } from "@/components/ui/slider"
 import { RenderIcon } from "@/components/icon-mapper"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
+import { useAnimation } from "@/contexts/animation-context"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { updateUserData } from "@/lib/auth-service"
@@ -59,6 +60,7 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
   const [content, setContent] = useState<ContactFormContent | null>(null)
   const { language, t } = useLanguage()
   const { user, userData, isAuthenticated } = useAuth()
+  const { pauseAnimations, resumeAnimations } = useAnimation()
   
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -213,6 +215,15 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
   //     }, 300)
   //   }
   // }, [isOpen])
+
+  // Pause animations when modal opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      pauseAnimations()
+    } else {
+      resumeAnimations()
+    }
+  }, [isOpen, pauseAnimations, resumeAnimations])
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/

@@ -1,8 +1,9 @@
 "use client"
 
-import { useRef, useState, useEffect, useMemo } from "react"
+import { useRef, useState, useEffect, useMemo, useCallback } from "react"
 import { motion, useMotionValue, useSpring } from "framer-motion"
 import { useActiveSection } from "@/hooks/use-active-section"
+import { useAnimation } from "@/contexts/animation-context"
 
 interface OptimizedFramerSpotlightProps {
   showMainSpotlight?: boolean
@@ -15,6 +16,7 @@ export default function OptimizedFramerSpotlight({ showMainSpotlight = true }: O
 
   // Use the active section hook directly
   const { isActive } = useActiveSection()
+  const { isPaused } = useAnimation()
   const isDark = true
 
   // Motion values for the spotlight position with spring physics - same as learn-more page
@@ -65,11 +67,23 @@ export default function OptimizedFramerSpotlight({ showMainSpotlight = true }: O
     return configs
   }, [windowDimensions.width, windowDimensions.height])
 
-  // Simple mouse tracking like in learn-more page
-  const handleMouseMove = (e: MouseEvent) => {
-    mouseX.set(e.clientX)
-    mouseY.set(e.clientY)
-  }
+  // Throttled mouse tracking for better scroll performance
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isPaused) {
+      // Use requestAnimationFrame for smoother updates
+      requestAnimationFrame(() => {
+        mouseX.set(e.clientX)
+        mouseY.set(e.clientY)
+      })
+    }
+  }, [isPaused, mouseX, mouseY])
+
+  // Debounced resize handler
+  const handleResize = useCallback(() => {
+    if (typeof window !== "undefined") {
+      setWindowDimensions({ width: window.innerWidth, height: window.innerHeight })
+    }
+  }, [])
 
   // Initial setup effect - runs only once on mount
   useEffect(() => {
@@ -80,23 +94,36 @@ export default function OptimizedFramerSpotlight({ showMainSpotlight = true }: O
       setWindowDimensions({ width: window.innerWidth, height: window.innerHeight })
     }
 
-    // Handle window resize
-    const handleResize = () => {
-      if (typeof window !== "undefined") {
-        setWindowDimensions({ width: window.innerWidth, height: window.innerHeight })
+    // Throttled event listeners for better performance
+    let ticking = false
+    const throttledMouseMove = (e: MouseEvent) => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleMouseMove(e)
+          ticking = false
+        })
+        ticking = true
       }
     }
 
-    // Add mouse tracking - same as learn-more page
-    window.addEventListener("mousemove", handleMouseMove)
-    window.addEventListener("resize", handleResize)
+    // Debounced resize handler
+    let resizeTimeout: NodeJS.Timeout
+    const debouncedResize = () => {
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(handleResize, 100)
+    }
+
+    // Add event listeners with passive option for better performance
+    window.addEventListener("mousemove", throttledMouseMove, { passive: true })
+    window.addEventListener("resize", debouncedResize, { passive: true })
 
     // Cleanup
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove)
-      window.removeEventListener("resize", handleResize)
+      window.removeEventListener("mousemove", throttledMouseMove)
+      window.removeEventListener("resize", debouncedResize)
+      clearTimeout(resizeTimeout)
     }
-  }, []) // Empty dependency array - runs only once
+  }, [handleMouseMove, handleResize, isPaused])
 
   if (!isMounted) {
     return null
@@ -105,7 +132,7 @@ export default function OptimizedFramerSpotlight({ showMainSpotlight = true }: O
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Primary spotlight that follows mouse - simplified like learn-more page */}
-      {showMainSpotlight && (
+      {showMainSpotlight && !isPaused && (
         <motion.div
           className="absolute pointer-events-none"
           style={{
@@ -127,7 +154,7 @@ export default function OptimizedFramerSpotlight({ showMainSpotlight = true }: O
       )}
 
       {/* Render particles using memoized configurations with stable keys */}
-      {particleConfigs.map((config) => {
+      {!isPaused && particleConfigs.map((config) => {
         const stableKey = `${config.id}-${windowDimensions.width}-${windowDimensions.height}`
         if (config.type === "large") {
           return (
@@ -227,3 +254,4 @@ export default function OptimizedFramerSpotlight({ showMainSpotlight = true }: O
     </div>
   )
 }
+

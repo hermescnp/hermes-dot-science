@@ -2,12 +2,14 @@
 
 import { useRef, useState, useEffect } from "react"
 import { motion, useMotionValue, useSpring, animate } from "framer-motion"
+import { useAnimation } from "@/contexts/animation-context"
 
 export default function SignInSpotlight() {
   const [isMounted, setIsMounted] = useState(false)
   const [isMouseActive, setIsMouseActive] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const defaultPositionRef = useRef({ x: 0, y: 0 })
+  const { isPaused } = useAnimation()
 
   // Motion values for the spotlight position with spring physics
   const mouseX = useMotionValue(0)
@@ -38,9 +40,11 @@ export default function SignInSpotlight() {
 
   // Handle mouse movement across the entire page
   const handleMouseMove = (e: MouseEvent) => {
-    setIsMouseActive(true)
-    mouseX.set(e.clientX)
-    mouseY.set(e.clientY)
+    if (!isPaused) {
+      setIsMouseActive(true)
+      mouseX.set(e.clientX)
+      mouseY.set(e.clientY)
+    }
   }
 
   // Handle mouse leave (when cursor leaves the window)
@@ -73,7 +77,7 @@ export default function SignInSpotlight() {
       document.removeEventListener("mouseleave", handleMouseLeave)
       window.removeEventListener("resize", updateDefaultPosition)
     }
-  }, [])
+  }, [isPaused]) // Add isPaused to dependencies
 
   if (!isMounted) {
     return null
@@ -82,25 +86,27 @@ export default function SignInSpotlight() {
   return (
     <div ref={containerRef} className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       {/* Primary spotlight that follows mouse */}
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{
-          background: `radial-gradient(circle, ${spotlightColors[0].darkColor} 0%, transparent 70%)`,
-          width: "1000px",
-          height: "1000px",
-          borderRadius: "50%",
-          x: springX,
-          y: springY,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      />
+      {!isPaused && (
+        <motion.div
+          className="absolute pointer-events-none"
+          style={{
+            background: `radial-gradient(circle, ${spotlightColors[0].darkColor} 0%, transparent 70%)`,
+            width: "1000px",
+            height: "1000px",
+            borderRadius: "50%",
+            x: springX,
+            y: springY,
+            translateX: "-50%",
+            translateY: "-50%",
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        />
+      )}
 
       {/* Floating ash-like particles */}
-      {Array.from({ length: 12 }).map((_, i) => (
+      {!isPaused && Array.from({ length: 12 }).map((_, i) => (
         <motion.div
           key={`particle-${i}`}
           className="absolute pointer-events-none"
@@ -148,7 +154,7 @@ export default function SignInSpotlight() {
       ))}
 
       {/* Additional smaller particles */}
-      {Array.from({ length: 8 }).map((_, i) => (
+      {!isPaused && Array.from({ length: 8 }).map((_, i) => (
         <motion.div
           key={`small-particle-${i}`}
           className="absolute pointer-events-none"

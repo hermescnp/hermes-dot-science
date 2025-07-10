@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { RenderIcon } from "@/components/icon-mapper"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
+import { useAnimation } from "@/contexts/animation-context"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -67,6 +68,7 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
   })
   const { language } = useLanguage()
   const { user, userData, isAuthenticated } = useAuth()
+  const { pauseAnimations, resumeAnimations } = useAnimation()
   const router = useRouter()
 
   const firstNameRef = useRef<HTMLInputElement>(null)
@@ -197,6 +199,15 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
       }, 100)
     }
   }, [isOpen])
+
+  // Pause animations when modal opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      pauseAnimations()
+    } else {
+      resumeAnimations()
+    }
+  }, [isOpen, pauseAnimations, resumeAnimations])
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/

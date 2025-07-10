@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react"
 import { motion, useMotionValue, useSpring, animate } from "framer-motion"
 import { useTheme } from "next-themes"
+import { useAnimation } from "@/contexts/animation-context"
 
 export default function FramerSpotlight() {
   const [isMounted, setIsMounted] = useState(false)
@@ -11,6 +12,7 @@ export default function FramerSpotlight() {
   const heroRef = useRef<HTMLElement | null>(null)
   const defaultPositionRef = useRef({ x: 0, y: 0 })
   const { resolvedTheme } = useTheme()
+  const { isPaused } = useAnimation()
   const isDark = resolvedTheme === "dark"
 
   // Motion values for the spotlight position with spring physics
@@ -65,7 +67,7 @@ export default function FramerSpotlight() {
 
   // Handle mouse movement only when inside hero
   const handleMouseMove = (e: MouseEvent) => {
-    if (isMouseInHero) {
+    if (isMouseInHero && !isPaused) {
       mouseX.set(e.clientX)
       mouseY.set(e.clientY)
     }
@@ -100,7 +102,7 @@ export default function FramerSpotlight() {
         heroRef.current.removeEventListener("mouseleave", handleMouseLeave)
       }
     }
-  }, [isMouseInHero]) // Only depend on isMouseInHero
+  }, [isMouseInHero, isPaused]) // Add isPaused to dependencies
 
   if (!isMounted) {
     return null
@@ -109,125 +111,131 @@ export default function FramerSpotlight() {
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Primary spotlight that follows mouse/animation */}
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{
-          background: `radial-gradient(circle, ${
-            isDark ? spotlightColors[0].darkColor : spotlightColors[0].color
-          } 0%, transparent 70%)`,
-          width: "1000px",
-          height: "1000px",
-          borderRadius: "50%",
-          x: springX,
-          y: springY,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      />
+      {!isPaused && (
+        <motion.div
+          className="absolute pointer-events-none"
+          style={{
+            background: `radial-gradient(circle, ${
+              isDark ? spotlightColors[0].darkColor : spotlightColors[0].color
+            } 0%, transparent 70%)`,
+            width: "1000px",
+            height: "1000px",
+            borderRadius: "50%",
+            x: springX,
+            y: springY,
+            translateX: "-50%",
+            translateY: "-50%",
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        />
+      )}
 
       {/* Secondary spotlights with independent animations */}
-      <motion.div
-        className="absolute pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: [0.3, 0.6, 0.3],
-          x: ["0%", "10%", "5%", "0%"],
-          y: ["0%", "5%", "10%", "0%"],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Number.POSITIVE_INFINITY,
-          repeatType: "reverse",
-        }}
-        style={{
-          background: `radial-gradient(circle, ${
-            isDark ? spotlightColors[1].darkColor : spotlightColors[1].color
-          } 0%, transparent 70%)`,
-          width: "800px",
-          height: "800px",
-          borderRadius: "50%",
-          left: "20%",
-          top: "30%",
-        }}
-      />
+      {!isPaused && (
+        <>
+          <motion.div
+            className="absolute pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0.3, 0.6, 0.3],
+              x: ["0%", "10%", "5%", "0%"],
+              y: ["0%", "5%", "10%", "0%"],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Number.POSITIVE_INFINITY,
+              repeatType: "reverse",
+            }}
+            style={{
+              background: `radial-gradient(circle, ${
+                isDark ? spotlightColors[1].darkColor : spotlightColors[1].color
+              } 0%, transparent 70%)`,
+              width: "800px",
+              height: "800px",
+              borderRadius: "50%",
+              left: "20%",
+              top: "30%",
+            }}
+          />
 
-      <motion.div
-        className="absolute pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: [0.2, 0.5, 0.2],
-          x: ["0%", "-10%", "-5%", "0%"],
-          y: ["0%", "-5%", "-10%", "0%"],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Number.POSITIVE_INFINITY,
-          repeatType: "reverse",
-        }}
-        style={{
-          background: `radial-gradient(circle, ${
-            isDark ? spotlightColors[2].darkColor : spotlightColors[2].color
-          } 0%, transparent 70%)`,
-          width: "700px",
-          height: "700px",
-          borderRadius: "50%",
-          right: "20%",
-          bottom: "30%",
-        }}
-      />
+          <motion.div
+            className="absolute pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0.2, 0.5, 0.2],
+              x: ["0%", "-10%", "-5%", "0%"],
+              y: ["0%", "-5%", "-10%", "0%"],
+            }}
+            transition={{
+              duration: 18,
+              repeat: Number.POSITIVE_INFINITY,
+              repeatType: "reverse",
+            }}
+            style={{
+              background: `radial-gradient(circle, ${
+                isDark ? spotlightColors[2].darkColor : spotlightColors[2].color
+              } 0%, transparent 70%)`,
+              width: "700px",
+              height: "700px",
+              borderRadius: "50%",
+              right: "20%",
+              bottom: "30%",
+            }}
+          />
 
-      {/* Additional colored spotlights */}
-      <motion.div
-        className="absolute pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: [0.2, 0.4, 0.2],
-          scale: [1, 1.05, 1],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Number.POSITIVE_INFINITY,
-          repeatType: "reverse",
-        }}
-        style={{
-          background: `radial-gradient(circle, ${
-            isDark ? "rgba(168, 85, 247, 0.2)" : "rgba(168, 85, 247, 0.15)"
-          } 0%, transparent 70%)`,
-          width: "600px",
-          height: "600px",
-          borderRadius: "50%",
-          left: "60%",
-          top: "20%",
-        }}
-      />
+          {/* Additional colored spotlights */}
+          <motion.div
+            className="absolute pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0.2, 0.4, 0.2],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Number.POSITIVE_INFINITY,
+              repeatType: "reverse",
+            }}
+            style={{
+              background: `radial-gradient(circle, ${
+                isDark ? "rgba(168, 85, 247, 0.2)" : "rgba(168, 85, 247, 0.15)"
+              } 0%, transparent 70%)`,
+              width: "600px",
+              height: "600px",
+              borderRadius: "50%",
+              left: "60%",
+              top: "20%",
+            }}
+          />
 
-      <motion.div
-        className="absolute pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: [0.15, 0.3, 0.15],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Number.POSITIVE_INFINITY,
-          repeatType: "reverse",
-          delay: 2,
-        }}
-        style={{
-          background: `radial-gradient(circle, ${
-            isDark ? "rgba(251, 191, 36, 0.2)" : "rgba(251, 191, 36, 0.15)"
-          } 0%, transparent 70%)`,
-          width: "550px",
-          height: "550px",
-          borderRadius: "50%",
-          left: "30%",
-          bottom: "15%",
-        }}
-      />
+          <motion.div
+            className="absolute pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0.15, 0.3, 0.15],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Number.POSITIVE_INFINITY,
+              repeatType: "reverse",
+              delay: 2,
+            }}
+            style={{
+              background: `radial-gradient(circle, ${
+                isDark ? "rgba(251, 191, 36, 0.2)" : "rgba(251, 191, 36, 0.15)"
+              } 0%, transparent 70%)`,
+              width: "550px",
+              height: "550px",
+              borderRadius: "50%",
+              left: "30%",
+              bottom: "15%",
+            }}
+          />
+        </>
+      )}
     </div>
   )
 }

@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useAnimation } from "@/contexts/animation-context"
 
 export default function HeroParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { isPaused } = useAnimation()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -53,6 +55,12 @@ export default function HeroParticles() {
 
     // Animation loop
     const animate = () => {
+      if (isPaused) {
+        // If paused, just request next frame without updating
+        requestAnimationFrame(animate)
+        return
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       // Update and draw particles
@@ -82,7 +90,7 @@ export default function HeroParticles() {
     return () => {
       window.removeEventListener("resize", setCanvasDimensions)
     }
-  }, [])
+  }, [isPaused]) // Add isPaused to dependencies
 
   return <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full -z-10 opacity-40" aria-hidden="true" />
 }
