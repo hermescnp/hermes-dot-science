@@ -10,6 +10,8 @@ import { RenderIcon } from "@/components/icon-mapper"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import Image from "next/image"
+import Link from "next/link"
 
 interface ProfileContent {
   title: string
@@ -39,6 +41,10 @@ export default function UserProfile() {
   const [lastName, setLastName] = useState("")
   const [company, setCompany] = useState("")
   const [role, setRole] = useState("")
+  const [phone, setPhone] = useState("")
+  const [phoneCountryCode, setPhoneCountryCode] = useState<"+1 (809)" | "+1 (829)" | "+1 (849)" | "Other">("+1 (809)")
+  const [phoneError, setPhoneError] = useState<string | null>(null)
+  const [isRefreshingAfterSave, setIsRefreshingAfterSave] = useState(false)
   
   // Track if form has changes
   const [hasChanges, setHasChanges] = useState(false)
@@ -50,6 +56,35 @@ export default function UserProfile() {
       setLastName(userData.lastName || "")
       setCompany(userData.company || "")
       setRole(userData.role || "")
+      
+      // Parse phone number and country code
+      const userPhone = userData.phone || ""
+      if (userPhone.startsWith("+1809")) {
+        setPhoneCountryCode("+1 (809)")
+        setPhone(userPhone.replace("+1809", ""))
+      } else if (userPhone.startsWith("+1829")) {
+        setPhoneCountryCode("+1 (829)")
+        setPhone(userPhone.replace("+1829", ""))
+      } else if (userPhone.startsWith("+1849")) {
+        setPhoneCountryCode("+1 (849)")
+        setPhone(userPhone.replace("+1849", ""))
+      } else if (userPhone.startsWith("+1 (809)")) {
+        setPhoneCountryCode("+1 (809)")
+        setPhone(userPhone.replace("+1 (809) ", ""))
+      } else if (userPhone.startsWith("+1 (829)")) {
+        setPhoneCountryCode("+1 (829)")
+        setPhone(userPhone.replace("+1 (829) ", ""))
+      } else if (userPhone.startsWith("+1 (849)")) {
+        setPhoneCountryCode("+1 (849)")
+        setPhone(userPhone.replace("+1 (849) ", ""))
+      } else if (userPhone) {
+        setPhoneCountryCode("Other")
+        setPhone(userPhone)
+      } else {
+        setPhoneCountryCode("+1 (809)")
+        setPhone("")
+      }
+      
       // Reset changes when userData is loaded
       setHasChanges(false)
     }
@@ -66,6 +101,7 @@ export default function UserProfile() {
         email: language === "es" ? "Correo Electrónico" : "Email",
         company: language === "es" ? "Empresa" : "Company",
         role: language === "es" ? "Rol" : "Role",
+        phone: language === "es" ? "Teléfono" : "Phone",
         emailVerified: language === "es" ? "Email Verificado" : "Email Verified",
       },
       placeholders: {
@@ -73,6 +109,7 @@ export default function UserProfile() {
         lastName: language === "es" ? "Tu apellido" : "Your last name",
         company: language === "es" ? "Tu empresa" : "Your company",
         role: language === "es" ? "Tu rol" : "Your role",
+        phone: language === "es" ? "Tu teléfono" : "Your phone number",
       },
       saveButtonText: language === "es" ? "Guardar Cambios" : "Save Changes",
       savingText: language === "es" ? "Guardando..." : "Saving...",
@@ -98,22 +135,90 @@ export default function UserProfile() {
     }
   }
 
+  // Phone formatting function
+  const formatPhone = (value: string): string => {
+    // Remove all non-numeric characters
+    const numbers = value.replace(/\D/g, "")
+
+    // If "Other" is selected, return numbers without formatting but limit to reasonable length
+    if (phoneCountryCode === "Other") {
+      return numbers.slice(0, 15) // Reasonable limit for international numbers
+    }
+
+    // Limit to 7 digits for Dominican numbers
+    const limitedNumbers = numbers.slice(0, 7)
+
+    // Apply format: 000-0000
+    if (limitedNumbers.length <= 3) {
+      return limitedNumbers
+    } else {
+      return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(3)}`
+    }
+  }
+
+  // Phone validation function
+  const validatePhone = (value: string): boolean => {
+    if (phoneCountryCode === "Other") {
+      // For "Other", just check if there are at least some digits
+      return value.length >= 7
+    }
+    // Check if it matches the format 000-0000 (exactly 7 digits)
+    const phoneRegex = /^\d{3}-\d{4}$/
+    return phoneRegex.test(value)
+  }
+
+  // Handle phone change with formatting and validation
+  const handlePhoneChange = (value: string) => {
+    const formattedValue = formatPhone(value)
+    setPhone(formattedValue)
+    
+    if (!formattedValue) {
+      setPhoneError(null)
+    } else if (!validatePhone(formattedValue)) {
+      setPhoneError(
+        language === "es"
+          ? "Asegúrate de proporcionar un número de teléfono válido"
+          : "Make sure to provide a valid phone number"
+      )
+    } else {
+      setPhoneError(null)
+    }
+  }
+
+  // Handle phone country code change
+  const handlePhoneCountryCodeChange = (value: "+1 (809)" | "+1 (829)" | "+1 (849)" | "Other") => {
+    setPhoneCountryCode(value)
+    // Clear phone when country code changes
+    setPhone("")
+    setPhoneError(null)
+  }
+
   // Check if form has changes compared to original userData
   const checkForChanges = () => {
     if (!userData) return false
+    
+    // Format full phone number for comparison
+    const fullPhoneNumber = phoneCountryCode === "Other" ? phone : `${phoneCountryCode.replace(" ", "")}${phone}`
     
     return (
       firstName !== (userData.firstName || "") ||
       lastName !== (userData.lastName || "") ||
       company !== (userData.company || "") ||
-      role !== (userData.role || "")
+      role !== (userData.role || "") ||
+      fullPhoneNumber !== (userData.phone || "")
     )
   }
 
   // Update hasChanges whenever form fields change
   useEffect(() => {
-    setHasChanges(checkForChanges())
-  }, [firstName, lastName, company, role, userData])
+    const newHasChanges = checkForChanges()
+    setHasChanges(newHasChanges)
+    
+    // Hide success banner when user makes new changes (but not when refreshing after save)
+    if (newHasChanges && isSaved && !isRefreshingAfterSave) {
+      setIsSaved(false)
+    }
+  }, [firstName, lastName, company, role, phone, phoneCountryCode, userData, isSaved, isRefreshingAfterSave])
 
   const handleSave = async () => {
     if (!user?.uid) {
@@ -128,14 +233,17 @@ export default function UserProfile() {
         firstName,
         lastName,
         company,
-        role
+        role,
+        phone: phoneCountryCode === "Other" ? phone : `${phoneCountryCode.replace(" ", "")}${phone}`
       }) as { success: boolean; message?: string; error?: string }
 
       if (result.success) {
         setIsSaved(true)
-        setTimeout(() => setIsSaved(false), 3000)
+        // Remove the setTimeout - banner will stay visible until user makes new changes
         // Refresh user data to get the updated information
+        setIsRefreshingAfterSave(true)
         await refreshUserData()
+        setIsRefreshingAfterSave(false)
       } else {
         console.error('Error updating user data:', result.error)
         // You could add error state handling here if needed
@@ -157,6 +265,19 @@ export default function UserProfile() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Fixed Logo */}
+      <div className="fixed top-8 left-8 z-50">
+        <Link href="/">
+          <Image
+            src="/images/hermes-logo.svg"
+            alt="Hermes Dot Science"
+            width={200}
+            height={50}
+            className="h-12 w-auto object-contain"
+          />
+        </Link>
+      </div>
+
       {/* Centered Profile Form */}
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md mx-auto">
@@ -251,6 +372,52 @@ export default function UserProfile() {
                     onChange={(e) => setRole(e.target.value)}
                     className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone">{content.labels.phone}</Label>
+                  <div className="flex">
+                    <div className="relative">
+                      <select
+                        value={phoneCountryCode}
+                        onChange={(e) => {
+                          handlePhoneCountryCodeChange(
+                            e.target.value as "+1 (809)" | "+1 (829)" | "+1 (849)" | "Other",
+                          )
+                        }}
+                        className="h-12 px-3 pr-10 border border-r-0 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-l-md focus:outline-none focus:border-[#315F8C] min-w-[120px] appearance-none cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200"
+                      >
+                        <option value="+1 (809)">+1 (809)</option>
+                        <option value="+1 (829)">+1 (829)</option>
+                        <option value="+1 (849)">+1 (849)</option>
+                        <option value="Other">{language === "es" ? "Otro" : "Other"}</option>
+                      </select>
+                      <RenderIcon
+                        iconName="ChevronDown"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
+                      />
+                    </div>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder={
+                        phoneCountryCode === "Other"
+                          ? language === "es"
+                            ? "123456789"
+                            : "123456789"
+                          : "000-0000"
+                      }
+                      value={phone}
+                      onChange={(e) => handlePhoneChange(e.target.value)}
+                      className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 rounded-l-none flex-1 ${
+                        phoneError ? "!border-[#E27D4A]" : ""
+                      }`}
+                      maxLength={phoneCountryCode === "Other" ? 15 : 8}
+                    />
+                  </div>
+                  {phoneError && (
+                    <p className="text-[#E27D4A] text-xs mt-1">{phoneError}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">

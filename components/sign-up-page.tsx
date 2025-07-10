@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { RenderIcon } from "@/components/icon-mapper"
 import { useLanguage } from "@/contexts/language-context"
+import { useAuth } from "@/contexts/auth-context"
 import Link from "next/link"
 import HeroParticles from "@/components/hero-particles"
 import CssGridBackground from "@/components/css-grid-background"
@@ -24,6 +25,7 @@ interface AuthResult {
   user?: any
   userData?: any
   error?: string
+  isNewUser?: boolean
 }
 
 interface SignUpContent {
@@ -64,6 +66,9 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
   const [content, setContent] = useState<SignUpContent | null>(null)
   const { language, t } = useLanguage()
 
+  // Add debugging for auth context
+  const { user, isAuthenticated } = useAuth()
+  
   const [emailError, setEmailError] = useState<string | null>(null)
   const [passwordError, setPasswordError] = useState<string | null>(null)
   const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null)
@@ -78,6 +83,18 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [isFormComplete, setIsFormComplete] = useState(false)
   const [userData, setUserData] = useState<any>(null)
+  
+  useEffect(() => {
+    console.log('SignUpPage: Auth state changed - user:', user, 'isAuthenticated:', isAuthenticated, 'isSubmitted:', isSubmitted, 'authError:', authError)
+    
+    // If user is authenticated but we don't have userData and there's no auth error,
+    // it might be a failed sign-up attempt, so reset the state
+    if (isAuthenticated && user && !userData && !authError && !isSubmitting) {
+      console.log('SignUpPage: Detected authenticated user without userData, resetting state')
+      setIsSubmitted(false)
+      setUserData(null)
+    }
+  }, [user, isAuthenticated, isSubmitted, authError, userData, isSubmitting])
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -304,6 +321,8 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
 
     setIsSubmitting(true)
     setAuthError(null)
+    setIsSubmitted(false) // Ensure we reset this
+    setUserData(null) // Reset user data as well
 
     try {
       const result = await signUpWithEmail(email, password, {
@@ -314,11 +333,17 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
         language
       }) as AuthResult
 
-      if (result.success) {
+      console.log('Sign up result:', result)
+
+      if (result.success && result.userData) {
+        console.log('Sign up successful, setting isSubmitted to true')
         setUserData(result.userData)
         setIsSubmitted(true)
       } else {
+        console.log('Sign up failed, setting auth error:', result.error)
         setAuthError(result.error ?? 'An error occurred during sign up.')
+        setIsSubmitted(false) // Ensure this is false on error
+        setUserData(null) // Clear user data on error
       }
     } catch (error) {
       console.error('Error during sign up:', error)
@@ -327,6 +352,8 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
           ? "Ocurrió un error durante el registro. Por favor intenta de nuevo."
           : "An error occurred during sign up. Please try again."
       )
+      setIsSubmitted(false) // Ensure this is false on error
+      setUserData(null) // Clear user data on error
     } finally {
       setIsSubmitting(false)
     }
@@ -335,15 +362,33 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
   const handleGoogleSignUp = async () => {
     setIsSubmitting(true)
     setAuthError(null)
+    setIsSubmitted(false) // Ensure we reset this
+    setUserData(null) // Reset user data as well
 
     try {
       const result = await signInWithGoogle() as AuthResult
 
-      if (result.success) {
-        setUserData(result.userData)
-        setIsSubmitted(true)
+      console.log('Google sign up result:', result)
+
+      if (result.success && result.userData) {
+        console.log('Google sign up result:', result)
+        
+        // Check if this is a new user or existing user
+        if (result.isNewUser) {
+          console.log('Google sign up successful for new user, setting isSubmitted to true')
+          setUserData(result.userData)
+          setIsSubmitted(true)
+        } else {
+          console.log('User already exists, showing error message')
+          setAuthError('EMAIL_ALREADY_EXISTS')
+          setIsSubmitted(false)
+          setUserData(null)
+        }
       } else {
-        setAuthError(result.error ?? 'An error occurred during sign up.')
+        console.log('Google sign up failed, setting auth error:', result.error)
+        setAuthError(result.error ?? 'An error occurred during Google sign up.')
+        setIsSubmitted(false) // Ensure this is false on error
+        setUserData(null) // Clear user data on error
       }
     } catch (error) {
       console.error('Error during Google sign up:', error)
@@ -352,6 +397,8 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
           ? "Ocurrió un error durante el registro con Google. Por favor intenta de nuevo."
           : "An error occurred during Google sign up. Please try again."
       )
+      setIsSubmitted(false) // Ensure this is false on error
+      setUserData(null) // Clear user data on error
     } finally {
       setIsSubmitting(false)
     }
@@ -365,7 +412,10 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
     return <LoadingSpinner text={language === "es" ? "Cargando..." : "Loading..."} />
   }
 
-  if (isSubmitted) {
+  // Never show success component if there's an auth error
+  if (authError) {
+    // Continue to show the form with error
+  } else if (isSubmitted && userData) {
     return (
       <div className="min-h-screen relative overflow-hidden flex items-center justify-center">
         {/* Background Effects */}
@@ -970,8 +1020,23 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
 
                   {/* Authentication Error Display */}
                   {authError && (
-                    <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-                      <p className="text-red-400 text-sm">{authError}</p>
+                    <div className="p-4 bg-[#E27D4A]/10 border border-[#E27D4A]/30 rounded-lg mb-4">
+                      <div className="flex items-start gap-3">
+                        <div className="flex items-center justify-center w-5 h-5 rounded-full bg-[#E27D4A]/20 mt-0.5">
+                          <svg className="w-3 h-3 text-[#E27D4A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-[#E27D4A] text-sm font-medium">
+                            {authError === 'EMAIL_ALREADY_EXISTS'
+                              ? (language === "es" 
+                                  ? "Ya existe una cuenta creada con este email."
+                                  : "There is already an account created with this email.")
+                              : authError}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   )}
 

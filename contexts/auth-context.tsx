@@ -23,6 +23,7 @@ interface UserData {
   lastName: string
   company: string
   role: string
+  phone: string
   organizationSize: string
   language: string
   createdAt: Date
@@ -78,6 +79,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             lastName: data.lastName || '',
             company: data.company || '',
             role: data.role || '',
+            phone: data.phone || '',
             organizationSize: data.organizationSize || '',
             language: data.language || 'en',
             createdAt: data.createdAt?.toDate() || new Date(),

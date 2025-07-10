@@ -9,10 +9,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RenderIcon } from "@/components/icon-mapper"
 import { useLanguage } from "@/contexts/language-context"
+import { useAuth } from "@/contexts/auth-context"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import { updateUserData } from "@/lib/auth-service"
 
 interface QuoteDataModalProps {
   isOpen: boolean
@@ -64,6 +66,7 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
     email: "",
   })
   const { language } = useLanguage()
+  const { user, userData, isAuthenticated } = useAuth()
   const router = useRouter()
 
   const firstNameRef = useRef<HTMLInputElement>(null)
@@ -141,6 +144,50 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
       })
     }
   }, [isOpen])
+
+  // Auto-fill form data when user is authenticated and modal opens
+  useEffect(() => {
+    if (isOpen && isAuthenticated && userData) {
+      // Parse phone number and country code
+      let phoneCountryCode: "+1 (809)" | "+1 (829)" | "+1 (849)" | "Other" = "+1 (809)"
+      let phone = ""
+      
+      const userPhone = userData.phone || ""
+      if (userPhone.startsWith("+1809")) {
+        phoneCountryCode = "+1 (809)"
+        phone = userPhone.replace("+1809", "")
+      } else if (userPhone.startsWith("+1829")) {
+        phoneCountryCode = "+1 (829)"
+        phone = userPhone.replace("+1829", "")
+      } else if (userPhone.startsWith("+1849")) {
+        phoneCountryCode = "+1 (849)"
+        phone = userPhone.replace("+1849", "")
+      } else if (userPhone.startsWith("+1 (809)")) {
+        phoneCountryCode = "+1 (809)"
+        phone = userPhone.replace("+1 (809) ", "")
+      } else if (userPhone.startsWith("+1 (829)")) {
+        phoneCountryCode = "+1 (829)"
+        phone = userPhone.replace("+1 (829) ", "")
+      } else if (userPhone.startsWith("+1 (849)")) {
+        phoneCountryCode = "+1 (849)"
+        phone = userPhone.replace("+1 (849) ", "")
+      } else if (userPhone) {
+        phoneCountryCode = "Other"
+        phone = userPhone
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        firstName: userData.firstName || "",
+        lastName: userData.lastName || "",
+        email: userData.email || user?.email || "",
+        company: userData.company || "",
+        role: userData.role || "",
+        phoneCountryCode,
+        phone,
+      }))
+    }
+  }, [isOpen, isAuthenticated, userData, user])
 
   // Auto-focus first field when modal opens
   useEffect(() => {
@@ -304,6 +351,41 @@ export default function QuoteDataModal({ isOpen, onClose, lang, isOnQuotePage = 
     setIsSubmitting(true)
 
     try {
+      // Update user profile data if user is authenticated and has missing information
+      if (isAuthenticated && user?.uid) {
+        const updateData: any = {}
+        let hasUpdates = false
+        
+        // Check if any fields are missing from userData and have been filled in the form
+        if (!userData?.company && formData.company.trim()) {
+          updateData.company = formData.company
+          hasUpdates = true
+        }
+        
+        if (!userData?.role && formData.role.trim()) {
+          updateData.role = formData.role
+          hasUpdates = true
+        }
+        
+        if (!userData?.phone && formData.phone.trim()) {
+          // Format phone number for profile update
+          const fullPhoneNumber = formData.phoneCountryCode === "Other" ? formData.phone : `${formData.phoneCountryCode.replace(" ", "")}${formData.phone}`
+          updateData.phone = fullPhoneNumber
+          hasUpdates = true
+        }
+        
+        // Update user profile if there are any new fields
+        if (hasUpdates) {
+          try {
+            await updateUserData(user.uid, updateData)
+            console.log('✅ User profile updated with new information')
+          } catch (updateError) {
+            console.warn('⚠️ Could not update user profile:', updateError)
+            // Continue with quote request even if profile update fails
+          }
+        }
+      }
+
       // Format the full phone number for display
       const fullPhoneNumber =
         formData.phoneCountryCode === "Other" ? formData.phone : `${formData.phoneCountryCode} ${formData.phone}`
@@ -571,7 +653,10 @@ ${
                             value={formData.firstName}
                             onChange={(e) => updateFormData("firstName", e.target.value)}
                             required
-                            className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
+                            disabled={isAuthenticated && !!userData?.firstName}
+                            className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                              isAuthenticated && !!userData?.firstName ? "bg-background/50 border-[#68DBFF]/20 text-white/50 cursor-not-allowed" : ""
+                            }`}
                           />
                         </div>
                         <div className="space-y-2">
@@ -584,7 +669,10 @@ ${
                             value={formData.lastName}
                             onChange={(e) => updateFormData("lastName", e.target.value)}
                             required
-                            className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
+                            disabled={isAuthenticated && !!userData?.lastName}
+                            className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                              isAuthenticated && !!userData?.lastName ? "bg-background/50 border-[#68DBFF]/20 text-white/50 cursor-not-allowed" : ""
+                            }`}
                           />
                         </div>
                       </div>
@@ -599,8 +687,11 @@ ${
                           value={formData.email}
                           onChange={(e) => updateFormData("email", e.target.value)}
                           required
+                          disabled={isAuthenticated && !!userData?.email}
                           className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
                             emailError ? "!border-[#E27D4A]" : ""
+                          } ${
+                            isAuthenticated && !!userData?.email ? "bg-background/50 border-[#68DBFF]/20 text-white/50 cursor-not-allowed" : ""
                           }`}
                         />
                         {emailError && <p className="text-[#E27D4A] text-xs mt-1">{emailError}</p>}
@@ -621,7 +712,10 @@ ${
                                 // Clear phone when country code changes
                                 updateFormData("phone", "")
                               }}
-                              className="h-12 px-3 pr-10 border border-r-0 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-l-md focus:outline-none focus:border-[#315F8C] min-w-[120px] appearance-none cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200"
+                              disabled={isAuthenticated && !!userData?.phone}
+                              className={`h-12 px-3 pr-10 border border-r-0 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-l-md focus:outline-none focus:border-[#315F8C] min-w-[120px] appearance-none cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200 ${
+                                isAuthenticated && !!userData?.phone ? "bg-background/50 border-[#68DBFF]/20 text-white/50 cursor-not-allowed" : ""
+                              }`}
                             >
                               <option value="+1 (809)">+1 (809)</option>
                               <option value="+1 (829)">+1 (829)</option>
@@ -646,7 +740,10 @@ ${
                             value={formData.phone}
                             onChange={(e) => updateFormData("phone", e.target.value)}
                             required
-                            className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 rounded-l-none flex-1"
+                            disabled={isAuthenticated && !!userData?.phone}
+                            className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 rounded-l-none flex-1 ${
+                              isAuthenticated && !!userData?.phone ? "bg-background/50 border-[#68DBFF]/20 text-white/50 cursor-not-allowed" : ""
+                            }`}
                             maxLength={formData.phoneCountryCode === "Other" ? 15 : 8}
                           />
                         </div>
@@ -681,7 +778,10 @@ ${
                           value={formData.company}
                           onChange={(e) => updateFormData("company", e.target.value)}
                           required
-                          className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
+                          disabled={isAuthenticated && !!userData?.company}
+                          className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                            isAuthenticated && !!userData?.company ? "bg-background/50 border-[#68DBFF]/20 text-white/50 cursor-not-allowed" : ""
+                          }`}
                         />
                       </div>
                       <div className="space-y-2">
@@ -777,7 +877,10 @@ ${
                           value={formData.role}
                           onChange={(e) => updateFormData("role", e.target.value)}
                           required
-                          className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
+                          disabled={isAuthenticated && !!userData?.role}
+                          className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                            isAuthenticated && !!userData?.role ? "bg-background/50 border-[#68DBFF]/20 text-white/50 cursor-not-allowed" : ""
+                          }`}
                         />
                       </div>
                     </div>
