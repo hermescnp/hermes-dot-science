@@ -9,6 +9,7 @@ import { Menu, User } from "lucide-react"
 import { LanguageToggle } from "@/components/language-toggle"
 import Image from "next/image"
 import { useLanguage } from "@/contexts/language-context"
+import { useAuth } from "@/contexts/auth-context"
 import { usePathname, useRouter } from "next/navigation"
 import { MobileBackButton } from "@/components/learn-more/navigation-ui"
 import { createPortal } from "react-dom"
@@ -37,6 +38,7 @@ interface NavbarContent {
 
 export default function Navbar() {
   const { language, t } = useLanguage()
+  const { user, userData, isAuthenticated } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const [hasScrolled, setHasScrolled] = useState(false)
   const [content, setContent] = useState<NavbarContent | null>(null)
@@ -288,6 +290,31 @@ export default function Navbar() {
     router.push(`/${language}/sign-up`)
   }
 
+  const handleSignOut = async () => {
+    try {
+      const { signOutUser } = await import('@/lib/auth-service')
+      await signOutUser()
+      setIsAuthOpen(false)
+      console.log("User signed out successfully")
+    } catch (error) {
+      console.error("Error signing out:", error)
+    }
+  }
+
+  // Get user's first letter for avatar
+  const getUserInitial = () => {
+    if (userData?.firstName) {
+      return userData.firstName.charAt(0).toUpperCase()
+    }
+    if (user?.displayName) {
+      return user.displayName.charAt(0).toUpperCase()
+    }
+    if (user?.email) {
+      return user.email.charAt(0).toUpperCase()
+    }
+    return "U"
+  }
+
   // Authentication Dropdown Portal Component
   const AuthDropdown = () => {
     if (!isAuthOpen || !isPositionReady) return null
@@ -334,104 +361,211 @@ export default function Navbar() {
             <div className="relative z-10 p-6">
               {/* Header */}
               <div className="flex items-center gap-3 mb-6">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#68DBFF]/20 border border-[#68DBFF]/40">
-                  <User className="w-6 h-6 text-[#68DBFF]" strokeWidth={2} />
-                </div>
+                {isAuthenticated ? (
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#68DBFF]/20 border border-[#68DBFF]/40">
+                    <div className="text-2xl font-light text-[#68DBFF]">
+                      {getUserInitial()}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#68DBFF]/20 border border-[#68DBFF]/40">
+                    <User className="w-6 h-6 text-[#68DBFF]" strokeWidth={2} />
+                  </div>
+                )}
                 <div>
                   <h3 className="text-lg font-semibold text-white leading-tight">
-                    {language === "es" ? "Acceso de Usuario" : "User Access"}
+                    {isAuthenticated 
+                      ? (language === "es" ? "Mi Cuenta" : "My Account")
+                      : (language === "es" ? "Acceso de Usuario" : "User Access")
+                    }
                   </h3>
                   <p className="text-xs text-white/60 mt-0.5">
-                    {language === "es" ? "Gestiona tu cuenta" : "Manage your account"}
+                    {isAuthenticated
+                      ? (language === "es" ? "Gestiona tu perfil" : "Manage your profile")
+                      : (language === "es" ? "Gestiona tu cuenta" : "Manage your account")
+                    }
                   </p>
                 </div>
               </div>
 
               {/* Action buttons */}
               <div className="space-y-3">
-                {/* Sign In Button */}
-                <button
-                  onClick={handleSignInClick}
-                  className="group w-full text-left p-4 rounded-lg transition-all duration-300 relative overflow-hidden"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(104, 219, 255, 0.08) 0%, rgba(104, 219, 255, 0.03) 100%)",
-                    border: "1px solid rgba(104, 219, 255, 0.2)",
-                  }}
-                >
-                  {/* Hover effect */}
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(104, 219, 255, 0.15) 0%, rgba(104, 219, 255, 0.08) 100%)",
-                    }}
-                  />
+                {isAuthenticated ? (
+                  <>
+                    {/* Profile Button */}
+                    <button
+                      onClick={() => {
+                        setIsAuthOpen(false)
+                        router.push(`/${language}/profile`)
+                      }}
+                      className="group w-full text-left p-4 rounded-lg transition-all duration-300 relative overflow-hidden"
+                      style={{
+                        background: "linear-gradient(135deg, rgba(104, 219, 255, 0.08) 0%, rgba(104, 219, 255, 0.03) 100%)",
+                        border: "1px solid rgba(104, 219, 255, 0.2)",
+                      }}
+                    >
+                      {/* Hover effect */}
+                      <div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(104, 219, 255, 0.15) 0%, rgba(104, 219, 255, 0.08) 100%)",
+                        }}
+                      />
 
-                  <div className="relative flex items-center">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[#68DBFF]/10 group-hover:bg-[#68DBFF]/20 transition-colors duration-300">
-                        <svg className="w-5 h-5 text-[#68DBFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <div className="text-white font-medium group-hover:text-[#68DBFF] transition-colors duration-300">
-                          {language === "es" ? "Iniciar Sesión" : "Sign In"}
+                      <div className="relative flex items-center">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[#68DBFF]/10 group-hover:bg-[#68DBFF]/20 transition-colors duration-300">
+                            <svg className="w-5 h-5 text-[#68DBFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                              />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className="text-white font-medium group-hover:text-[#68DBFF] transition-colors duration-300">
+                              {language === "es" ? "Mi Perfil" : "My Profile"}
+                            </div>
+                            <div className="text-sm text-white/60 mt-0.5">
+                              {language === "es" ? "Ver y editar perfil" : "View and edit profile"}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-sm text-white/60 mt-0.5">
-                          {language === "es" ? "Accede con tu cuenta" : "Access your account"}
-                        </div>
                       </div>
-                    </div>
-                  </div>
-                </button>
+                    </button>
 
-                {/* Sign Up Button */}
-                <button
-                  onClick={handleSignUpClick}
-                  className="group w-full text-left p-4 rounded-lg transition-all duration-300 relative overflow-hidden"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(104, 219, 255, 0.08) 0%, rgba(104, 219, 255, 0.03) 100%)",
-                    border: "1px solid rgba(104, 219, 255, 0.2)",
-                  }}
-                >
-                  {/* Hover effect */}
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(104, 219, 255, 0.15) 0%, rgba(104, 219, 255, 0.08) 100%)",
-                    }}
-                  />
+                    {/* Sign Out Button */}
+                    <button
+                      onClick={handleSignOut}
+                      className="group w-full text-left p-4 rounded-lg transition-all duration-300 relative overflow-hidden"
+                      style={{
+                        background: "linear-gradient(135deg, rgba(226, 125, 74, 0.08) 0%, rgba(226, 125, 74, 0.03) 100%)",
+                        border: "1px solid rgba(226, 125, 74, 0.2)",
+                      }}
+                    >
+                      {/* Hover effect */}
+                      <div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(226, 125, 74, 0.15) 0%, rgba(226, 125, 74, 0.08) 100%)",
+                        }}
+                      />
 
-                  <div className="relative flex items-center">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[#68DBFF]/10 group-hover:bg-[#68DBFF]/20 transition-colors duration-300">
-                        <svg className="w-5 h-5 text-[#68DBFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <div className="text-white font-medium group-hover:text-[#68DBFF] transition-colors duration-300">
-                          {language === "es" ? "Crear Cuenta" : "Create Account"}
+                      <div className="relative flex items-center">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[#E27D4A]/10 group-hover:bg-[#E27D4A]/20 transition-colors duration-300">
+                            <svg className="w-5 h-5 text-[#E27D4A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                              />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className="text-white font-medium group-hover:text-[#E27D4A] transition-colors duration-300">
+                              {language === "es" ? "Cerrar Sesión" : "Sign Out"}
+                            </div>
+                            <div className="text-sm text-white/60 mt-0.5">
+                              {language === "es" ? "Salir de tu cuenta" : "Sign out of your account"}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-sm text-white/60 mt-0.5">
-                          {language === "es" ? "Únete a la comunidad" : "Join the community"}
+                      </div>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {/* Sign In Button */}
+                    <button
+                      onClick={handleSignInClick}
+                      className="group w-full text-left p-4 rounded-lg transition-all duration-300 relative overflow-hidden"
+                      style={{
+                        background: "linear-gradient(135deg, rgba(104, 219, 255, 0.08) 0%, rgba(104, 219, 255, 0.03) 100%)",
+                        border: "1px solid rgba(104, 219, 255, 0.2)",
+                      }}
+                    >
+                      {/* Hover effect */}
+                      <div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(104, 219, 255, 0.15) 0%, rgba(104, 219, 255, 0.08) 100%)",
+                        }}
+                      />
+
+                      <div className="relative flex items-center">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[#68DBFF]/10 group-hover:bg-[#68DBFF]/20 transition-colors duration-300">
+                            <svg className="w-5 h-5 text-[#68DBFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                              />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className="text-white font-medium group-hover:text-[#68DBFF] transition-colors duration-300">
+                              {language === "es" ? "Iniciar Sesión" : "Sign In"}
+                            </div>
+                            <div className="text-sm text-white/60 mt-0.5">
+                              {language === "es" ? "Accede con tu cuenta" : "Access your account"}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </button>
+                    </button>
+
+                    {/* Sign Up Button */}
+                    <button
+                      onClick={handleSignUpClick}
+                      className="group w-full text-left p-4 rounded-lg transition-all duration-300 relative overflow-hidden"
+                      style={{
+                        background: "linear-gradient(135deg, rgba(104, 219, 255, 0.08) 0%, rgba(104, 219, 255, 0.03) 100%)",
+                        border: "1px solid rgba(104, 219, 255, 0.2)",
+                      }}
+                    >
+                      {/* Hover effect */}
+                      <div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(104, 219, 255, 0.15) 0%, rgba(104, 219, 255, 0.08) 100%)",
+                        }}
+                      />
+
+                      <div className="relative flex items-center">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[#68DBFF]/10 group-hover:bg-[#68DBFF]/20 transition-colors duration-300">
+                            <svg className="w-5 h-5 text-[#68DBFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                              />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className="text-white font-medium group-hover:text-[#68DBFF] transition-colors duration-300">
+                              {language === "es" ? "Crear Cuenta" : "Create Account"}
+                            </div>
+                            <div className="text-sm text-white/60 mt-0.5">
+                              {language === "es" ? "Únete a la comunidad" : "Join the community"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  </>
+                )}
               </div>
 
               {/* Footer */}
@@ -563,15 +697,23 @@ export default function Navbar() {
                   }
                   setIsAuthOpen(!isAuthOpen)
                 }}
-                aria-label={language === "es" ? "Iniciar Sesión" : "Sign In"}
+                aria-label={isAuthenticated ? (language === "es" ? "Mi Cuenta" : "My Account") : (language === "es" ? "Iniciar Sesión" : "Sign In")}
                 aria-expanded={isAuthOpen}
               >
-                <User
-                  className={`!h-7 !w-7 transition-colors duration-300 ${
-                    isAuthOpen ? "text-[#68DBFF]" : "text-white/60 group-hover:text-[#68DBFF]"
-                  }`}
-                  strokeWidth={1}
-                />
+                {isAuthenticated ? (
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#68DBFF]/20 border border-[#68DBFF]/40">
+                    <div className="text-2xl font-light text-[#68DBFF]">
+                      {getUserInitial()}
+                    </div>
+                  </div>
+                ) : (
+                  <User
+                    className={`!h-7 !w-7 transition-colors duration-300 ${
+                      isAuthOpen ? "text-[#68DBFF]" : "text-white/60 group-hover:text-[#68DBFF]"
+                    }`}
+                    strokeWidth={1}
+                  />
+                )}
               </button>
             </div>
 

@@ -11,8 +11,10 @@ import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { RenderIcon } from "@/components/icon-mapper"
 import { useLanguage } from "@/contexts/language-context"
+import { useAuth } from "@/contexts/auth-context"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
+import { updateUserData } from "@/lib/auth-service"
 
 interface DemoRequestModalProps {
   isOpen: boolean
@@ -55,6 +57,9 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [content, setContent] = useState<ContactFormContent | null>(null)
+  const { language, t } = useLanguage()
+  const { user, userData, isAuthenticated } = useAuth()
+  
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -67,7 +72,6 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
     phone: "",
   })
   const [sizeSliderValue, setSizeSliderValue] = useState([0])
-  const { language, t } = useLanguage()
 
   const firstNameRef = useRef<HTMLInputElement>(null)
   const companyRef = useRef<HTMLInputElement>(null)
@@ -171,7 +175,20 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
     }
   }, [isOpen])
 
-  // Remove the existing auto-focus useEffect and replace with this:
+  // Auto-fill form data when user is authenticated and modal opens
+  useEffect(() => {
+    if (isOpen && isAuthenticated && userData) {
+      setFormData((prev) => ({
+        ...prev,
+        firstName: userData.firstName || "",
+        lastName: userData.lastName || "",
+        email: userData.email || user?.email || "",
+        company: userData.company || "",
+        role: userData.role || "",
+        phone: userData.phone || "",
+      }))
+    }
+  }, [isOpen, isAuthenticated, userData, user])
 
   // Auto-focus first field when modal opens
   useEffect(() => {
@@ -311,8 +328,47 @@ export default function DemoRequestModal({ isOpen, onClose }: DemoRequestModalPr
       // Import the lead capture service
       const { createDemoRequest, validateLeadData, storeLeadData } = await import('@/lib/lead-capture-service.js')
       
+      // Update user profile data if user is authenticated and has missing information
+      if (isAuthenticated && user?.uid) {
+        const updateData: any = {}
+        let hasUpdates = false
+        
+        // Check if any fields are missing from userData and have been filled in the form
+        if (!userData?.company && formData.company.trim()) {
+          updateData.company = formData.company
+          hasUpdates = true
+        }
+        
+        if (!userData?.role && formData.role.trim()) {
+          updateData.role = formData.role
+          hasUpdates = true
+        }
+        
+        if (!userData?.phone && formData.phone.trim()) {
+          // Format phone number for profile update
+          const fullPhoneNumber = formData.phoneCountryCode === "Other" ? formData.phone : `${formData.phoneCountryCode} ${formData.phone}`
+          updateData.phone = fullPhoneNumber
+          hasUpdates = true
+        }
+        
+        // Update user profile if there are any new fields
+        if (hasUpdates) {
+          try {
+            await updateUserData(user.uid, updateData)
+            console.log('✅ User profile updated with new information')
+          } catch (updateError) {
+            console.warn('⚠️ Could not update user profile:', updateError)
+            // Continue with demo request even if profile update fails
+          }
+        }
+      }
+      
             // Format phone number for display
-      const fullPhoneNumber = formData.phoneCountryCode === "Other" ? formData.phone : `${formData.phoneCountryCode} ${formData.phone}`
+      // If phone is auto-filled from user data, use it as is (it already contains the full number)
+      // Otherwise, combine country code with phone number
+      const fullPhoneNumber = isAuthenticated && userData?.phone && userData.phone.trim() !== "" 
+        ? formData.phone 
+        : (formData.phoneCountryCode === "Other" ? formData.phone : `${formData.phoneCountryCode} ${formData.phone}`)
       
       // Create clean numeric phone number for database
       const cleanPhoneNumber = fullPhoneNumber.replace(/[\s\-\(\)]/g, '')
@@ -514,7 +570,10 @@ ${
                             value={formData.firstName}
                             onChange={(e) => updateFormData("firstName", e.target.value)}
                             required
-                            className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
+                            disabled={isAuthenticated}
+                            className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                              isAuthenticated ? "bg-gray-800/50 text-gray-400 cursor-not-allowed" : ""
+                            }`}
                           />
                         </div>
                         <div className="space-y-2">
@@ -527,7 +586,10 @@ ${
                             value={formData.lastName}
                             onChange={(e) => updateFormData("lastName", e.target.value)}
                             required
-                            className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
+                            disabled={isAuthenticated}
+                            className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                              isAuthenticated ? "bg-gray-800/50 text-gray-400 cursor-not-allowed" : ""
+                            }`}
                           />
                         </div>
                       </div>
@@ -542,8 +604,11 @@ ${
                           value={formData.email}
                           onChange={(e) => updateFormData("email", e.target.value)}
                           required
+                          disabled={isAuthenticated}
                           className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
                             emailError ? "!border-[#E27D4A]" : ""
+                          } ${
+                            isAuthenticated ? "bg-gray-800/50 text-gray-400 cursor-not-allowed" : ""
                           }`}
                         />
                         {emailError && <p className="text-[#E27D4A] text-xs mt-1">{emailError}</p>}
@@ -552,48 +617,60 @@ ${
                         <Label htmlFor="phone" className="text-slate-700 dark:text-slate-300">
                           {content.labels.phone}
                         </Label>
-                        <div className="flex">
-                          <div className="relative">
-                            <select
-                              value={formData.phoneCountryCode}
-                              onChange={(e) => {
-                                updateFormData(
-                                  "phoneCountryCode",
-                                  e.target.value as "+1 (809)" | "+1 (829)" | "+1 (849)" | "Other",
-                                )
-                                // Clear phone when country code changes
-                                updateFormData("phone", "")
-                              }}
-                              className="h-12 px-3 pr-10 border border-r-0 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-l-md focus:outline-none focus:border-[#315F8C] min-w-[120px] appearance-none cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200"
-                            >
-                              <option value="+1 (809)">+1 (809)</option>
-                              <option value="+1 (829)">+1 (829)</option>
-                              <option value="+1 (849)">+1 (849)</option>
-                              <option value="Other">{language === "es" ? "Otro" : "Other"}</option>
-                            </select>
-                            <RenderIcon
-                              iconName="ChevronDown"
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
-                            />
-                          </div>
+                        {isAuthenticated && userData?.phone && userData.phone.trim() !== "" ? (
+                          // Simple input field for auto-filled phone
                           <Input
                             id="phone"
                             type="tel"
-                            placeholder={
-                              formData.phoneCountryCode === "Other"
-                                ? language === "es"
-                                  ? "123456789"
-                                  : "123456789"
-                                : "000-0000"
-                            }
                             value={formData.phone}
-                            onChange={(e) => updateFormData("phone", e.target.value)}
-                            className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 rounded-l-none flex-1 ${
-                              phoneError ? "!border-[#E27D4A]" : ""
-                            }`}
-                            maxLength={formData.phoneCountryCode === "Other" ? 15 : 8}
+                            disabled
+                            className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 bg-gray-800/50 text-gray-400 cursor-not-allowed"
                           />
-                        </div>
+                        ) : (
+                          // Dropdown + input combination for manual entry
+                          <div className="flex">
+                            <div className="relative">
+                              <select
+                                value={formData.phoneCountryCode}
+                                onChange={(e) => {
+                                  updateFormData(
+                                    "phoneCountryCode",
+                                    e.target.value as "+1 (809)" | "+1 (829)" | "+1 (849)" | "Other",
+                                  )
+                                  // Clear phone when country code changes
+                                  updateFormData("phone", "")
+                                }}
+                                className="h-12 px-3 pr-10 border border-r-0 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-l-md focus:outline-none focus:border-[#315F8C] min-w-[120px] appearance-none cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200"
+                              >
+                                <option value="+1 (809)">+1 (809)</option>
+                                <option value="+1 (829)">+1 (829)</option>
+                                <option value="+1 (849)">+1 (849)</option>
+                                <option value="Other">{language === "es" ? "Otro" : "Other"}</option>
+                              </select>
+                              <RenderIcon
+                                iconName="ChevronDown"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
+                              />
+                            </div>
+                            <Input
+                              id="phone"
+                              type="tel"
+                              placeholder={
+                                formData.phoneCountryCode === "Other"
+                                  ? language === "es"
+                                    ? "123456789"
+                                    : "123456789"
+                                  : "000-0000"
+                              }
+                              value={formData.phone}
+                              onChange={(e) => updateFormData("phone", e.target.value)}
+                              className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 rounded-l-none flex-1 ${
+                                phoneError ? "!border-[#E27D4A]" : ""
+                              }`}
+                              maxLength={formData.phoneCountryCode === "Other" ? 15 : 8}
+                            />
+                          </div>
+                        )}
                         {phoneError && <p className="text-[#E27D4A] text-xs mt-1">{phoneError}</p>}
                       </div>
                     </div>
@@ -612,7 +689,10 @@ ${
                           value={formData.company}
                           onChange={(e) => updateFormData("company", e.target.value)}
                           required
-                          className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
+                          disabled={!!(isAuthenticated && userData?.company && userData.company.trim() !== "")}
+                          className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                            isAuthenticated && userData?.company && userData.company.trim() !== "" ? "bg-gray-800/50 text-gray-400 cursor-not-allowed" : ""
+                          }`}
                         />
                       </div>
                       <div className="space-y-2">
@@ -625,7 +705,10 @@ ${
                           value={formData.role}
                           onChange={(e) => updateFormData("role", e.target.value)}
                           required
-                          className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
+                          disabled={!!(isAuthenticated && userData?.role && userData.role.trim() !== "")}
+                          className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                            isAuthenticated && userData?.role && userData.role.trim() !== "" ? "bg-gray-800/50 text-gray-400 cursor-not-allowed" : ""
+                          }`}
                         />
                       </div>
                       <div className="space-y-4">
@@ -758,12 +841,12 @@ ${
                     {isSubmitting ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        {content.submittingText}
+                        {language === "es" ? "Enviando Solicitud..." : "Sending Request..."}
                       </>
                     ) : (
                       <>
                         <RenderIcon iconName="Zap" className="w-4 h-4" />
-                        {content.submitButtonText}
+                        {language === "es" ? "Enviar Solicitud" : "Send Request"}
                       </>
                     )}
                   </Button>
@@ -789,7 +872,7 @@ ${
                 onClick={onClose}
                 className="mt-6 bg-gradient-radial-primary hover:bg-gradient-radial-primary-hover text-white rounded-xl border-0 shadow-none hover:shadow-[0_0_35px_rgba(104,219,255,0.7)] px-5 py-6 h-[60px] transition-all duration-300"
               >
-                Close dialog
+                {language === "es" ? "Cerrar diálogo" : "Close dialog"}
               </Button>
             </motion.div>
           )}
