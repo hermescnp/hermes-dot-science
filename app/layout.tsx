@@ -5,6 +5,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/contexts/language-context"
 import { ActiveSectionProvider } from "@/hooks/use-active-section"
+import { AuthProvider } from "@/contexts/auth-context"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -25,9 +26,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
           <LanguageProvider initialLanguage="en">
-            <ActiveSectionProvider>
-              {children}
-            </ActiveSectionProvider>
+            <AuthProvider>
+              <ActiveSectionProvider>
+                {children}
+              </ActiveSectionProvider>
+            </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>

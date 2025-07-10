@@ -17,6 +17,14 @@ import SignInSpotlight from "@/components/sign-in-spotlight"
 import { BackButton, MobileBackButton } from "@/components/learn-more/navigation-ui"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { HERMES_SCIENCE_URL } from "@/lib/config"
+import { signUpWithEmail, signInWithGoogle } from "@/lib/auth-service"
+
+interface AuthResult {
+  success: boolean
+  user?: any
+  userData?: any
+  error?: string
+}
 
 interface SignUpContent {
   title: string
@@ -57,13 +65,19 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
   const { language, t } = useLanguage()
 
   const [emailError, setEmailError] = useState<string | null>(null)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null)
+  const [authError, setAuthError] = useState<string | null>(null)
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [company, setCompany] = useState("")
   const [role, setRole] = useState("")
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [isFormComplete, setIsFormComplete] = useState(false)
+  const [userData, setUserData] = useState<any>(null)
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -165,6 +179,14 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
     return emailRegex.test(email)
   }
 
+  const validatePassword = (password: string): boolean => {
+    return password.length >= 6
+  }
+
+  const validateConfirmPassword = (password: string, confirmPassword: string): boolean => {
+    return password === confirmPassword
+  }
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value
     setEmail(email)
@@ -182,10 +204,46 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
     }
   }
 
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const password = e.target.value
+    setPassword(password)
+    if (!password) {
+      setPasswordError(null)
+    } else if (!validatePassword(password)) {
+      setPasswordError(
+        language === "es"
+          ? "La contraseña debe tener al menos 6 caracteres."
+          : "Password must be at least 6 characters long."
+      )
+    } else {
+      setPasswordError(null)
+    }
+  }
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const confirmPassword = e.target.value
+    setConfirmPassword(confirmPassword)
+    if (!confirmPassword) {
+      setConfirmPasswordError(null)
+    } else if (!validateConfirmPassword(password, confirmPassword)) {
+      setConfirmPasswordError(
+        language === "es"
+          ? "Las contraseñas no coinciden."
+          : "Passwords do not match."
+      )
+    } else {
+      setConfirmPasswordError(null)
+    }
+  }
+
   const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
     const emailInput = form.email as HTMLInputElement
+    const passwordInput = form.password as HTMLInputElement
+    const confirmPasswordInput = form.confirmPassword as HTMLInputElement
+
+    let isValid = true
 
     if (emailInput.value && !validateEmail(emailInput.value)) {
       setEmailError(
@@ -194,11 +252,34 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
             ? "Por favor ingresa una dirección de email válida."
             : "Please enter a valid email address."),
       )
-      return false
+      isValid = false
     }
 
-    setEmailError(null)
-    return true
+    if (passwordInput.value && !validatePassword(passwordInput.value)) {
+      setPasswordError(
+        language === "es"
+          ? "La contraseña debe tener al menos 6 caracteres."
+          : "Password must be at least 6 characters long."
+      )
+      isValid = false
+    }
+
+    if (confirmPasswordInput.value && !validateConfirmPassword(passwordInput.value, confirmPasswordInput.value)) {
+      setConfirmPasswordError(
+        language === "es"
+          ? "Las contraseñas no coinciden."
+          : "Passwords do not match."
+      )
+      isValid = false
+    }
+
+    if (isValid) {
+      setEmailError(null)
+      setPasswordError(null)
+      setConfirmPasswordError(null)
+    }
+
+    return isValid
   }
 
   const checkFormCompletion = () => {
@@ -206,36 +287,79 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
       firstName.trim() !== "" &&
       lastName.trim() !== "" &&
       email.trim() !== "" &&
+      password.trim() !== "" &&
+      confirmPassword.trim() !== "" &&
       company.trim() !== "" &&
       validateEmail(email) &&
+      validatePassword(password) &&
+      validateConfirmPassword(password, confirmPassword) &&
       acceptTerms
     setIsFormComplete(isComplete)
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (!validateForm(e)) {
       return
     }
 
     setIsSubmitting(true)
-    setTimeout(() => {
+    setAuthError(null)
+
+    try {
+      const result = await signUpWithEmail(email, password, {
+        firstName,
+        lastName,
+        company,
+        role,
+        language
+      }) as AuthResult
+
+      if (result.success) {
+        setUserData(result.userData)
+        setIsSubmitted(true)
+      } else {
+        setAuthError(result.error ?? 'An error occurred during sign up.')
+      }
+    } catch (error) {
+      console.error('Error during sign up:', error)
+      setAuthError(
+        language === "es"
+          ? "Ocurrió un error durante el registro. Por favor intenta de nuevo."
+          : "An error occurred during sign up. Please try again."
+      )
+    } finally {
       setIsSubmitting(false)
-      setIsSubmitted(true)
-    }, 1500)
+    }
   }
 
-  const handleGoogleSignUp = () => {
-    // Simulate Google sign-up process
+  const handleGoogleSignUp = async () => {
     setIsSubmitting(true)
-    setTimeout(() => {
+    setAuthError(null)
+
+    try {
+      const result = await signInWithGoogle() as AuthResult
+
+      if (result.success) {
+        setUserData(result.userData)
+        setIsSubmitted(true)
+      } else {
+        setAuthError(result.error ?? 'An error occurred during sign up.')
+      }
+    } catch (error) {
+      console.error('Error during Google sign up:', error)
+      setAuthError(
+        language === "es"
+          ? "Ocurrió un error durante el registro con Google. Por favor intenta de nuevo."
+          : "An error occurred during Google sign up. Please try again."
+      )
+    } finally {
       setIsSubmitting(false)
-      setIsSubmitted(true)
-    }, 2000)
+    }
   }
 
   useEffect(() => {
     checkFormCompletion()
-  }, [firstName, lastName, email, company, acceptTerms])
+  }, [firstName, lastName, email, password, confirmPassword, company, acceptTerms])
 
   if (!content) {
     return <LoadingSpinner text={language === "es" ? "Cargando..." : "Loading..."} />
@@ -296,7 +420,9 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
                 </div>
 
                 <h3 className="text-3xl font-bold mb-3 bg-gradient-to-r from-[#68DBFF] to-[#315F8C] bg-clip-text text-transparent">
-                  {language === "es" ? `¡Bienvenido a bordo, ${firstName}!` : `Welcome aboard, ${firstName}!`}
+                  {language === "es" 
+                    ? `¡Bienvenido a bordo, ${userData?.firstName || firstName || 'Usuario'}!` 
+                    : `Welcome aboard, ${userData?.firstName || firstName || 'User'}!`}
                 </h3>
 
                 <div className="max-w-lg mb-6">
@@ -727,6 +853,38 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
                   </div>
 
                   <div className="space-y-2">
+                    <Label htmlFor="password">{language === "es" ? "Contraseña" : "Password"}</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder={language === "es" ? "Tu contraseña" : "Your password"}
+                      onChange={handlePasswordChange}
+                      required
+                      className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                        passwordError ? "!border-[#FFB338]" : ""
+                      }`}
+                      value={password}
+                    />
+                    {passwordError && <p className="text-[#FFB338] text-xs mt-1">{passwordError}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">{language === "es" ? "Confirmar Contraseña" : "Confirm Password"}</Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      placeholder={language === "es" ? "Confirma tu contraseña" : "Confirm your password"}
+                      onChange={handleConfirmPasswordChange}
+                      required
+                      className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                        confirmPasswordError ? "!border-[#FFB338]" : ""
+                      }`}
+                      value={confirmPassword}
+                    />
+                    {confirmPasswordError && <p className="text-[#FFB338] text-xs mt-1">{confirmPasswordError}</p>}
+                  </div>
+
+                  <div className="space-y-2">
                     <Label htmlFor="company">{content.labels.company}</Label>
                     <Input
                       id="company"
@@ -800,11 +958,22 @@ export default function SignUpPage({ lang }: SignUpPageProps) {
 
                   <Button
                     type="submit"
-                    className={`w-full h-[60px] py-6 bg-gradient-radial-primary hover:bg-gradient-radial-primary-hover text-white shadow-none hover:shadow-[0_0_30px_rgba(104,219,255,0.6)] transition-all duration-300 rounded-xl ${!isFormComplete ? "opacity-50 cursor-not-allowed" : ""}`}
+                    className={`w-full h-[60px] py-6 transition-all duration-300 rounded-xl ${
+                      isFormComplete && !isSubmitting
+                        ? "bg-gradient-radial-primary hover:bg-gradient-radial-primary-hover text-white shadow-none hover:shadow-[0_0_30px_rgba(104,219,255,0.6)]"
+                        : "bg-background/50 border border-[#68DBFF]/20 text-white/50 cursor-not-allowed"
+                    }`}
                     disabled={isSubmitting || !isFormComplete}
                   >
                     {isSubmitting ? content.signingUpText : content.signUpButtonText}
                   </Button>
+
+                  {/* Authentication Error Display */}
+                  {authError && (
+                    <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                      <p className="text-red-400 text-sm">{authError}</p>
+                    </div>
+                  )}
 
                   {/* Already have account Link */}
                   <div className="text-center pt-4 border-t border-border/50">

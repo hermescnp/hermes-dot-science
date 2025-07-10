@@ -16,6 +16,14 @@ import SignInSpotlight from "@/components/sign-in-spotlight"
 import { BackButton, MobileBackButton } from "@/components/learn-more/navigation-ui"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { HERMES_SCIENCE_URL } from "@/lib/config"
+import { signInWithEmail, signInWithGoogle } from "@/lib/auth-service"
+
+interface AuthResult {
+  success: boolean
+  user?: any
+  userData?: any
+  error?: string
+}
 
 interface SignInContent {
   title: string
@@ -53,6 +61,12 @@ export default function SignInPage({ lang }: SignInPageProps) {
   const { language, t } = useLanguage()
 
   const [emailError, setEmailError] = useState<string | null>(null)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+  const [authError, setAuthError] = useState<string | null>(null)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [userData, setUserData] = useState<any>(null)
+  const [isFormComplete, setIsFormComplete] = useState(false)
 
   useEffect(() => {
     // For now, we'll use static content. In a real app, this would come from an API
@@ -93,8 +107,19 @@ export default function SignInPage({ lang }: SignInPageProps) {
     return emailRegex.test(email)
   }
 
+  const checkFormCompletion = () => {
+    const isComplete = 
+      email.trim() !== "" && 
+      password.trim() !== "" && 
+      validateEmail(email) &&
+      !emailError &&
+      !passwordError
+    setIsFormComplete(isComplete)
+  }
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value
+    setEmail(email)
     if (!email) {
       setEmailError(null)
     } else if (!validateEmail(email)) {
@@ -109,10 +134,28 @@ export default function SignInPage({ lang }: SignInPageProps) {
     }
   }
 
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const password = e.target.value
+    setPassword(password)
+    if (!password) {
+      setPasswordError(null)
+    } else {
+      setPasswordError(null)
+    }
+  }
+
+  // Check form completion whenever form fields change
+  useEffect(() => {
+    checkFormCompletion()
+  }, [email, password, emailError, passwordError])
+
   const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
     const emailInput = form.email as HTMLInputElement
+    const passwordInput = form.password as HTMLInputElement
+
+    let isValid = true
 
     if (emailInput.value && !validateEmail(emailInput.value)) {
       setEmailError(
@@ -121,32 +164,78 @@ export default function SignInPage({ lang }: SignInPageProps) {
             ? "Por favor ingresa una dirección de email válida."
             : "Please enter a valid email address."),
       )
-      return false
+      isValid = false
     }
 
-    setEmailError(null)
-    return true
+    if (!passwordInput.value) {
+      setPasswordError(
+        language === "es"
+          ? "La contraseña es requerida."
+          : "Password is required."
+      )
+      isValid = false
+    }
+
+    if (isValid) {
+      setEmailError(null)
+      setPasswordError(null)
+    }
+
+    return isValid
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (!validateForm(e)) {
       return
     }
 
     setIsSubmitting(true)
-    setTimeout(() => {
+    setAuthError(null)
+
+    try {
+      const result = await signInWithEmail(email, password) as AuthResult
+
+      if (result.success) {
+        setUserData(result.userData)
+        setIsSubmitted(true)
+      } else {
+        setAuthError(result.error ?? 'An error occurred during sign in.')
+      }
+    } catch (error) {
+      console.error('Error during sign in:', error)
+      setAuthError(
+        language === "es"
+          ? "Ocurrió un error durante el inicio de sesión. Por favor intenta de nuevo."
+          : "An error occurred during sign in. Please try again."
+      )
+    } finally {
       setIsSubmitting(false)
-      setIsSubmitted(true)
-    }, 1500)
+    }
   }
 
-  const handleGoogleSignIn = () => {
-    // Simulate Google sign-in process
+  const handleGoogleSignIn = async () => {
     setIsSubmitting(true)
-    setTimeout(() => {
+    setAuthError(null)
+
+    try {
+      const result = await signInWithGoogle() as AuthResult
+
+      if (result.success) {
+        setUserData(result.userData)
+        setIsSubmitted(true)
+      } else {
+        setAuthError(result.error ?? 'An error occurred during Google sign in.')
+      }
+    } catch (error) {
+      console.error('Error during Google sign in:', error)
+      setAuthError(
+        language === "es"
+          ? "Ocurrió un error durante el inicio de sesión con Google. Por favor intenta de nuevo."
+          : "An error occurred during Google sign in. Please try again."
+      )
+    } finally {
       setIsSubmitting(false)
-      setIsSubmitted(true)
-    }, 2000)
+    }
   }
 
   if (!content) {
@@ -208,7 +297,9 @@ export default function SignInPage({ lang }: SignInPageProps) {
                 </div>
 
                 <h3 className="text-3xl font-bold mb-3 bg-gradient-to-r from-[#68DBFF] to-[#315F8C] bg-clip-text text-transparent">
-                  {language === "es" ? `¡Bienvenido de vuelta! 👋` : `Welcome back! 👋`}
+                  {language === "es" 
+                    ? `¡Bienvenido de vuelta ${userData?.firstName || 'Usuario'}! 👋` 
+                    : `Welcome back ${userData?.firstName || 'User'}! 👋`}
                 </h3>
 
                 <div className="max-w-lg mb-6">
@@ -624,18 +715,34 @@ export default function SignInPage({ lang }: SignInPageProps) {
                       id="password"
                       type="password"
                       placeholder={content.placeholders.password}
+                      onChange={handlePasswordChange}
                       required
-                      className="h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30"
+                      className={`h-12 border-slate-200 dark:border-slate-700 focus:!ring-0 focus:!ring-offset-0 focus:!outline-none focus:!border-[#315F8C] focus:!bg-black/30 ${
+                        passwordError ? "!border-[#FFB338]" : ""
+                      }`}
+                      value={password}
                     />
+                    {passwordError && <p className="text-[#FFB338] text-xs mt-1">{passwordError}</p>}
                   </div>
 
                   <Button
                     type="submit"
-                    className="w-full h-[60px] py-6 bg-gradient-radial-primary hover:bg-gradient-radial-primary-hover text-white shadow-none hover:shadow-[0_0_30px_rgba(104,219,255,0.6)] transition-all duration-300 rounded-xl"
-                    disabled={isSubmitting}
+                    className={`w-full h-[60px] py-6 transition-all duration-300 rounded-xl ${
+                      isFormComplete && !isSubmitting
+                        ? "bg-gradient-radial-primary hover:bg-gradient-radial-primary-hover text-white shadow-none hover:shadow-[0_0_30px_rgba(104,219,255,0.6)]"
+                        : "bg-background/50 border border-[#68DBFF]/20 text-white/50 cursor-not-allowed"
+                    }`}
+                    disabled={isSubmitting || !isFormComplete}
                   >
                     {isSubmitting ? content.signingInText : content.signInButtonText}
                   </Button>
+
+                  {/* Authentication Error Display */}
+                  {authError && (
+                    <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                      <p className="text-red-400 text-sm">{authError}</p>
+                    </div>
+                  )}
 
                   {/* Forgot Password Link */}
                   <div className="text-center">
