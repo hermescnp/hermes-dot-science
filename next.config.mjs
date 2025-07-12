@@ -14,7 +14,6 @@ const nextConfig = {
   },
   // Add experimental optimizations
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['framer-motion', 'lucide-react', '@radix-ui/react-icons'],
   },
   // Remove console logs in production
