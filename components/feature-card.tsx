@@ -1,13 +1,13 @@
 "use client"
 
-import type { ReactNode } from "react"
 import { motion } from "framer-motion"
-import { Card } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
+import { FrostedGlassIcon } from "@/components/frosted-glass-icon"
 import { useTheme } from "next-themes"
-import FrostedGlassIcon from "./frosted-glass-icon"
+import { useAnimation } from "@/contexts/animation-context"
 
 interface FeatureCardProps {
-  icon: ReactNode
+  icon: React.ReactNode
   title: string
   description: string
   accentColor?: string
@@ -20,11 +20,12 @@ export default function FeatureCard({
   accentColor = "rgba(120, 120, 255, 0.5)",
 }: FeatureCardProps) {
   const { resolvedTheme } = useTheme()
+  const { isPaused } = useAnimation()
   const isDark = resolvedTheme === "dark"
 
   // Adjust accent color opacity for dark mode
   const adjustedAccentColor = isDark
-    ? accentColor.replace(/rgba$$(\d+),\s*(\d+),\s*(\d+),\s*[\d.]+$$/, "rgba($1, $2, $3, 0.3)")
+    ? accentColor.replace(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*[\d.]+\)/, "rgba($1, $2, $3, 0.3)")
     : accentColor
 
   return (
@@ -44,23 +45,35 @@ export default function FeatureCard({
         </div>
 
         {/* Always visible animated gradient background */}
-        <motion.div
-          className="absolute inset-0 z-0 opacity-20 dark:opacity-30"
-          initial={{ opacity: 0 }}
-          animate={{
-            background: [
-              `radial-gradient(circle at 30% 30%, ${adjustedAccentColor} 0%, transparent 60%)`,
-              `radial-gradient(circle at 70% 70%, ${adjustedAccentColor} 0%, transparent 60%)`,
-            ],
-            opacity: [0.15, 0.25, 0.15],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
-            ease: "easeInOut",
-          }}
-        />
+        {!isPaused && (
+          <motion.div
+            className="absolute inset-0 z-0 opacity-20 dark:opacity-30"
+            initial={{ opacity: 0 }}
+            animate={{
+              background: [
+                `radial-gradient(circle at 30% 30%, ${adjustedAccentColor} 0%, transparent 60%)`,
+                `radial-gradient(circle at 70% 70%, ${adjustedAccentColor} 0%, transparent 60%)`,
+              ],
+              opacity: [0.15, 0.25, 0.15],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Number.POSITIVE_INFINITY,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
+          />
+        )}
+
+        {/* Static gradient when animations are paused */}
+        {isPaused && (
+          <div
+            className="absolute inset-0 z-0 opacity-20 dark:opacity-30"
+            style={{
+              background: `radial-gradient(circle at 30% 30%, ${adjustedAccentColor} 0%, transparent 60%)`,
+            }}
+          />
+        )}
       </Card>
     </motion.div>
   )

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
+import { useAnimation } from "@/contexts/animation-context"
 
 interface ElegantSeparatorProps {
   width?: string
@@ -10,6 +11,7 @@ interface ElegantSeparatorProps {
 
 export default function ElegantSeparator({ width = "200px", variant = "default" }: ElegantSeparatorProps) {
   const [mounted, setMounted] = useState(false)
+  const { isPaused } = useAnimation()
 
   useEffect(() => {
     setMounted(true)
@@ -33,18 +35,30 @@ export default function ElegantSeparator({ width = "200px", variant = "default" 
         >
           {/* Decorative dots */}
           <div className="flex items-center gap-3">
-            <motion.div
-              className="w-1 h-1 rounded-full bg-[#68DBFF]/60"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0.3, 0.8, 0.3] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0 }}
-            />
-            <motion.div
-              className="w-1.5 h-1.5 rounded-full bg-[#68DBFF]/80"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.3 }}
-            />
+            {!isPaused && (
+              <motion.div
+                className="w-1 h-1 rounded-full bg-[#68DBFF]/60"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.3, 0.8, 0.3] }}
+                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0 }}
+              />
+            )}
+            {!isPaused && (
+              <motion.div
+                className="w-1.5 h-1.5 rounded-full bg-[#68DBFF]/80"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.3 }}
+              />
+            )}
+
+            {/* Static dots when animations are paused */}
+            {isPaused && (
+              <>
+                <div className="w-1 h-1 rounded-full bg-[#68DBFF]/60" />
+                <div className="w-1.5 h-1.5 rounded-full bg-[#68DBFF]/80" />
+              </>
+            )}
 
             {/* Main elegant line */}
             <div className="relative flex items-center">
@@ -70,35 +84,50 @@ export default function ElegantSeparator({ width = "200px", variant = "default" 
                 }}
               >
                 {/* Subtle shimmer effect */}
-                <motion.div
-                  className="absolute top-0 left-0 h-full w-[20%] bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                  animate={{
-                    left: ["-20%", "100%"],
-                    opacity: [0, 0.6, 0],
-                  }}
-                  transition={{
-                    repeat: Number.POSITIVE_INFINITY,
-                    repeatType: "loop",
-                    duration: 4,
-                    ease: "easeInOut",
-                    repeatDelay: 6,
-                  }}
-                />
+                {!isPaused && (
+                  <motion.div
+                    className="absolute top-0 left-0 h-full w-[20%] bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                    animate={{
+                      left: ["-20%", "100%"],
+                      opacity: [0, 0.6, 0],
+                    }}
+                    transition={{
+                      repeat: Number.POSITIVE_INFINITY,
+                      repeatType: "loop",
+                      duration: 4,
+                      ease: "easeInOut",
+                      repeatDelay: 6,
+                    }}
+                  />
+                )}
               </div>
             </div>
 
-            <motion.div
-              className="w-1.5 h-1.5 rounded-full bg-[#68DBFF]/80"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.6 }}
-            />
-            <motion.div
-              className="w-1 h-1 rounded-full bg-[#68DBFF]/60"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0.3, 0.8, 0.3] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.9 }}
-            />
+            {/* Decorative dots on the right */}
+            {!isPaused && (
+              <motion.div
+                className="w-1.5 h-1.5 rounded-full bg-[#68DBFF]/80"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.6 }}
+              />
+            )}
+            {!isPaused && (
+              <motion.div
+                className="w-1 h-1 rounded-full bg-[#68DBFF]/60"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.3, 0.8, 0.3] }}
+                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.9 }}
+              />
+            )}
+
+            {/* Static dots when animations are paused */}
+            {isPaused && (
+              <>
+                <div className="w-1.5 h-1.5 rounded-full bg-[#68DBFF]/80" />
+                <div className="w-1 h-1 rounded-full bg-[#68DBFF]/60" />
+              </>
+            )}
           </div>
         </motion.div>
       </div>

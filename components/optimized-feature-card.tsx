@@ -1,14 +1,15 @@
 "use client"
 
-import type { ReactNode } from "react"
+import { useMemo } from "react"
 import { motion } from "framer-motion"
-import { Card } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { FrostedGlassIcon } from "@/components/frosted-glass-icon"
 import { useScrollParallax } from "@/hooks/use-scroll-parallax"
 import { useActiveSection } from "@/hooks/use-active-section"
-import { FrostedGlassIcon } from "@/components/frosted-glass-icon"
+import { useAnimation } from "@/contexts/animation-context"
 
 interface OptimizedFeatureCardProps {
-  icon: ReactNode
+  icon: React.ReactNode
   title: string
   description: string
   accentColor?: string
@@ -22,27 +23,23 @@ export default function OptimizedFeatureCard({
   accentColor = "rgba(120, 120, 255, 0.5)",
   index = 0,
 }: OptimizedFeatureCardProps) {
-  const isDark = true
   const { isActive } = useActiveSection()
+  const { isPaused } = useAnimation()
+  const shouldAnimate = isActive("features") && !isPaused
+  const parallaxOffset = useScrollParallax({ sectionId: "features", intensity: 0.3, debounceMs: 100 })
 
-  // Only animate when features section is active
-  const shouldAnimate = isActive("features")
-
-  // Get parallax offset for this card with slight variation based on index
-  const parallaxOffset = useScrollParallax({
-    sectionId: "features",
-    intensity: 0.3 + index * 0.1, // Vary intensity per card
-    debounceMs: 100,
-  })
-
-  // Adjust accent color opacity for dark mode
-  const adjustedAccentColor = isDark
-    ? accentColor.replace(/rgba$$(\d+),\s*(\d+),\s*(\d+),\s*[\d.]+$$/, "rgba($1, $2, $3, 0.3)")
-    : accentColor
-
-  // Calculate gradient position based on parallax offset
-  const gradientX = 30 + parallaxOffset * 0.2
-  const gradientY = 30 + parallaxOffset * 0.3
+  // Memoize gradient position calculations
+  const { gradientX, gradientY, adjustedAccentColor } = useMemo(() => {
+    const baseX = 30 + (parallaxOffset * 0.1) + index * 5
+    const baseY = 30 + parallaxOffset * 0.15
+    const adjustedColor = accentColor.replace(/[0-9.]+\)$/, "0.3)")
+    
+    return {
+      gradientX: shouldAnimate ? baseX : 30,
+      gradientY: shouldAnimate ? baseY : 30,
+      adjustedAccentColor: adjustedColor
+    }
+  }, [parallaxOffset, index, accentColor, shouldAnimate])
 
   return (
     <motion.div
@@ -94,7 +91,7 @@ export default function OptimizedFeatureCard({
         )}
 
         {/* Hover effect overlay */}
-        <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-10 dark:group-hover:opacity-20 transition-opacity duration-300 bg-gradient-to-br from-white to-transparent" />
+        <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 bg-gradient-to-br from-white/5 to-transparent" />
       </Card>
     </motion.div>
   )

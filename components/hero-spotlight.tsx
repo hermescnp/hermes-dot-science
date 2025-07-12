@@ -1,17 +1,19 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useAnimation } from "@/contexts/animation-context"
 
 export default function HeroSpotlight() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMounted, setIsMounted] = useState(false)
+  const { isPaused } = useAnimation()
 
   useEffect(() => {
     setIsMounted(true)
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Only update position occasionally to improve performance
-      if (Math.random() > 0.92) {
+      // Only update position occasionally to improve performance and when not paused
+      if (!isPaused && Math.random() > 0.92) {
         setMousePosition({ x: e.clientX, y: e.clientY })
       }
     }
@@ -27,7 +29,7 @@ export default function HeroSpotlight() {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
     }
-  }, [])
+  }, [isPaused]) // Add isPaused to dependencies
 
   if (!isMounted) {
     return null
@@ -36,12 +38,14 @@ export default function HeroSpotlight() {
   return (
     <>
       {/* Main spotlight that follows mouse */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[-1] opacity-70 transition-opacity duration-500"
-        style={{
-          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(100, 100, 255, 0.15), transparent 40%)`,
-        }}
-      />
+      {!isPaused && (
+        <div
+          className="pointer-events-none absolute inset-0 z-[-1] opacity-70 transition-opacity duration-500"
+          style={{
+            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(100, 100, 255, 0.15), transparent 40%)`,
+          }}
+        />
+      )}
 
       {/* Static spotlights for visual interest */}
       <div

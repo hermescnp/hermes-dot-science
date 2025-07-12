@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { LanguageProvider } from "@/contexts/language-context"
+import { AnimationProvider } from "@/contexts/animation-context"
 import { use } from "react"
 
 export const metadata: Metadata = {
@@ -22,7 +23,13 @@ export default function LocaleLayout({
 
   console.log(`LocaleLayout: Received lang param: ${lang}, using: ${validLang}`)
 
-  return <LanguageProvider initialLanguage={validLang as "en" | "es"}>{children}</LanguageProvider>
+  return (
+    <AnimationProvider>
+      <LanguageProvider initialLanguage={validLang as "en" | "es"}>
+        {children}
+      </LanguageProvider>
+    </AnimationProvider>
+  )
 }
 
 // Define the valid language parameters
