@@ -344,9 +344,10 @@ export default function HomePage({ params }: { params: Promise<{ lang: string }>
                 >
                   {/* Header */}
                   <div className="space-y-4">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#68DBFF]/20 to-[#0A5E95]/20 border border-[#68DBFF]/30">
-                      <RenderIcon iconName="Sparkles" className="h-4 w-4 text-[#68DBFF]" />
-                      <span className="text-sm font-medium text-[#68DBFF]">{contactContent.badgeText}</span>
+                    <div className="inline-block rounded-lg bg-gradient-to-r from-[#68DBFF] via-[#0A5E95] to-[#E27D4A] p-[1px] mb-2">
+                      <div className="rounded-lg px-4 py-2 text-sm font-medium" style={{ backgroundColor: "#0B1E33" }}>
+                        {contactContent.badgeText}
+                      </div>
                     </div>
                     <h2
                       id="contact-heading"

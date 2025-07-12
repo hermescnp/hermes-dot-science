@@ -243,8 +243,10 @@ export default function PlatformCarousel() {
       <div className="relative z-10">
         <div className="container px-4 md:px-6 mb-8">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="inline-block rounded-lg bg-primary px-3 py-1 text-sm text-primary-foreground mb-2">
-              {content.sectionBadge}
+            <div className="inline-block rounded-lg bg-gradient-to-r from-[#68DBFF] via-[#0A5E95] to-[#E27D4A] p-[1px] mb-2">
+              <div className="rounded-lg px-4 py-2 text-sm font-medium" style={{ backgroundColor: "#0B1E33" }}>
+                {content.sectionBadge}
+              </div>
             </div>
           </div>
         </div>
