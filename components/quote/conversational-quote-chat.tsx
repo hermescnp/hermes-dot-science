@@ -172,7 +172,7 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
   const [userData, setUserData] = useState<UserData | null>(null)
   const [hasShownFirstQuestion, setHasShownFirstQuestion] = useState(false)
   const [shouldShowSlider, setShouldShowSlider] = useState(false)
-  const [totalStepsCompleted, setTotalStepsCompleted] = useState(0)
+  const [completedInteractions, setCompletedInteractions] = useState(0)
 
   // Load user data from localStorage
   useEffect(() => {
@@ -242,7 +242,6 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     // Company size question counts as 1 step
     totalSteps += 1
 
-    // Count each question and its potential complexity follow-up
     content.questions.forEach((question) => {
       // Main question counts as 1 step
       totalSteps += 1
@@ -262,10 +261,33 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     return totalSteps
   }
 
-  // Calculate progress with equal distribution, completing on the last answer
-  const totalSteps = calculateTotalSteps()
-  const stepSize = totalSteps > 1 ? 100 / (totalSteps - 1) : 100
-  const progress = Math.min(totalStepsCompleted * stepSize, 100)
+  // Calculate progress based on actual answers completed
+  const calculateTotalInteractions = (): number => {
+    if (!content) return 0
+    
+    let totalInteractions = 0
+    
+    content.questions.forEach((question) => {
+      // Main question counts as 1 interaction
+      totalInteractions += 1
+      
+      // If any option has sub-options, add 1 more interaction for the sub-option selection
+      const hasSubOptions = question.options?.some((option) => option.subOptions && option.subOptions.length > 0)
+      if (hasSubOptions) {
+        totalInteractions += 1
+      }
+      
+      // If the question requires a complexity multiplier, add another interaction
+      if (question.requiresMultiplier && question.multipliers && question.multipliers.length > 0) {
+        totalInteractions += 1
+      }
+    })
+    
+    return totalInteractions
+  }
+  
+  const totalInteractions = calculateTotalInteractions()
+  const progress = totalInteractions > 0 ? Math.min((completedInteractions / totalInteractions) * 100, 100) : 0
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -498,9 +520,9 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     // Add company size answer to the answers array
     const newAnswers = [...answers, companySizeAnswer]
     setAnswers(newAnswers)
+    setCompletedInteractions((prev) => prev + 1)
 
-    // Increment steps completed (company size selection counts as 1 step)
-    setTotalStepsCompleted((prev) => prev + 1)
+
 
     // Move to next question
     setTimeout(() => {
@@ -528,9 +550,9 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
       addUserMessage(option.conversationalText)
       setShowOptions(false)
       setIsWaitingForResponse(true)
+      setCompletedInteractions((prev) => prev + 1)
 
-      // Increment steps completed (main option selection with sub-options counts as 1 step)
-      setTotalStepsCompleted((prev) => prev + 1)
+
 
       // Show sub-options
       setTimeout(() => {
@@ -551,9 +573,9 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     addUserMessage(option.conversationalText)
     setShowOptions(false)
     setIsWaitingForResponse(true)
+    setCompletedInteractions((prev) => prev + 1)
 
-    // Increment steps completed (main question answer counts as 1 step)
-    setTotalStepsCompleted((prev) => prev + 1)
+
 
     if (currentQuestion.requiresMultiplier && currentQuestion.multipliers) {
       // Show follow-up question for complexity
@@ -584,9 +606,9 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     addUserMessage(subOption.conversationalText)
     setShowSubOptions(false)
     setIsWaitingForResponse(true)
+    setCompletedInteractions((prev) => prev + 1)
 
-    // Increment steps completed (sub-option selection counts as 1 step)
-    setTotalStepsCompleted((prev) => prev + 1)
+
 
     if (currentQuestion?.requiresMultiplier && currentQuestion.multipliers) {
       // Show follow-up question for complexity
@@ -616,9 +638,9 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
     addUserMessage(multiplier.conversationalText)
     setShowMultipliers(false)
     setIsWaitingForResponse(true)
+    setCompletedInteractions((prev) => prev + 1)
 
-    // Increment steps completed (complexity selection counts as 1 step)
-    setTotalStepsCompleted((prev) => prev + 1)
+
 
     processAnswer(selectedOption, multiplierId)
   }
@@ -716,7 +738,6 @@ export function ConversationalQuoteChat({ onComplete, onBack }: ConversationalQu
 
     setAnswers((prev) => [...prev, answer])
     setTotalPrice((prev) => prev + finalPrice)
-    setTotalStepsCompleted((prev) => prev + 1)
 
     // User message was already added in the selection handlers, so we don't need to add it again
     setIsWaitingForResponse(true)
