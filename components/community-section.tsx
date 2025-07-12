@@ -316,8 +316,10 @@ export default function CommunitySection() {
           transition={{ duration: 0.6 }}
         >
           <div className="space-y-2">
-            <div className="inline-block rounded-lg bg-primary px-3 py-1 text-sm text-primary-foreground mb-2">
-              {content.badgeText}
+            <div className="inline-block rounded-lg bg-gradient-to-r from-[#68DBFF] via-[#0A5E95] to-[#E27D4A] p-[1px] mb-2">
+              <div className="rounded-lg px-4 py-2 text-sm font-medium" style={{ backgroundColor: "#0B1E33" }}>
+                {content.badgeText}
+              </div>
             </div>
             <h2 id="community-heading" className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
               {content.title}
